@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coastal Climate Risk Index</title>
+<style>
+:root{--db:#023E8A;--ob:#0077B6;--sb:#0096C7;--lb:#90E0EF;--pb:#CAF0F8;--sand:#F9C74F;--bg:#F8FAFC;--text:#1A1A2E;--card:#FFFFFF;--border:#E2E8F0}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+/* HEADER */
+header{background:linear-gradient(135deg,var(--db),var(--ob));color:#fff;position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.2)}
+.htop{display:flex;align-items:center;justify-content:space-between;padding:12px 24px}
+.htitle{font-size:1.05rem;font-weight:700}
+.ltog{display:flex;gap:4px;background:rgba(255,255,255,.15);border-radius:20px;padding:3px}
+.lbtn{padding:4px 14px;border:none;border-radius:16px;cursor:pointer;font-size:.8rem;font-weight:600;background:transparent;color:rgba(255,255,255,.7);transition:all .2s}
+.lbtn.active{background:#fff;color:var(--db)}
+nav{display:flex;overflow-x:auto;padding:0 16px;border-top:1px solid rgba(255,255,255,.1);scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.ni{padding:10px 14px;color:rgba(255,255,255,.7);cursor:pointer;font-size:.78rem;font-weight:600;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;text-decoration:none;display:block}
+.ni:hover,.ni.active{color:#fff;border-bottom-color:var(--sand)}
+/* HERO */
+.hero{background:linear-gradient(180deg,#0077B6,#023E8A);color:#fff;padding:56px 24px;text-align:center}
+.hero h1{font-size:clamp(1.7rem,5vw,2.8rem);font-weight:800;margin-bottom:10px;letter-spacing:-.02em}
+.hero p{font-size:1rem;opacity:.85;max-width:580px;margin:0 auto 28px}
+.pills{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:.82rem;font-weight:600}
+/* OBJ BAND */
+.objband{background:var(--pb);padding:48px 24px}
+.objband-inner{max-width:920px;margin:0 auto}
+.slabel{color:var(--ob);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;color:var(--db);margin-bottom:14px;letter-spacing:-.02em}
+h3{font-size:1.15rem;font-weight:700;color:var(--db);margin-bottom:10px}
+h4{font-size:1rem;font-weight:700;color:var(--ob);margin:20px 0 8px}
+p{margin-bottom:14px}
+/* CARDS */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:28px 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:0 2px 10px rgba(0,0,0,.04);transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.cicon{font-size:1.8rem;margin-bottom:10px}
+.ctitle{font-size:.95rem;font-weight:700;color:var(--db);margin-bottom:6px}
+.card p{font-size:.88rem;color:#555;margin:0}
+/* FORMULA */
+.fbox{background:var(--db);color:#fff;border-radius:14px;padding:28px;text-align:center;margin:28px 0}
+.formula{font-size:1.25rem;font-weight:700;font-family:'Courier New',monospace;color:var(--sand);margin:12px 0}
+/* INFO BOXES */
+.ibox{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:12px;padding:18px 22px;margin:20px 0}
+.wbox{background:#FFF7ED;border:1px solid #FED7AA;border-radius:12px;padding:18px 22px;margin:20px 0}
+.sbox{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:18px 22px;margin:20px 0}
+/* SECTIONS */
+section{padding:56px 24px;max-width:940px;margin:0 auto;scroll-margin-top:80px}
+hr.div{border:none;height:1px;background:var(--border);margin:0}
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.88rem}
+th{background:var(--db);color:#fff;padding:10px 14px;text-align:left;font-weight:600}
+td{padding:9px 14px;border-bottom:1px solid var(--border)}
+tr:nth-child(even) td{background:#F8FAFC}
+.r1{background:#DCFCE7!important;color:#166534;font-weight:600}
+.r2{background:#D1FAE5!important;color:#065F46;font-weight:600}
+.r3{background:#FEF3C7!important;color:#92400E;font-weight:600}
+.r4{background:#FEE2E2!important;color:#991B1B;font-weight:600}
+.r5{background:#FCA5A5!important;color:#7F1D1D;font-weight:600}
+/* CHARTS */
+.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin:20px 0}
+.ctit{font-size:.95rem;font-weight:700;color:var(--db);margin-bottom:14px}
+.cnote{font-size:.78rem;color:#666;margin-top:8px}
+/* TIMELINE */
+.tl{position:relative;padding-left:28px}
+.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--lb)}
+.tli{position:relative;padding-bottom:28px}
+.tldot{position:absolute;left:-33px;width:10px;height:10px;background:var(--ob);border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px var(--ob);top:5px}
+.tlyear{font-size:.78rem;font-weight:700;color:var(--ob);margin-bottom:4px}
+.tlcard{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:.9rem}
+/* STEPS */
+.step{display:flex;gap:18px;margin-bottom:20px;align-items:flex-start}
+.snum{flex-shrink:0;width:36px;height:36px;background:var(--ob);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem}
+.scontent{flex:1;background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px}
+/* WORKSHOP */
+.wintro{background:linear-gradient(135deg,#023E8A,#0096C7);color:#fff;border-radius:18px;padding:28px;margin-bottom:28px}
+.wintro h3{color:#fff;margin-bottom:10px}
+.wintro p{color:rgba(255,255,255,.9);margin:0}
+.vgrid{display:grid;gap:14px;margin:20px 0}
+.vcard{background:#fff;border:2px solid var(--border);border-radius:12px;padding:18px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
+.vcard:focus-within{border-color:var(--ob)}
+.vname{font-weight:700;color:var(--db);margin-bottom:3px;font-size:.95rem}
+.vhint{font-size:.82rem;color:#666}
+select{padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-size:.95rem;font-weight:700;color:var(--db);background:#fff;cursor:pointer;min-width:60px}
+select:focus{outline:none;border-color:var(--ob)}
+.cbtn{background:linear-gradient(135deg,var(--ob),var(--sb));color:#fff;border:none;padding:14px 36px;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;transition:all .3s;margin-top:20px}
+.cbtn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,119,182,.4)}
+/* RESULT */
+.rbox{display:none;background:var(--card);border:2px solid var(--ob);border-radius:18px;padding:28px;margin-top:28px;text-align:center}
+.cscore{font-size:3.5rem;font-weight:900;color:var(--db);line-height:1}
+.rbadge{display:inline-block;padding:7px 22px;border-radius:20px;font-weight:700;font-size:1rem;margin:10px 0}
+.rvl{background:#DCFCE7;color:#166534}
+.rl{background:#D1FAE5;color:#065F46}
+.rm{background:#FEF3C7;color:#92400E}
+.rh{background:#FEE2E2;color:#991B1B}
+.rvh{background:#FCA5A5;color:#7F1D1D}
+.rbar{width:100%;height:18px;background:linear-gradient(90deg,#22C55E,#84CC16,#EAB308,#EF4444,#DC2626);border-radius:9px;position:relative;margin:18px 0}
+.rind{position:absolute;top:-8px;transform:translateX(-50%);width:4px;height:34px;background:var(--db);border-radius:2px;transition:left .8s cubic-bezier(.34,1.56,.64,1)}
+.rlabels{display:flex;justify-content:space-between;font-size:.7rem;color:#666;margin-top:6px}
+.dhint{background:#F0F9FF;border:1px solid #BAE6FD;border-radius:8px;padding:12px 16px;font-size:.85rem;color:#0369A1;margin-bottom:10px}
+.dg4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+/* FOOTER */
+footer{background:var(--db);color:rgba(255,255,255,.7);padding:44px 24px;text-align:center;margin-top:48px}
+/* MODAL */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:3000;align-items:flex-start;justify-content:center;padding:60px 20px 20px;overflow-y:auto}
+.modal-ov.show{display:flex}
+.modal-box{background:#fff;border-radius:20px;padding:32px;max-width:560px;width:100%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.6rem;cursor:pointer;color:#999;line-height:1}
+.modal-close:hover{color:#333}
+.modal-box h3{color:var(--db);margin-bottom:12px}
+.modal-box ul{padding-left:20px;line-height:2;font-size:.9rem}
+/* INFO BUTTON */
+.ibtn{background:none;border:2px solid var(--ob);color:var(--ob);border-radius:50%;width:22px;height:22px;font-size:.7rem;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-left:7px;vertical-align:middle;transition:all .2s;flex-shrink:0;line-height:1}
+.ibtn:hover{background:var(--ob);color:#fff}
+/* EXT LINKS */
+.extlinks{background:#F0F7FF;border:1px solid #BFDBFE;border-radius:12px;padding:14px 18px;margin-top:24px}
+.extlinks-lbl{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748B;margin-bottom:10px}
+.extlinks a{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid #BFDBFE;border-radius:8px;padding:5px 12px;font-size:.82rem;font-weight:600;color:var(--ob);text-decoration:none;margin:3px;transition:all .2s}
+.extlinks a:hover{background:var(--ob);color:#fff;border-color:var(--ob)}
+.extlinks a::before{content:'↗';font-size:.7rem;opacity:.7}
+/* BRUUN BOX */
+.bruun-box{background:linear-gradient(135deg,#1E3A5F,#0F2A47);color:#fff;border-radius:14px;padding:26px;margin:24px 0}
+.bruun-box h3{color:#CAF0F8;margin-bottom:10px}
+.bruun-formula{font-family:'Courier New',monospace;font-size:1.05rem;font-weight:700;color:var(--sand);background:rgba(255,255,255,.08);padding:14px 20px;border-radius:8px;margin:14px 0;text-align:center;letter-spacing:.02em}
+.bruun-box p{font-size:.88rem;color:rgba(255,255,255,.85);margin-bottom:8px}
+.bruun-vars{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin:10px 0}
+.bvar{background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;font-size:.82rem;color:rgba(255,255,255,.9)}
+.bvar strong{color:var(--sand)}
+/* MODEL CARDS */
+.model-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:18px 0}
+.model-card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:16px;transition:all .2s}
+.model-card:hover{border-color:var(--ob);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,119,182,.12)}
+.model-card-head{font-weight:700;color:var(--db);margin-bottom:6px;font-size:.95rem}
+.model-card p{font-size:.82rem;color:#555;margin:0}
+.model-tag{display:inline-block;background:var(--pb);color:var(--db);font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+/* DATA SOURCE CARDS */
+.dsrc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0}
+.dsrc{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;transition:all .2s;text-decoration:none;display:block}
+.dsrc:hover{border-color:var(--ob);transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,119,182,.1)}
+.dsrc-name{font-weight:700;color:var(--db);font-size:.88rem;margin-bottom:4px}
+.dsrc-desc{font-size:.76rem;color:#666;line-height:1.5}
+.dsrc-type{display:inline-block;background:#E0F2FE;color:#0369A1;font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:8px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+/* CLASS INTRO BANNER */
+.intro-banner{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:18px 22px;max-width:740px;margin:22px auto 0;text-align:left;font-size:.9rem;line-height:1.7;opacity:.95}
+.intro-banner strong{color:var(--sand)}
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+/* RESPONSIVE */
+@media(max-width:680px){.cgrid{grid-template-columns:1fr}.vcard{grid-template-columns:1fr}.htop{padding:10px 14px}.chart-wrap{padding:14px}.col2{grid-template-columns:1fr!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="htop">
+    <div class="htitle" data-i18n="header_title">🌊 Coastal Climate Risk Index</div>
+    <div class="ltog">
+      <button class="lbtn" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lbtn" id="btn-es" onclick="setLang('es')">ES</button>
+    </div>
+  </div>
+  <nav>
+    <a href="#overview" class="ni" data-i18n="nav_overview">Overview</a>
+    <a href="#basics" class="ni" data-i18n="nav_basics">Risk Basics</a>
+    <a href="#coastal" class="ni" data-i18n="nav_coastal">Coastal Hazards</a>
+    <a href="#ranasinghe" class="ni" data-i18n="nav_rana">Ranasinghe</a>
+    <a href="#cvi" class="ni" data-i18n="nav_cvi">CVI Method</a>
+    <a href="#example" class="ni" data-i18n="nav_example">Worked Example</a>
+    <a href="#workshop" class="ni" data-i18n="nav_workshop">Workshop</a>
+  </nav>
+</header>
+
+<!-- VULNERABILITY MODAL -->
+<div class="modal-ov" id="vuln-modal" onclick="if(event.target===this)closeModal('vuln-modal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('vuln-modal')">×</button>
+    <h3>🛡️ <span data-i18n="vm_title">Understanding Vulnerability</span></h3>
+    <p data-i18n="vm_p1">Vulnerability is the most misunderstood part of the risk equation — and often the most important lever for action. It answers the question: <strong>"If a hazard occurs, how badly will the exposed element be affected?"</strong></p>
+    <p style="font-size:.9rem;font-weight:700;color:var(--db);margin-bottom:6px" data-i18n="vm_dims">Vulnerability has three dimensions:</p>
+    <ul style="font-size:.9rem;padding-left:20px;line-height:2.2">
+      <li data-i18n="vm_l1"><strong>Physical:</strong> Low elevation, sandy unstable soil, proximity to the coast, no protective reef or dune</li>
+      <li data-i18n="vm_l2"><strong>Social &amp; Economic:</strong> Poverty, limited access to insurance, informal housing, language barriers to warnings</li>
+      <li data-i18n="vm_l3"><strong>Adaptive capacity:</strong> Ability to prepare, respond, and recover — e.g., seawalls, early warning systems, evacuation plans, financial reserves</li>
+    </ul>
+    <div style="background:#EFF6FF;border-radius:10px;padding:14px 16px;margin-top:14px;font-size:.88rem" data-i18n="vm_example">
+      <strong>Example:</strong> Two houses on the same beach hit by the same storm (same hazard, same exposure). A concrete house on a raised foundation = low vulnerability. A wooden shack at sea level with no flood insurance = very high vulnerability. The hazard was identical — the difference is entirely in vulnerability.
+    </div>
+    <div class="extlinks" style="margin-top:14px">
+      <div class="extlinks-lbl" data-i18n="learn_more">Learn more</div>
+      <a href="https://www.ipcc.ch/report/ar6/wg2/" target="_blank" rel="noopener">IPCC AR6 WG2</a>
+      <a href="https://www.undrr.org/terminology/vulnerability" target="_blank" rel="noopener">UNDRR Terminology</a>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="overview">
+  <h1 data-i18n="hero_title">Coastal Climate Risk Index</h1>
+  <p data-i18n="hero_sub">From fundamentals to Ranasinghe's probabilistic framework — an interactive class with a hands-on Caribbean case study.</p>
+  <div class="pills">
+    <span class="pill">⏱ <span data-i18n="p_time">~3 hours</span></span>
+    <span class="pill">🎯 <span data-i18n="p_level">All levels</span></span>
+    <span class="pill">🌎 <span data-i18n="p_region">Caribbean · Latin America</span></span>
+    <span class="pill">🔬 <span data-i18n="p_type">Interactive Workshop</span></span>
+  </div>
+  <div class="intro-banner">
+    <strong data-i18n="ib_label">What you will learn:</strong>
+    <span data-i18n="ib_text"> This class builds from the ground up — starting with what "risk" actually means, moving through coastal physical processes (sea-level rise, storm surge, erosion), covering the standard Coastal Vulnerability Index (CVI) method, then advancing to Prof. Ranasinghe's probabilistic framework and why it replaced the Bruun Rule. You will calculate a real CVI for a Caribbean beach, interpret the result, and debate what the numbers mean for coastal management. No prior coastal science background required.</span>
+  </div>
+</div>
+
+<!-- OBJECTIVES BAND -->
+<div class="objband">
+  <div class="objband-inner">
+    <p class="slabel" data-i18n="obj_label">Learning Objectives</p>
+    <h2 data-i18n="obj_title">By the end of this class, you will be able to…</h2>
+    <div class="cgrid">
+      <div class="card" style="border-top:3px solid #0077B6">
+        <div class="cicon">📐</div>
+        <div class="ctitle" data-i18n="o1t">Define Climate Risk</div>
+        <p data-i18n="o1d">Explain the Risk = Hazard × Exposure × Vulnerability equation and apply it to coastal settings.</p>
+      </div>
+      <div class="card" style="border-top:3px solid #0096C7">
+        <div class="cicon">🌊</div>
+        <div class="ctitle" data-i18n="o2t">Identify Coastal Hazards</div>
+        <p data-i18n="o2d">Recognize key coastal hazards: sea-level rise, storm surge, and shoreline erosion.</p>
+      </div>
+      <div class="card" style="border-top:3px solid #00B4D8">
+        <div class="cicon">📊</div>
+        <div class="ctitle" data-i18n="o3t">Calculate the CVI</div>
+        <p data-i18n="o3d">Use the 6-variable Coastal Vulnerability Index formula to rank coastal risk for a real location.</p>
+      </div>
+      <div class="card" style="border-top:3px solid #48CAE4">
+        <div class="cicon">🔬</div>
+        <div class="ctitle" data-i18n="o4t">Apply Ranasinghe's Framework</div>
+        <p data-i18n="o4d">Understand probabilistic risk modeling and how climate change drivers alter coastal systems.</p>
+      </div>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:22px;margin-top:12px">
+      <h3 data-i18n="tbt">⏱ Class Time Breakdown</h3>
+      <table style="margin:12px 0 0">
+        <thead><tr><th data-i18n="th_mod">Module</th><th data-i18n="th_top">Topic</th><th data-i18n="th_time">Time</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td data-i18n="m1">Climate Risk Fundamentals</td><td>30 min</td></tr>
+          <tr><td>2</td><td data-i18n="m2">Coastal Hazards &amp; Exposure</td><td>30 min</td></tr>
+          <tr><td>3</td><td data-i18n="m3">Ranasinghe's Framework</td><td>30 min</td></tr>
+          <tr><td>4</td><td data-i18n="m4">CVI Methodology</td><td>30 min</td></tr>
+          <tr><td>5</td><td data-i18n="m5">Worked Example — Dominican Republic</td><td>30 min</td></tr>
+          <tr><td>6</td><td data-i18n="m6">Workshop Exercise — You solve it!</td><td>45 min</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- MODULE 1 -->
+<section id="basics">
+  <p class="slabel" data-i18n="s1_lbl">Module 1 · 30 minutes</p>
+  <h2 data-i18n="s1_h2">Climate Risk Fundamentals</h2>
+  <p data-i18n="s1_intro">Before diving into coastal specifics, we need a solid grasp of what "climate risk" means. Risk is not simply about how often a disaster happens — it is a combination of three interacting components.</p>
+  <div class="fbox">
+    <p style="opacity:.75;font-size:.88rem" data-i18n="req_lbl">The Risk Equation</p>
+    <div class="formula" data-i18n="req_formula">Risk = Hazard × Exposure × Vulnerability</div>
+    <p style="font-size:.88rem;opacity:.7" data-i18n="req_note">If any factor equals zero, risk is zero — all three must be present.</p>
+  </div>
+  <div class="cgrid">
+    <div class="card" style="border-left:4px solid #EF4444">
+      <div class="cicon">⚡</div>
+      <div class="ctitle" data-i18n="ht">Hazard</div>
+      <p data-i18n="hd">A potentially damaging physical event or trend — e.g., a hurricane, sea-level rise, or extreme storm. Hazard has both probability and magnitude.</p>
+    </div>
+    <div class="card" style="border-left:4px solid #F59E0B">
+      <div class="cicon">🏘️</div>
+      <div class="ctitle" data-i18n="et">Exposure</div>
+      <p data-i18n="ed">The people, infrastructure, and assets present in hazard-prone areas. A deserted beach has low exposure even with high hazard.</p>
+    </div>
+    <div class="card" style="border-left:4px solid #8B5CF6">
+      <div class="cicon">🛡️</div>
+      <div class="ctitle">
+        <span data-i18n="vt">Vulnerability</span>
+        <button class="ibtn" onclick="openModal('vuln-modal')" title="Click to learn more about Vulnerability">i</button>
+      </div>
+      <p data-i18n="vd">The predisposition to be adversely affected — determined by physical susceptibility, socioeconomic factors, and adaptive capacity.</p>
+      <p style="font-size:.8rem;color:var(--ob);margin:6px 0 0;cursor:pointer" onclick="openModal('vuln-modal')" data-i18n="click_explain">Click ℹ️ for a plain-language explanation →</p>
+    </div>
+  </div>
+  <div class="ibox">
+    <strong data-i18n="ipcc_t">📌 IPCC Definition (AR6, 2021):</strong>
+    <p style="margin:8px 0 0;font-size:.9rem" data-i18n="ipcc_d">The IPCC defines risk as the potential for adverse consequences arising from an event or trend. Risk is always a function of hazard, exposure, and vulnerability — and all three are influenced by human decisions and climate change.</p>
+  </div>
+  <div class="chart-wrap">
+    <div class="ctit" data-i18n="rc_t">Risk Components — Example for a Coastal Town</div>
+    <canvas id="riskChart" height="180"></canvas>
+  </div>
+  <div class="wbox">
+    <strong data-i18n="ki_t">💡 Key Insight for Coastal Environments:</strong>
+    <p style="margin:8px 0 0;font-size:.9rem" data-i18n="ki_d">Climate change increases hazard (stronger storms, higher seas), while coastal urbanization increases exposure. These two forces together are rapidly driving up coastal risk — even if individual vulnerability stays constant. This is why coastal risk assessment is a top global priority.</p>
+  </div>
+  <div class="extlinks">
+    <div class="extlinks-lbl" data-i18n="learn_more">🔗 Learn more</div>
+    <a href="https://www.ipcc.ch/report/ar6/wg2/" target="_blank" rel="noopener">IPCC AR6 WG2 — Impacts &amp; Adaptation</a>
+    <a href="https://www.undrr.org/sendai-framework/sendai-framework-monitor" target="_blank" rel="noopener">UNDRR Sendai Framework</a>
+    <a href="https://www.preventionweb.net/understanding-disaster-risk" target="_blank" rel="noopener">PreventionWeb — Risk Concepts</a>
+    <a href="https://www.ipcc.ch/report/ar6/wg1/" target="_blank" rel="noopener">IPCC AR6 WG1 — Physical Science</a>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- MODULE 2 -->
+<section id="coastal">
+  <p class="slabel" data-i18n="s2_lbl">Module 2 · 30 minutes</p>
+  <h2 data-i18n="s2_h2">Coastal Hazards &amp; Exposure</h2>
+  <p data-i18n="s2_intro">The coast is one of the most dynamic and hazard-prone environments on Earth. Three primary physical processes drive coastal climate risk, and they interact and amplify each other.</p>
+  <div class="cgrid">
+    <div class="card" style="border-top:4px solid #0077B6">
+      <div class="cicon">🌡️</div>
+      <div class="ctitle" data-i18n="slr_t">Sea-Level Rise (SLR)</div>
+      <p data-i18n="slr_d">Global mean sea level has risen ~20 cm since 1900, accelerating to ~3.7 mm/yr today. The Caribbean faces local rates of 3–5 mm/yr due to ocean warming, ice melt, and land subsidence.</p>
+    </div>
+    <div class="card" style="border-top:4px solid #0096C7">
+      <div class="cicon">🌀</div>
+      <div class="ctitle" data-i18n="ss_t">Storm Surge &amp; Hurricanes</div>
+      <p data-i18n="ss_d">Tropical storms push water onshore, causing surges of 2–6 m in the Caribbean. Climate change is intensifying storms (higher Cat 4–5 proportion) while SLR raises the baseline flood level.</p>
+    </div>
+    <div class="card" style="border-top:4px solid #00B4D8">
+      <div class="cicon">🏖️</div>
+      <div class="ctitle" data-i18n="er_t">Shoreline Erosion</div>
+      <p data-i18n="er_d">Around 70% of sandy beaches worldwide are eroding. In the Caribbean, erosion rates of 0.5–3 m/yr are common, driven by SLR, reduced sediment supply, coral reef degradation, and human interventions.</p>
+    </div>
+  </div>
+  <div class="chart-wrap">
+    <div class="ctit" data-i18n="slr_ct">Sea-Level Rise Projections for the Caribbean (2020–2100) — RCP Scenarios</div>
+    <canvas id="slrChart" height="210"></canvas>
+    <p class="cnote" data-i18n="slr_cn">Based on IPCC AR6 regional projections. Values represent median estimates (m) relative to the 2000 baseline.</p>
+  </div>
+  <h3 data-i18n="carib_h">The Caribbean Context</h3>
+  <p data-i18n="carib_p">The Caribbean is a global hotspot for coastal climate risk. With over 40 million people living within 10 km of the coast and economies heavily dependent on coastal tourism and fisheries, the region is highly exposed. Small Island Developing States (SIDS) face existential threats — some islands could be largely uninhabitable by 2100 under high-emission scenarios.</p>
+  <div class="ibox">
+    <strong data-i18n="carib_ft">📊 Caribbean Coastal Facts:</strong>
+    <ul style="margin-top:8px;padding-left:20px;font-size:.88rem;line-height:2.1" data-i18n-html="carib_fl">
+      <li>Mean tidal range: &lt;0.5 m (micro-tidal environment)</li>
+      <li>Dominant wave regime: NE trade winds, Hs ≈ 0.8–1.5 m</li>
+      <li>Hurricane season: June–November (peak September)</li>
+      <li>Average shoreline erosion: ~0.5 m/yr, up to 3 m/yr in hotspots</li>
+      <li>Coral reef cover declined 50% since 1970s — loss of natural coastal protection</li>
+    </ul>
+  </div>
+  <div class="extlinks">
+    <div class="extlinks-lbl" data-i18n="learn_more">🔗 Learn more</div>
+    <a href="https://coast.noaa.gov/slr/" target="_blank" rel="noopener">NOAA Sea Level Rise Viewer</a>
+    <a href="https://sealevel.nasa.gov/" target="_blank" rel="noopener">NASA Sea Level Portal</a>
+    <a href="https://www.ipcc.ch/srocc/" target="_blank" rel="noopener">IPCC SROCC (2019)</a>
+    <a href="https://www.esrl.noaa.gov/gmd/ccgg/trends/" target="_blank" rel="noopener">NOAA CO₂ Trends</a>
+    <a href="https://marine.copernicus.eu/" target="_blank" rel="noopener">Copernicus Marine Service</a>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- MODULE 3 -->
+<section id="ranasinghe">
+  <p class="slabel" data-i18n="s3_lbl">Module 3 · 30 minutes</p>
+  <h2 data-i18n="s3_h2">Ranasinghe's Probabilistic Framework</h2>
+  <p data-i18n="s3_intro">Prof. Roshanka Ranasinghe (IHE Delft / TU Delft) is one of the world's leading researchers on coastal change under climate change. His work shifted how we assess coastal risk — from deterministic rules of thumb to probabilistic, process-based frameworks.</p>
+
+  <h3 data-i18n="tl_h">Evolution of the Framework</h3>
+  <div class="tl" style="margin:22px 0">
+    <div class="tli">
+      <div class="tldot"></div>
+      <div class="tlyear">2000s — Early process-based modeling</div>
+      <div class="tlcard" data-i18n="tl1">Ranasinghe developed and applied process-based numerical models (DELFT3D, XBeach) to understand how coasts respond to storms, waves, and tidal forcing. This established the physical foundation for his later risk work.</div>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <div class="tlyear">2012 — Critique of the Bruun Rule</div>
+      <div class="tlcard" data-i18n="tl2">Ranasinghe demonstrated that the widely-used Bruun Rule for estimating beach erosion from SLR oversimplifies coastal dynamics and can dramatically underestimate erosion around tidal inlets, estuaries, and embayed coasts.</div>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <div class="tlyear">2016 — Landmark synthesis paper</div>
+      <div class="tlcard" data-i18n="tl3"><strong>"Assessing climate change impacts on open sandy coasts"</strong> (Earth-Science Reviews, 160). This paper synthesized global evidence, identified five key climate change impact drivers, and called for a new generation of probabilistic coastal risk models.</div>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <div class="tlyear">2019–2020 — IPCC SROCC &amp; global impact</div>
+      <div class="tlcard" data-i18n="tl4">Ranasinghe contributed to the IPCC Special Report on the Ocean and Cryosphere (SROCC, 2019), shaping global coastal policy. His 2020 <em>Scientific Reports</em> paper called for models that handle deep uncertainty in 21st-century projections.</div>
+    </div>
+  </div>
+
+  <!-- BRUUN RULE -->
+  <h3 data-i18n="bruun_h" style="margin-top:32px">The Bruun Rule — and Why We Need to Go Beyond It</h3>
+  <p data-i18n="bruun_intro">For decades, coastal managers used the <strong>Bruun Rule</strong> (Bruun, 1962) as the default method to estimate how much a beach would retreat for a given sea-level rise. Understanding it — and its critical limitations — is essential background for Ranasinghe's work.</p>
+  <div class="bruun-box">
+    <h3 data-i18n="bruun_eq_h">The Bruun Rule Equation</h3>
+    <div class="bruun-formula">R = (S × L*) / (B + h*)</div>
+    <div class="bruun-vars">
+      <div class="bvar"><strong>R</strong> — <span data-i18n="bv_r">Shoreline retreat distance (m)</span></div>
+      <div class="bvar"><strong>S</strong> — <span data-i18n="bv_s">Sea-level rise (m)</span></div>
+      <div class="bvar"><strong>L*</strong> — <span data-i18n="bv_l">Active profile width (m) — from berm to closure depth</span></div>
+      <div class="bvar"><strong>B</strong> — <span data-i18n="bv_b">Berm height above mean sea level (m)</span></div>
+      <div class="bvar"><strong>h*</strong> — <span data-i18n="bv_h">Depth of closure (m)</span></div>
+    </div>
+    <p data-i18n="bruun_concept">The concept: when sea level rises by <em>S</em>, the beach profile must shift landward and upward to maintain its equilibrium shape. The sand needed to raise the subaqueous profile (S × L*) comes from the beach face — causing horizontal retreat R. It is elegant, simple, and widely criticized.</p>
+  </div>
+  <div class="wbox">
+    <strong data-i18n="bruun_lim_h">⚠️ Critical Limitations of the Bruun Rule:</strong>
+    <ul style="margin-top:8px;padding-left:20px;font-size:.88rem;line-height:2.1" data-i18n-html="bruun_lims">
+      <li><strong>1D cross-shore only</strong> — ignores longshore sediment transport entirely</li>
+      <li><strong>No sediment budget</strong> — assumes no sediment input (rivers, dunes) or loss (offshore, inlets)</li>
+      <li><strong>Equilibrium assumption</strong> — assumes the coast is always in equilibrium; real beaches aren't</li>
+      <li><strong>Fails for complex coasts</strong> — tidal inlets, estuaries, headlands, and embayed beaches violate its assumptions</li>
+      <li><strong>Ignores wave climate change</strong> — changes in wave height, direction, and period can dominate over SLR on decadal scales</li>
+      <li><strong>Scale mismatch</strong> — designed for long-term (100-yr) averages; not applicable to storm events or short-term variability</li>
+    </ul>
+  </div>
+  <h3 data-i18n="models_h">Beyond Bruun: Process-Based Coastal Models</h3>
+  <p data-i18n="models_intro">Ranasinghe advocates replacing (or supplementing) the Bruun Rule with <strong>process-based numerical models</strong> that simulate the actual physics of coastal change. Three models are most widely used in research and practice:</p>
+  <div class="model-cards">
+    <div class="model-card">
+      <div class="model-tag" data-i18n="mt_storm">Storm impact · Dunes</div>
+      <div class="model-card-head">XBeach</div>
+      <p data-i18n="mc_xbeach">Open-source nearshore process model (Roelvink et al., 2009). Simulates swash, dune erosion, overwash, and short-term storm impact. Widely used for rapid coastal hazard assessments. Runs on a laptop; free.</p>
+      <a href="https://xbeach.readthedocs.io/" target="_blank" rel="noopener" style="font-size:.78rem;color:var(--ob);font-weight:600;text-decoration:none;display:inline-block;margin-top:8px">🔗 xbeach.readthedocs.io →</a>
+    </div>
+    <div class="model-card">
+      <div class="model-tag" data-i18n="mt_morpho">Full hydrodynamics · Engineering</div>
+      <div class="model-card-head">Delft3D</div>
+      <p data-i18n="mc_delft">Industry-standard 3D hydrodynamic and morphodynamic suite (Deltares). Handles waves, tides, currents, and sediment transport in estuaries, coasts, and harbors. Gold standard for complex engineering applications. Open-source version available.</p>
+      <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-4-suite" target="_blank" rel="noopener" style="font-size:.78rem;color:var(--ob);font-weight:600;text-decoration:none;display:inline-block;margin-top:8px">🔗 deltares.nl/Delft3D →</a>
+    </div>
+    <div class="model-card">
+      <div class="model-tag" data-i18n="mt_shore">Shoreline evolution · Planform</div>
+      <div class="model-card-head">ShorelineS</div>
+      <p data-i18n="mc_shores">One-line shoreline evolution model (Roelvink &amp; Costas, 2021). Simulates long-term planform change around inlets, headlands, and spits under variable wave climates. Handles the complex geometries that break the Bruun Rule. Open-source on GitHub.</p>
+      <a href="https://github.com/danoroelvink/shorelines" target="_blank" rel="noopener" style="font-size:.78rem;color:var(--ob);font-weight:600;text-decoration:none;display:inline-block;margin-top:8px">🔗 github.com/ShorelineS →</a>
+    </div>
+  </div>
+  <div class="sbox">
+    <strong data-i18n="model_insight_h">🔑 The Takeaway:</strong>
+    <p style="margin:8px 0 0;font-size:.9rem" data-i18n="model_insight_d">The Bruun Rule gives a single deterministic number (e.g., "2 m of retreat per 1 mm of SLR"). Process-based models give you a physically-realistic simulation with uncertainty bounds. Combined with Ranasinghe's probabilistic framework, they let you say: <em>"There is a 90% probability that shoreline retreat will be between 1.5 and 4.2 m by 2080 under RCP 4.5."</em> That is far more actionable for coastal managers.</p>
+  </div>
+
+  <h3 data-i18n="ccid_h">The Five Climate Change Impact Drivers</h3>
+  <p data-i18n="ccid_p">Ranasinghe (2016) identifies five physical drivers that mediate how climate change alters coastal systems. Understanding these is essential for any realistic coastal risk assessment.</p>
+  <div class="cgrid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+    <div class="card" style="text-align:center;border-top:3px solid #0077B6"><div class="cicon">📈</div><div class="ctitle" data-i18n="d1t">1. Mean SLR</div><p data-i18n="d1d">Raises baseline for flooding and drives long-term beach erosion. Even small SLR changes have large non-linear effects.</p></div>
+    <div class="card" style="text-align:center;border-top:3px solid #0096C7"><div class="cicon">🌊</div><div class="ctitle" data-i18n="d2t">2. Wave Climate</div><p data-i18n="d2d">Changes in wave height, period, and direction reshape sediment transport — often dominating over SLR on decadal scales.</p></div>
+    <div class="card" style="text-align:center;border-top:3px solid #00B4D8"><div class="cicon">⛈️</div><div class="ctitle" data-i18n="d3t">3. Storm Characteristics</div><p data-i18n="d3d">Changes in storm intensity, frequency, and tracks alter surge heights and wave conditions during extreme events.</p></div>
+    <div class="card" style="text-align:center;border-top:3px solid #48CAE4"><div class="cicon">⬇️</div><div class="ctitle" data-i18n="d4t">4. Sediment Supply</div><p data-i18n="d4d">Dams and land-use change reduce river sediment, starving beaches of material and amplifying erosion from other drivers.</p></div>
+    <div class="card" style="text-align:center;border-top:3px solid #90E0EF"><div class="cicon">🌡️</div><div class="ctitle" data-i18n="d5t">5. Atm. CO₂</div><p data-i18n="d5d">Ocean acidification degrades coral reefs — natural wave-breaking structures. Reef loss can increase shore wave energy by 30–50%.</p></div>
+  </div>
+  <div class="sbox">
+    <strong data-i18n="rk_t">🔑 Ranasinghe's Core Contribution:</strong>
+    <p style="margin:8px 0 0;font-size:.9rem" data-i18n="rk_d">Rather than asking "how much will this beach erode?" (a single number), Ranasinghe's framework asks: "What is the probability distribution of erosion outcomes, given all uncertainties in climate projections, model parameters, and natural variability?" This allows planners to design for a chosen confidence level — e.g., the 95th-percentile outcome.</p>
+  </div>
+  <div class="chart-wrap">
+    <div class="ctit" data-i18n="pc_t">Deterministic vs. Probabilistic Erosion Projection — Conceptual Comparison</div>
+    <canvas id="probChart" height="210"></canvas>
+    <p class="cnote" data-i18n="pc_n">The deterministic approach gives one number; the probabilistic approach gives a distribution of possible outcomes. Risk managers choose the acceptable risk level.</p>
+  </div>
+  <div class="extlinks">
+    <div class="extlinks-lbl" data-i18n="learn_more">🔗 Learn more</div>
+    <a href="https://doi.org/10.1016/j.earscirev.2016.07.011" target="_blank" rel="noopener">Ranasinghe (2016) Earth-Sci. Reviews</a>
+    <a href="https://doi.org/10.1038/s41598-020-57998-9" target="_blank" rel="noopener">Ranasinghe (2020) Sci. Reports</a>
+    <a href="https://www.ipcc.ch/srocc/chapter/chapter-4/" target="_blank" rel="noopener">IPCC SROCC Chapter 4 — Sea Level</a>
+    <a href="https://xbeach.readthedocs.io/" target="_blank" rel="noopener">XBeach Documentation</a>
+    <a href="https://github.com/danoroelvink/shorelines" target="_blank" rel="noopener">ShorelineS on GitHub</a>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- MODULE 4 -->
+<section id="cvi">
+  <p class="slabel" data-i18n="s4_lbl">Module 4 · 30 minutes</p>
+  <h2 data-i18n="s4_h2">The Coastal Vulnerability Index (CVI)</h2>
+  <p data-i18n="s4_intro">The CVI was developed by the U.S. Geological Survey (Thieler &amp; Hammar-Klose, 1999) as a rapid, data-driven method to rank the relative vulnerability of coastal segments to sea-level rise. It serves as a practical entry point to the probabilistic frameworks advocated by Ranasinghe.</p>
+  <div class="fbox">
+    <p style="opacity:.75;font-size:.88rem" data-i18n="cvi_fl">The CVI Formula</p>
+    <div class="formula">CVI = √( (G × S × SLR × SC × WH × TR) / 6 )</div>
+    <p style="font-size:.85rem;opacity:.7;margin-top:8px" data-i18n="cvi_fn">Each variable is ranked 1 (very low vulnerability) to 5 (very high). The geometric mean highlights cases where even one extreme variable drives high overall risk.</p>
+  </div>
+  <h3 data-i18n="cv_h">Variable Ranking Scales</h3>
+  <h4 data-i18n="geo_h">1. Geomorphology (G)</h4>
+  <table>
+    <thead><tr><th data-i18n="th_rank">Rank</th><th data-i18n="th_vuln">Vulnerability</th><th data-i18n="th_desc">Description</th></tr></thead>
+    <tbody>
+      <tr><td class="r1">1</td><td class="r1" data-i18n="vl">Very Low</td><td data-i18n="g1">Rocky cliffs, high mountain coasts</td></tr>
+      <tr><td class="r2">2</td><td class="r2" data-i18n="lo">Low</td><td data-i18n="g2">Medium cliffs, fjords</td></tr>
+      <tr><td class="r3">3</td><td class="r3" data-i18n="mo">Moderate</td><td data-i18n="g3">Low cliffs, glacial drift, alluvial plains</td></tr>
+      <tr><td class="r4">4</td><td class="r4" data-i18n="hi">High</td><td data-i18n="g4">Cobble beaches, estuaries, lagoons</td></tr>
+      <tr><td class="r5">5</td><td class="r5" data-i18n="vh">Very High</td><td data-i18n="g5">Barrier beaches, sandy beaches, deltas, coral reefs</td></tr>
+    </tbody>
+  </table>
+  <h4 data-i18n="qv_h">2–6. Quantitative Variables — Complete Ranking Reference</h4>
+  <div style="overflow-x:auto">
+  <table style="min-width:640px">
+    <thead><tr>
+      <th data-i18n="th_var">Variable</th>
+      <th class="r1">1 — <span data-i18n="vl">Very Low</span></th>
+      <th class="r2">2 — <span data-i18n="lo">Low</span></th>
+      <th class="r3">3 — <span data-i18n="mo">Moderate</span></th>
+      <th class="r4">4 — <span data-i18n="hi">High</span></th>
+      <th class="r5">5 — <span data-i18n="vh">Very High</span></th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>S</strong> — <span data-i18n="vs">Coastal Slope</span></td>
+        <td class="r1">&gt; 0.12%</td><td class="r2">0.09–0.12%</td><td class="r3">0.06–0.09%</td><td class="r4">0.03–0.06%</td><td class="r5">&lt; 0.03%</td>
+      </tr>
+      <tr>
+        <td><strong>SLR</strong> — <span data-i18n="vslr">Sea-Level Change</span></td>
+        <td class="r1">&lt; 1.8 mm/yr</td><td class="r2">1.8–2.5</td><td class="r3">2.5–3.0</td><td class="r4">3.0–3.4</td><td class="r5">&gt; 3.4 mm/yr</td>
+      </tr>
+      <tr>
+        <td><strong>SC</strong> — <span data-i18n="vsc">Shoreline Change</span></td>
+        <td class="r1">&gt; +2.0 m/yr</td><td class="r2">+1.0 to +2.0</td><td class="r3">±1.0 m/yr</td><td class="r4">−1.0 to −2.0</td><td class="r5">&lt; −2.0 m/yr</td>
+      </tr>
+      <tr>
+        <td><strong>WH</strong> — <span data-i18n="vwh">Mean Wave Height</span></td>
+        <td class="r1">&lt; 0.55 m</td><td class="r2">0.55–0.85 m</td><td class="r3">0.85–1.05 m</td><td class="r4">1.05–1.25 m</td><td class="r5">&gt; 1.25 m</td>
+      </tr>
+      <tr>
+        <td><strong>TR</strong> — <span data-i18n="vtr">Mean Tidal Range</span></td>
+        <td class="r1">&gt; 6.0 m</td><td class="r2">4.0–6.0 m</td><td class="r3">2.0–4.0 m</td><td class="r4">1.0–2.0 m</td><td class="r5">&lt; 1.0 m</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <h3 style="margin-top:28px" data-i18n="ci_h">CVI Score Interpretation</h3>
+  <table>
+    <thead><tr><th data-i18n="th_cvi">CVI Range</th><th data-i18n="th_cls">Risk Class</th><th data-i18n="th_act">Typical Management Response</th></tr></thead>
+    <tbody>
+      <tr><td class="r1">&lt; 8</td><td class="r1" data-i18n="vl">Very Low</td><td data-i18n="a1">Monitoring only; no immediate intervention needed</td></tr>
+      <tr><td class="r2">8 – 15</td><td class="r2" data-i18n="lo">Low</td><td data-i18n="a2">Regular monitoring; review development setbacks</td></tr>
+      <tr><td class="r3">15 – 25</td><td class="r3" data-i18n="mo">Moderate</td><td data-i18n="a3">Adaptation planning; beach nourishment, dune restoration</td></tr>
+      <tr><td class="r4">25 – 35</td><td class="r4" data-i18n="hi">High</td><td data-i18n="a4">Active intervention; hard structures or managed retreat</td></tr>
+      <tr><td class="r5">&gt; 35</td><td class="r5" data-i18n="vh">Very High</td><td data-i18n="a5">Urgent action; evaluate relocation</td></tr>
+    </tbody>
+  </table>
+  <div class="wbox">
+    <strong data-i18n="cl_t">⚠️ CVI Limitations (per Ranasinghe's Critique):</strong>
+    <p style="margin:8px 0 0;font-size:.9rem" data-i18n="cl_d">The CVI is a useful screening tool but has important limitations: (1) equal weighting of all variables; (2) it doesn't capture storm surge or extreme events; (3) it doesn't account for future climate trajectories; (4) local conditions (reef presence, infrastructure) may override the simple ranking. For high-stakes decisions, complement the CVI with process-based probabilistic models.</p>
+  </div>
+  <div class="extlinks">
+    <div class="extlinks-lbl" data-i18n="learn_more">🔗 Learn more</div>
+    <a href="https://pubs.usgs.gov/of/1999/of99-593/" target="_blank" rel="noopener">USGS CVI Original Paper (1999)</a>
+    <a href="https://www.usgs.gov/centers/whcmsc/science/coastal-vulnerability-index-cvi" target="_blank" rel="noopener">USGS CVI Methodology</a>
+    <a href="https://doi.org/10.1016/j.earscirev.2016.07.011" target="_blank" rel="noopener">Ranasinghe (2016) — CVI critique</a>
+    <a href="https://coast.noaa.gov/digitalcoast/tools/cvi.html" target="_blank" rel="noopener">NOAA Digital Coast — CVI Tool</a>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- MODULE 5 -->
+<section id="example">
+  <p class="slabel" data-i18n="s5_lbl">Module 5 · 30 minutes</p>
+  <h2 data-i18n="s5_h2">Worked Example: Playa Bávaro, Dominican Republic</h2>
+  <p data-i18n="s5_intro">Let's apply the CVI step by step to a real Caribbean setting. Playa Bávaro is a barrier beach system on the northeast coast of the Dominican Republic — a low-lying sandy coast with significant tourism development and documented erosion problems.</p>
+  <div class="ibox" style="margin-bottom:28px">
+    <strong data-i18n="ex_st">📍 Site Description:</strong>
+    <p style="margin:8px 0 0;font-size:.9rem" data-i18n="ex_sd">A 30-km stretch of fine carbonate sandy beach backed by low-elevation coastal plain, with fringing coral reefs 200–500 m offshore. The beach has experienced accelerating erosion since the 1990s, linked to reef degradation, coastal construction, and rising sea levels. Tidal range is micro-tidal (~0.3 m).</p>
+  </div>
+  <div>
+    <div class="step"><div class="snum">1</div><div class="scontent"><h3 data-i18n="st1t">Geomorphology (G)</h3><p data-i18n="st1d">Classic barrier beach with fine carbonate sand and low relief. Barrier beaches fall in the highest vulnerability category.</p><div style="background:#FCA5A5;padding:8px 14px;border-radius:8px;display:inline-block;font-weight:700;color:#7F1D1D">G = 5 — <span data-i18n="vh">Very High</span></div></div></div>
+    <div class="step"><div class="snum">2</div><div class="scontent"><h3 data-i18n="st2t">Coastal Slope (S)</h3><p data-i18n="st2d">LIDAR survey shows the backshore slope averages 0.035% over a 2 km inland transect — within the 0.03–0.06% range.</p><div style="background:#FEE2E2;padding:8px 14px;border-radius:8px;display:inline-block;font-weight:700;color:#991B1B">S = 4 — <span data-i18n="hi">High</span></div></div></div>
+    <div class="step"><div class="snum">3</div><div class="scontent"><h3 data-i18n="st3t">Sea-Level Change Rate (SLR)</h3><p data-i18n="st3d">Nearest NOAA tide gauge (Santo Domingo) records a relative sea-level rise of 3.2 mm/yr, combining eustatic rise and local subsidence.</p><div style="background:#FEE2E2;padding:8px 14px;border-radius:8px;display:inline-block;font-weight:700;color:#991B1B">SLR = 4 — <span data-i18n="hi">High</span> (3.0–3.4 mm/yr)</div></div></div>
+    <div class="step"><div class="snum">4</div><div class="scontent"><h3 data-i18n="st4t">Shoreline Change Rate (SC)</h3><p data-i18n="st4d">Satellite-derived shoreline analysis (1990–2020) shows an average retreat of 1.8 m/yr at Bávaro, with some hotspots reaching 3 m/yr near hotel structures that block sediment transport.</p><div style="background:#FEE2E2;padding:8px 14px;border-radius:8px;display:inline-block;font-weight:700;color:#991B1B">SC = 4 — <span data-i18n="hi">High</span> (1.0–2.0 m/yr erosion)</div></div></div>
+    <div class="step"><div class="snum">5</div><div class="scontent"><h3 data-i18n="st5t">Mean Wave Height (WH)</h3><p data-i18n="st5d">Wave buoy near Punta Cana shows a mean significant wave height (Hs) of 1.1 m, driven by NE trade winds and North Atlantic swells.</p><div style="background:#FEE2E2;padding:8px 14px;border-radius:8px;display:inline-block;font-weight:700;color:#991B1B">WH = 4 — <span data-i18n="hi">High</span> (1.05–1.25 m)</div></div></div>
+    <div class="step"><div class="snum">6</div><div class="scontent"><h3 data-i18n="st6t">Mean Tidal Range (TR)</h3><p data-i18n="st6d">The Caribbean is micro-tidal. Tide gauge data shows a mean spring range of only 0.3 m. Small tidal ranges concentrate wave energy at a narrow elevation band.</p><div style="background:#FCA5A5;padding:8px 14px;border-radius:8px;display:inline-block;font-weight:700;color:#7F1D1D">TR = 5 — <span data-i18n="vh">Very High</span> (&lt;1.0 m)</div></div></div>
+    <div class="step"><div class="snum">7</div><div class="scontent">
+      <h3 data-i18n="st7t">Calculate the CVI</h3>
+      <div style="font-family:'Courier New',monospace;font-size:.95rem;background:#F8FAFC;padding:14px;border-radius:8px;border:1px solid var(--border);margin-bottom:12px;line-height:2">
+        CVI = √( (5 × 4 × 4 × 4 × 4 × 5) / 6 )<br>
+        CVI = √( 6400 / 6 ) = √( 1066.7 )<br>
+        <strong>CVI ≈ 32.7</strong>
+      </div>
+      <div style="background:#FEE2E2;padding:10px 16px;border-radius:8px;font-weight:700;color:#991B1B">🔴 <span data-i18n="ex_res">Result: HIGH vulnerability (25–35). Active coastal management is required.</span></div>
+    </div></div>
+  </div>
+  <div class="col2" style="margin-top:28px">
+    <div class="chart-wrap"><div class="ctit" data-i18n="ex_bt">Variable Rankings — Playa Bávaro</div><canvas id="exBarChart" height="240"></canvas></div>
+    <div class="chart-wrap"><div class="ctit" data-i18n="ex_rt">Vulnerability Radar — Playa Bávaro</div><canvas id="exRadarChart" height="240"></canvas></div>
+  </div>
+  <div class="sbox" style="margin-top:22px">
+    <strong data-i18n="rc_t2">🔗 Connecting to Ranasinghe's Framework:</strong>
+    <p style="margin:8px 0 0;font-size:.9rem" data-i18n="rc_d">The CVI gives us 32.7 — but Ranasinghe would ask: "What is the uncertainty range?" SLR projections for 2100 range from +0.3 m (RCP2.6) to +1.0 m+ (RCP8.5). Under high-end SLR, shoreline retreat at Bávaro could increase from 1.8 m/yr to 4–6 m/yr, potentially pushing the CVI above 40 (Very High). This probabilistic thinking — not just a single number — is essential for long-term coastal planning.</p>
+  </div>
+  <div class="extlinks">
+    <div class="extlinks-lbl" data-i18n="learn_more">🔗 Learn more</div>
+    <a href="https://www.nodc.noaa.gov/cgi-bin/OC5/SELECT/builder.pl" target="_blank" rel="noopener">NOAA Tide Gauge Data</a>
+    <a href="https://psmsl.org/" target="_blank" rel="noopener">PSMSL — Global Sea Level</a>
+    <a href="https://gesla787.org/" target="_blank" rel="noopener">GESLA — Extreme Sea Levels</a>
+    <a href="https://opentopography.org/" target="_blank" rel="noopener">OpenTopography — LIDAR Data</a>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- MODULE 6: WORKSHOP -->
+<section id="workshop">
+  <p class="slabel" data-i18n="s6_lbl">Module 6 · 45 minutes · Workshop</p>
+  <h2 data-i18n="s6_h2">Your Turn: Playa Blanca, Colombia</h2>
+  <div class="wintro">
+    <h3 data-i18n="ws_h">🌊 Scenario</h3>
+    <p data-i18n="ws_p">You are a coastal risk analyst hired by the Colombian government to assess Playa Blanca — a 15-km sandy beach on the Caribbean coast near Cartagena. The community relies on tourism and artisanal fishing. Your task: calculate the CVI and classify the risk level using the data provided below.</p>
+  </div>
+  <h3 style="margin-bottom:14px" data-i18n="dp_h">📊 Data Provided</h3>
+  <div class="col2" style="margin-bottom:28px">
+    <div class="chart-wrap"><div class="ctit" data-i18n="sh_t">Shoreline Change at Playa Blanca (2000–2022)</div><canvas id="shoreChart" height="210"></canvas><p class="cnote" data-i18n="sh_n">Satellite-derived shoreline positions (DSAS). Negative = erosion from 2000 baseline.</p></div>
+    <div class="chart-wrap"><div class="ctit" data-i18n="wh_t">Monthly Mean Wave Height — Buoy Data (2015–2022)</div><canvas id="waveChart" height="210"></canvas><p class="cnote" data-i18n="wh_n">Annual mean Hs = 1.15 m. Peak season: Dec–Mar (NE trade winds).</p></div>
+  </div>
+  <div class="dg4">
+    <div class="dhint"><strong>🏔️ <span data-i18n="dg_l">Geomorphology:</span></strong><br><span data-i18n="dg_d">Low-lying carbonate sandy beach with small foredunes (&lt;1.5 m). Backed by narrow coastal plain and mangrove lagoon. No rocky outcrops.</span></div>
+    <div class="dhint"><strong>📐 <span data-i18n="ds_l">Coastal Slope:</span></strong><br><span data-i18n="ds_d">Topographic survey shows an average slope of 0.045% measured over a 1 km inland transect from the current shoreline.</span></div>
+    <div class="dhint"><strong>🌡️ <span data-i18n="dslr_l">Sea-Level Change:</span></strong><br><span data-i18n="dslr_d">Cartagena tide gauge (CIOH): relative SLR rate = 4.1 mm/yr — one of the highest in the Caribbean, partly due to local subsidence.</span></div>
+    <div class="dhint"><strong>🌊 <span data-i18n="dt_l">Tidal Range:</span></strong><br><span data-i18n="dt_d">Mean spring tidal range at Cartagena = 0.38 m. Classic micro-tidal Caribbean environment.</span></div>
+  </div>
+
+  <h3 data-i18n="ya_h">✏️ Your Assessment</h3>
+  <p data-i18n="ya_p">Based on the data above, assign a vulnerability rank (1–5) to each variable using the tables from Module 4. Then click Calculate.</p>
+  <div class="vgrid">
+    <div class="vcard"><div><div class="vname">G — <span data-i18n="vn_g">Geomorphology</span></div><div class="vhint" data-i18n="vh_g">Rocky cliff (1) → Sandy barrier beach / delta (5)</div></div><select id="inp_G" onchange="liveUpdate()"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+    <div class="vcard"><div><div class="vname">S — <span data-i18n="vn_s">Coastal Slope</span></div><div class="vhint" data-i18n="vh_s">&gt;0.12% (1) → &lt;0.03% (5) | Measured: 0.045%</div></div><select id="inp_S" onchange="liveUpdate()"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+    <div class="vcard"><div><div class="vname">SLR — <span data-i18n="vn_slr">Sea-Level Change Rate</span></div><div class="vhint" data-i18n="vh_slr">&lt;1.8 mm/yr (1) → &gt;3.4 mm/yr (5) | Measured: 4.1 mm/yr</div></div><select id="inp_SLR" onchange="liveUpdate()"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+    <div class="vcard"><div><div class="vname">SC — <span data-i18n="vn_sc">Shoreline Change Rate</span></div><div class="vhint" data-i18n="vh_sc">&gt;+2.0 m/yr accretion (1) → &lt;−2.0 m/yr erosion (5) | Read from chart</div></div><select id="inp_SC" onchange="liveUpdate()"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+    <div class="vcard"><div><div class="vname">WH — <span data-i18n="vn_wh">Mean Wave Height</span></div><div class="vhint" data-i18n="vh_wh">&lt;0.55 m (1) → &gt;1.25 m (5) | Read from chart</div></div><select id="inp_WH" onchange="liveUpdate()"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+    <div class="vcard"><div><div class="vname">TR — <span data-i18n="vn_tr">Mean Tidal Range</span></div><div class="vhint" data-i18n="vh_tr">&gt;6.0 m macro-tidal (1) → &lt;1.0 m micro-tidal (5) | Measured: 0.38 m</div></div><select id="inp_TR" onchange="liveUpdate()"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+  </div>
+  <button class="cbtn" onclick="calcCVI()" data-i18n="calc_btn">Calculate My CVI →</button>
+
+  <div class="rbox" id="rbox">
+    <p style="color:#666;font-size:.9rem" data-i18n="yr_lbl">Your CVI Score</p>
+    <div class="cscore" id="cvi_score">—</div>
+    <div id="risk_badge" class="rbadge">—</div>
+    <div class="rbar"><div class="rind" id="rind" style="left:2%"></div></div>
+    <div class="rlabels"><span data-i18n="vl">Very Low</span><span data-i18n="lo">Low</span><span data-i18n="mo">Moderate</span><span data-i18n="hi">High</span><span data-i18n="vh">Very High</span></div>
+    <div class="chart-wrap" style="margin-top:22px;text-align:left">
+      <div class="ctit" data-i18n="wr_t">Your Vulnerability Profile</div>
+      <canvas id="wsRadar" height="240"></canvas>
+    </div>
+    <div id="interp_box" style="text-align:left;margin-top:20px;padding:18px;background:#F8FAFC;border-radius:12px;font-size:.92rem"></div>
+    <button onclick="toggleAnswer()" style="background:#6B7280;color:#fff;border:none;padding:9px 22px;border-radius:8px;cursor:pointer;margin-top:14px;font-weight:600" data-i18n="show_ans">Show Expected Answer</button>
+    <div id="ans_box" style="display:none;margin-top:14px;padding:18px;background:#F0FDF4;border:2px solid #86EFAC;border-radius:12px;text-align:left">
+      <h4 style="color:#166534;margin-bottom:10px" data-i18n="ea_t">Expected Answer</h4>
+      <p data-i18n="ea_p">G=5 (sandy barrier beach), S=4 (0.045% falls in the 0.03–0.06% range), SLR=5 (4.1 mm/yr &gt; 3.4 mm/yr threshold), SC=3 (chart shows ~−0.42 m/yr — within the ±1 m/yr "stable" band), WH=4 (annual mean 1.15 m falls in 1.05–1.25 m range), TR=5 (0.38 m is micro-tidal).</p>
+      <div style="font-family:'Courier New',monospace;background:#fff;padding:12px;border-radius:8px;margin:12px 0;font-size:.9rem;line-height:2">
+        CVI = √((5 × 4 × 5 × 3 × 4 × 5) / 6) = √(6000/6) = √1000 ≈ <strong>31.6</strong>
+      </div>
+      <div style="background:#FEE2E2;display:inline-block;padding:8px 18px;border-radius:8px;font-weight:700;color:#991B1B" data-i18n="ea_r">🔴 HIGH Risk — Active coastal management required</div>
+    </div>
+  </div>
+
+  <div class="ibox" style="margin-top:28px">
+    <strong data-i18n="rf_t">💭 Reflection Questions:</strong>
+    <ol style="margin-top:10px;padding-left:22px;line-height:2.3;font-size:.92rem" data-i18n-html="rf_q">
+      <li>Which variable contributed most to the CVI score? What would change if that variable improved?</li>
+      <li>The SLR rate at Cartagena (4.1 mm/yr) is much higher than the global average. What local factors might explain this?</li>
+      <li>Using Ranasinghe's framework, how would your assessment change if you used the RCP 8.5 SLR projection for 2100?</li>
+      <li>What adaptation measures would you recommend for Playa Blanca, and why?</li>
+    </ol>
+  </div>
+
+  <!-- PUBLIC DATA SOURCES -->
+  <div style="margin-top:32px;background:var(--pb);border-radius:16px;padding:24px">
+    <p class="slabel" data-i18n="ds_lbl">Public Data Sources</p>
+    <h3 data-i18n="ds_h">🗂️ Where to Get Real Coastal Data</h3>
+    <p style="font-size:.9rem" data-i18n="ds_p">These free, publicly available datasets are the same sources used by researchers to perform real coastal vulnerability assessments. Bookmark them for your own studies.</p>
+    <h4 data-i18n="ds_slr_h">🌡️ Sea Level &amp; Tides</h4>
+    <div class="dsrc-grid">
+      <a class="dsrc" href="https://psmsl.org/" target="_blank" rel="noopener"><div class="dsrc-type">Global</div><div class="dsrc-name">PSMSL</div><p class="dsrc-desc">Permanent Service for Mean Sea Level — historic tide gauge records from 2,000+ stations worldwide</p></a>
+      <a class="dsrc" href="https://gesla787.org/" target="_blank" rel="noopener"><div class="dsrc-type">Global</div><div class="dsrc-name">GESLA</div><p class="dsrc-desc">Global Extreme Sea Level Analysis — high-frequency tide gauge data for extremes and return periods</p></a>
+      <a class="dsrc" href="https://tidesandcurrents.noaa.gov/" target="_blank" rel="noopener"><div class="dsrc-type">Americas</div><div class="dsrc-name">NOAA Tides &amp; Currents</div><p class="dsrc-desc">U.S. + Caribbean tide gauges, datums, sea level trends, and real-time water level data</p></a>
+      <a class="dsrc" href="https://sealevel.nasa.gov/" target="_blank" rel="noopener"><div class="dsrc-type">Satellite</div><div class="dsrc-name">NASA Sea Level Portal</div><p class="dsrc-desc">Altimetry-based global sea level change since 1992 + regional projections</p></a>
+    </div>
+    <h4 data-i18n="ds_wave_h">🌊 Waves &amp; Ocean Climate</h4>
+    <div class="dsrc-grid">
+      <a class="dsrc" href="https://marine.copernicus.eu/" target="_blank" rel="noopener"><div class="dsrc-type">Global · Free</div><div class="dsrc-name">Copernicus Marine (CMEMS)</div><p class="dsrc-desc">Waves, currents, sea level, temperature — reanalysis and forecast products for all ocean basins</p></a>
+      <a class="dsrc" href="https://cds.climate.copernicus.eu/" target="_blank" rel="noopener"><div class="dsrc-type">Global · Reanalysis</div><div class="dsrc-name">Copernicus CDS (ERA5)</div><p class="dsrc-desc">ERA5 wave reanalysis (1940–present): significant wave height, period, direction at 0.5° resolution</p></a>
+      <a class="dsrc" href="https://www.ncei.noaa.gov/products/wavewatch-iii" target="_blank" rel="noopener"><div class="dsrc-type">Model</div><div class="dsrc-name">NOAA WAVEWATCH III</div><p class="dsrc-desc">Global and regional wave model hindcast and forecast data from NOAA NCEI</p></a>
+    </div>
+    <h4 data-i18n="ds_shore_h">🏖️ Shorelines &amp; Elevation</h4>
+    <div class="dsrc-grid">
+      <a class="dsrc" href="https://doi.org/10.1038/s41586-021-03455-8" target="_blank" rel="noopener"><div class="dsrc-type">Global · Satellite</div><div class="dsrc-name">CoastSat / Global Shoreline</div><p class="dsrc-desc">Satellite-derived shoreline change data (Landsat 1984–present). Free Python toolkit available</p></a>
+      <a class="dsrc" href="https://www.gebco.net/" target="_blank" rel="noopener"><div class="dsrc-type">Global · Bathymetry</div><div class="dsrc-name">GEBCO</div><p class="dsrc-desc">General Bathymetric Chart of the Oceans — 15 arc-second global ocean depth grid, free download</p></a>
+      <a class="dsrc" href="https://opentopography.org/" target="_blank" rel="noopener"><div class="dsrc-type">Global · LIDAR</div><div class="dsrc-name">OpenTopography</div><p class="dsrc-desc">Free access to high-resolution topographic LIDAR data, including coastal DEMs</p></a>
+      <a class="dsrc" href="https://www.climatecentral.org/coastaldem-v2" target="_blank" rel="noopener"><div class="dsrc-type">Global · Flood Risk</div><div class="dsrc-name">CoastalDEM v2</div><p class="dsrc-desc">AI-corrected coastal elevation model; far more accurate than SRTM for low-lying coasts</p></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:10px" data-i18n="ft_t">Coastal Climate Risk Index — Educational Resource</p>
+  <p style="font-size:.82rem;max-width:580px;margin:0 auto 20px" data-i18n="ft_c">Curriculum based on: Thieler &amp; Hammar-Klose (1999) USGS CVI; Ranasinghe (2016) Earth-Science Reviews; IPCC SROCC (2019). For educational use only.</p>
+  <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;font-size:.78rem;opacity:.7;margin-bottom:20px">
+    <span>📚 Thieler &amp; Hammar-Klose (1999)</span>
+    <span>📚 Ranasinghe (2016) ESR 160</span>
+    <span>📚 IPCC SROCC (2019)</span>
+    <span>📚 Ranasinghe (2020) Sci. Reports</span>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,.1);padding-top:18px;font-size:.78rem;opacity:.6">
+    <p data-i18n="gh_note">🚀 GitHub Pages: save this file as <code style="background:rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">index.html</code> in your repository root (or <code style="background:rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">/docs</code> folder), then enable GitHub Pages in Settings → Pages. No build step required.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// ─── TRANSLATIONS ──────────────────────────────────────────────────────────
+const T = {
+en:{
+  header_title:"🌊 Coastal Climate Risk Index",
+  nav_overview:"Overview",nav_basics:"Risk Basics",nav_coastal:"Coastal Hazards",
+  nav_rana:"Ranasinghe",nav_cvi:"CVI Method",nav_example:"Worked Example",nav_workshop:"Workshop",
+  hero_title:"Coastal Climate Risk Index",
+  hero_sub:"From fundamentals to Ranasinghe's probabilistic framework — an interactive class with a hands-on Caribbean case study.",
+  p_time:"~3 hours",p_level:"All levels",p_region:"Caribbean · Latin America",p_type:"Interactive Workshop",
+  obj_label:"Learning Objectives",obj_title:"By the end of this class, you will be able to…",
+  o1t:"Define Climate Risk",o1d:"Explain the Risk = Hazard × Exposure × Vulnerability equation and apply it to coastal settings.",
+  o2t:"Identify Coastal Hazards",o2d:"Recognize key coastal hazards: sea-level rise, storm surge, and shoreline erosion.",
+  o3t:"Calculate the CVI",o3d:"Use the 6-variable Coastal Vulnerability Index formula to rank coastal risk for a real location.",
+  o4t:"Apply Ranasinghe's Framework",o4d:"Understand probabilistic risk modeling and how climate change drivers alter coastal systems.",
+  tbt:"⏱ Class Time Breakdown",th_mod:"Module",th_top:"Topic",th_time:"Time",
+  m1:"Climate Risk Fundamentals",m2:"Coastal Hazards & Exposure",m3:"Ranasinghe's Framework",
+  m4:"CVI Methodology",m5:"Worked Example — Dominican Republic",m6:"Workshop Exercise — You solve it!",
+  s1_lbl:"Module 1 · 30 minutes",s1_h2:"Climate Risk Fundamentals",
+  s1_intro:"Before diving into coastal specifics, we need a solid grasp of what \"climate risk\" means. Risk is not simply about how often a disaster happens — it is a combination of three interacting components.",
+  req_lbl:"The Risk Equation",req_formula:"Risk = Hazard × Exposure × Vulnerability",
+  req_note:"If any factor equals zero, risk is zero — all three must be present.",
+  ht:"Hazard",hd:"A potentially damaging physical event or trend — e.g., a hurricane, sea-level rise, or extreme storm. Hazard has both probability and magnitude.",
+  et:"Exposure",ed:"The people, infrastructure, and assets present in hazard-prone areas. A deserted beach has low exposure even with high hazard.",
+  vt:"Vulnerability",vd:"The predisposition to be adversely affected — determined by physical susceptibility, socioeconomic factors, and adaptive capacity.",
+  ipcc_t:"📌 IPCC Definition (AR6, 2021):",
+  ipcc_d:"The IPCC defines risk as the potential for adverse consequences arising from an event or trend. Risk is always a function of hazard, exposure, and vulnerability — and all three are influenced by human decisions and climate change.",
+  rc_t:"Risk Components — Example for a Coastal Town",
+  ki_t:"💡 Key Insight for Coastal Environments:",
+  ki_d:"Climate change increases hazard (stronger storms, higher seas), while coastal urbanization increases exposure. These two forces together are rapidly driving up coastal risk — even if individual vulnerability stays constant.",
+  s2_lbl:"Module 2 · 30 minutes",s2_h2:"Coastal Hazards & Exposure",
+  s2_intro:"The coast is one of the most dynamic and hazard-prone environments on Earth. Three primary physical processes drive coastal climate risk, and they interact and amplify each other.",
+  slr_t:"Sea-Level Rise (SLR)",slr_d:"Global mean sea level has risen ~20 cm since 1900, accelerating to ~3.7 mm/yr today. The Caribbean faces local rates of 3–5 mm/yr due to ocean warming, ice melt, and land subsidence.",
+  ss_t:"Storm Surge & Hurricanes",ss_d:"Tropical storms push water onshore, causing surges of 2–6 m in the Caribbean. Climate change is intensifying storms while SLR raises the baseline flood level.",
+  er_t:"Shoreline Erosion",er_d:"Around 70% of sandy beaches worldwide are eroding. In the Caribbean, erosion rates of 0.5–3 m/yr are common, driven by SLR, reduced sediment supply, coral reef degradation, and human interventions.",
+  slr_ct:"Sea-Level Rise Projections for the Caribbean (2020–2100) — RCP Scenarios",
+  slr_cn:"Based on IPCC AR6 regional projections. Values represent median estimates (m) relative to 2000 baseline.",
+  carib_h:"The Caribbean Context",
+  carib_p:"The Caribbean is a global hotspot for coastal climate risk. With over 40 million people within 10 km of the coast and economies dependent on coastal tourism and fisheries, the region is highly exposed.",
+  carib_ft:"📊 Caribbean Coastal Facts:",
+  carib_fl:"<li>Mean tidal range: &lt;0.5 m (micro-tidal environment)</li><li>Dominant wave regime: NE trade winds, Hs ≈ 0.8–1.5 m</li><li>Hurricane season: June–November (peak September)</li><li>Average shoreline erosion: ~0.5 m/yr, up to 3 m/yr in hotspots</li><li>Coral reef cover declined 50% since 1970s — loss of natural coastal protection</li>",
+  s3_lbl:"Module 3 · 30 minutes",s3_h2:"Ranasinghe's Probabilistic Framework",
+  s3_intro:"Prof. Roshanka Ranasinghe (IHE Delft / TU Delft) is one of the world's leading researchers on coastal change under climate change. His work shifted how we assess coastal risk — from deterministic rules of thumb to probabilistic, process-based frameworks.",
+  tl_h:"Evolution of the Framework",
+  tl1:"Ranasinghe developed and applied process-based numerical models (DELFT3D, XBeach) to understand how coasts respond to storms, waves, and tidal forcing. This established the physical foundation for his later risk work.",
+  tl2:"Ranasinghe demonstrated that the widely-used Bruun Rule oversimplifies coastal dynamics and can dramatically underestimate erosion around tidal inlets, estuaries, and embayed coasts.",
+  tl3:"<strong>\"Assessing climate change impacts on open sandy coasts\"</strong> (Earth-Science Reviews, 160). This paper synthesized global evidence, identified five key climate change impact drivers, and called for a new generation of probabilistic coastal risk models.",
+  tl4:"Ranasinghe contributed to the IPCC Special Report on the Ocean and Cryosphere (SROCC, 2019). His 2020 <em>Scientific Reports</em> paper called for models that handle deep uncertainty in 21st-century projections.",
+  ccid_h:"The Five Climate Change Impact Drivers",
+  ccid_p:"Ranasinghe (2016) identifies five physical drivers that mediate how climate change alters coastal systems. Understanding these is essential for any realistic coastal risk assessment.",
+  d1t:"1. Mean SLR",d1d:"Raises baseline for flooding and drives long-term beach erosion. Even small SLR changes have large non-linear effects.",
+  d2t:"2. Wave Climate",d2d:"Changes in wave height, period, and direction reshape sediment transport — often dominating over SLR on decadal scales.",
+  d3t:"3. Storm Characteristics",d3d:"Changes in storm intensity, frequency, and tracks alter surge heights and wave conditions during extreme events.",
+  d4t:"4. Sediment Supply",d4d:"Dams and land-use change reduce river sediment, starving beaches of material and amplifying erosion from other drivers.",
+  d5t:"5. Atm. CO₂",d5d:"Ocean acidification degrades coral reefs. Reef loss can increase shore wave energy by 30–50%.",
+  rk_t:"🔑 Ranasinghe's Core Contribution:",
+  rk_d:"Rather than asking \"how much will this beach erode?\" (a single number), Ranasinghe's framework asks: \"What is the probability distribution of erosion outcomes?\" This allows planners to design for a chosen confidence level — e.g., the 95th-percentile outcome.",
+  pc_t:"Deterministic vs. Probabilistic Erosion Projection — Conceptual Comparison",
+  pc_n:"The deterministic approach gives one number; the probabilistic approach gives a distribution of possible outcomes. Risk managers choose the acceptable risk level.",
+  s4_lbl:"Module 4 · 30 minutes",s4_h2:"The Coastal Vulnerability Index (CVI)",
+  s4_intro:"The CVI was developed by the U.S. Geological Survey (Thieler & Hammar-Klose, 1999) as a rapid method to rank coastal vulnerability to sea-level rise. It serves as a practical entry point to the probabilistic frameworks advocated by Ranasinghe.",
+  cvi_fl:"The CVI Formula",cvi_fn:"Each variable is ranked 1 (very low) to 5 (very high vulnerability). The geometric mean highlights cases where even one extreme variable drives high overall risk.",
+  cv_h:"Variable Ranking Scales",geo_h:"1. Geomorphology (G)",
+  th_rank:"Rank",th_vuln:"Vulnerability",th_desc:"Description",
+  vl:"Very Low",lo:"Low",mo:"Moderate",hi:"High",vh:"Very High",
+  g1:"Rocky cliffs, high mountain coasts",g2:"Medium cliffs, fjords",g3:"Low cliffs, glacial drift, alluvial plains",
+  g4:"Cobble beaches, estuaries, lagoons",g5:"Barrier beaches, sandy beaches, deltas, coral reefs",
+  qv_h:"2–6. Quantitative Variables",th_var:"Variable",th_r1:"Rank 1 — Very Low",th_r3:"Rank 3 — Moderate",th_r5:"Rank 5 — Very High",
+  vs:"Coastal Slope",vslr:"Sea-Level Change",vsc:"Shoreline Change",vwh:"Mean Wave Height",vtr:"Mean Tidal Range",
+  ci_h:"CVI Score Interpretation",th_cvi:"CVI Range",th_cls:"Risk Class",th_act:"Typical Management Response",
+  a1:"Monitoring only; no immediate intervention needed",a2:"Regular monitoring; review development setbacks",
+  a3:"Adaptation planning; beach nourishment, dune restoration",a4:"Active intervention; hard structures or managed retreat",a5:"Urgent action; evaluate relocation",
+  cl_t:"⚠️ CVI Limitations (per Ranasinghe's Critique):",
+  cl_d:"The CVI is a useful screening tool but has important limitations: (1) equal weighting of all variables; (2) it doesn't capture storm surge or extreme events; (3) it doesn't account for future climate trajectories; (4) local conditions may override the simple ranking. For high-stakes decisions, complement the CVI with process-based probabilistic models.",
+  s5_lbl:"Module 5 · 30 minutes",s5_h2:"Worked Example: Playa Bávaro, Dominican Republic",
+  s5_intro:"Let's apply the CVI step by step to a real Caribbean setting. Playa Bávaro is a barrier beach system on the northeast coast of the Dominican Republic — a low-lying sandy coast with significant tourism development and documented erosion problems.",
+  ex_st:"📍 Site Description:",ex_sd:"A 30-km stretch of fine carbonate sandy beach backed by low-elevation coastal plain, with fringing coral reefs 200–500 m offshore. Accelerating erosion since the 1990s linked to reef degradation, coastal construction, and rising sea levels. Tidal range ~0.3 m.",
+  st1t:"Geomorphology (G)",st1d:"Classic barrier beach with fine carbonate sand and low relief. Barrier beaches fall in the highest vulnerability category.",
+  st2t:"Coastal Slope (S)",st2d:"LIDAR survey shows backshore slope averages 0.035% over a 2 km inland transect — within the 0.03–0.06% range.",
+  st3t:"Sea-Level Change Rate (SLR)",st3d:"NOAA tide gauge (Santo Domingo) records relative SLR of 3.2 mm/yr, combining eustatic rise and local subsidence.",
+  st4t:"Shoreline Change Rate (SC)",st4d:"Satellite-derived shoreline analysis (1990–2020) shows average retreat of 1.8 m/yr at Bávaro, with hotspots near hotel structures reaching 3 m/yr.",
+  st5t:"Mean Wave Height (WH)",st5d:"Wave buoy near Punta Cana shows mean Hs = 1.1 m, driven by NE trade winds and North Atlantic swells.",
+  st6t:"Mean Tidal Range (TR)",st6d:"Caribbean is micro-tidal. Spring range = 0.3 m. Small tidal ranges concentrate wave energy at a narrow elevation band.",
+  st7t:"Calculate the CVI",
+  ex_res:"Result: HIGH vulnerability (25–35). Active coastal management is required.",
+  ex_bt:"Variable Rankings — Playa Bávaro",ex_rt:"Vulnerability Radar — Playa Bávaro",
+  rc_t2:"🔗 Connecting to Ranasinghe's Framework:",
+  rc_d:"The CVI gives 32.7 — but Ranasinghe would ask: 'What is the uncertainty range?' SLR projections for 2100 range from +0.3 m to +1.0 m+. Under high-end SLR, shoreline retreat could increase from 1.8 m/yr to 4–6 m/yr, potentially pushing the CVI above 40 (Very High).",
+  s6_lbl:"Module 6 · 45 minutes · Workshop",s6_h2:"Your Turn: Playa Blanca, Colombia",
+  ws_h:"🌊 Scenario",ws_p:"You are a coastal risk analyst hired by the Colombian government to assess Playa Blanca — a 15-km sandy beach on the Caribbean coast near Cartagena. Your task: calculate the CVI and classify the risk level using the data provided.",
+  dp_h:"📊 Data Provided",
+  sh_t:"Shoreline Change at Playa Blanca (2000–2022)",sh_n:"Satellite-derived shoreline positions (DSAS). Negative = erosion from 2000 baseline.",
+  wh_t:"Monthly Mean Wave Height — Buoy Data (2015–2022)",wh_n:"Annual mean Hs = 1.15 m. Peak season: Dec–Mar (NE trade winds).",
+  dg_l:"Geomorphology:",dg_d:"Low-lying carbonate sandy beach with small foredunes (<1.5 m). Backed by narrow coastal plain and mangrove lagoon. No rocky outcrops.",
+  ds_l:"Coastal Slope:",ds_d:"Topographic survey: average slope of 0.045% over a 1 km inland transect.",
+  dslr_l:"Sea-Level Change:",dslr_d:"Cartagena tide gauge (CIOH): relative SLR = 4.1 mm/yr — one of the highest in the Caribbean, partly due to local subsidence.",
+  dt_l:"Tidal Range:",dt_d:"Mean spring tidal range at Cartagena = 0.38 m. Classic micro-tidal Caribbean environment.",
+  ya_h:"✏️ Your Assessment",ya_p:"Based on the data above, assign a vulnerability rank (1–5) to each variable using the tables from Module 4. Then click Calculate.",
+  vn_g:"Geomorphology",vh_g:"Rocky cliff (1) → Sandy barrier beach / delta (5)",
+  vn_s:"Coastal Slope",vh_s:">0.12% (1) → <0.03% (5) | Measured: 0.045%",
+  vn_slr:"Sea-Level Change Rate",vh_slr:"<1.8 mm/yr (1) → >3.4 mm/yr (5) | Measured: 4.1 mm/yr",
+  vn_sc:"Shoreline Change Rate",vh_sc:">+2.0 m/yr accretion (1) → <−2.0 m/yr erosion (5) | Read from chart",
+  vn_wh:"Mean Wave Height",vh_wh:"<0.55 m (1) → >1.25 m (5) | Read from chart",
+  vn_tr:"Mean Tidal Range",vh_tr:">6.0 m macro-tidal (1) → <1.0 m micro-tidal (5) | Measured: 0.38 m",
+  calc_btn:"Calculate My CVI →",yr_lbl:"Your CVI Score",wr_t:"Your Vulnerability Profile",
+  show_ans:"Show Expected Answer",ea_t:"Expected Answer",
+  ea_p:"G=5 (sandy barrier beach), S=4 (0.045% is in 0.03–0.06% range), SLR=5 (4.1 mm/yr > 3.4 mm/yr threshold), SC=3 (chart shows ~−0.42 m/yr — within ±1 m/yr stable band), WH=4 (annual mean 1.15 m in 1.05–1.25 m range), TR=5 (0.38 m micro-tidal).",
+  ea_r:"🔴 HIGH Risk — Active coastal management required",
+  rf_t:"💭 Reflection Questions:",
+  rf_q:"<li>Which variable contributed most to the CVI score? What would change if that variable improved?</li><li>The SLR rate at Cartagena (4.1 mm/yr) is much higher than the global average. What local factors might explain this?</li><li>Using Ranasinghe's framework, how would your assessment change under the RCP 8.5 SLR projection for 2100?</li><li>What adaptation measures would you recommend for Playa Blanca, and why?</li>",
+  // vulnerability modal
+  vm_title:"Understanding Vulnerability",
+  vm_p1:"Vulnerability is the most misunderstood part of the risk equation — and often the most important lever for action. It answers the question: <strong>\"If a hazard occurs, how badly will the exposed element be affected?\"</strong>",
+  vm_dims:"Vulnerability has three dimensions:",
+  vm_l1:"<strong>Physical:</strong> Low elevation, sandy unstable soil, proximity to the coast, no protective reef or dune",
+  vm_l2:"<strong>Social & Economic:</strong> Poverty, limited access to insurance, informal housing, language barriers to warnings",
+  vm_l3:"<strong>Adaptive capacity:</strong> Ability to prepare, respond, and recover — e.g., seawalls, early warning systems, evacuation plans, financial reserves",
+  vm_example:"<strong>Example:</strong> Two houses on the same beach hit by the same storm. A concrete house on a raised foundation = low vulnerability. A wooden shack at sea level with no flood insurance = very high vulnerability. The hazard was identical — the difference is entirely in vulnerability.",
+  click_explain:"Click ℹ️ for a plain-language explanation →",
+  // hero intro
+  ib_label:"What you will learn:",
+  ib_text:" This class builds from the ground up — starting with what \"risk\" actually means, through coastal physical processes (sea-level rise, storm surge, erosion), covering the CVI method, then advancing to Prof. Ranasinghe's probabilistic framework and why it replaced the Bruun Rule. You will calculate a real CVI for a Caribbean beach and interpret what the numbers mean for coastal management. No prior background required.",
+  learn_more:"🔗 Learn more",
+  // Bruun Rule
+  bruun_h:"The Bruun Rule — and Why We Need to Go Beyond It",
+  bruun_intro:"For decades, coastal managers used the <strong>Bruun Rule</strong> (Bruun, 1962) as the default method to estimate how much a beach would retreat for a given sea-level rise. Understanding it — and its critical limitations — is essential background for Ranasinghe's work.",
+  bruun_eq_h:"The Bruun Rule Equation",
+  bv_r:"Shoreline retreat distance (m)",bv_s:"Sea-level rise (m)",
+  bv_l:"Active profile width (m) — from berm crest to closure depth",
+  bv_b:"Berm height above mean sea level (m)",bv_h:"Depth of closure (m)",
+  bruun_concept:"The concept: when sea level rises by S, the beach profile must shift landward and upward to maintain its equilibrium shape. The sand needed to raise the subaqueous profile (S × L*) comes from the beach face — causing horizontal retreat R.",
+  bruun_lim_h:"⚠️ Critical Limitations of the Bruun Rule:",
+  bruun_lims:"<li><strong>1D cross-shore only</strong> — ignores longshore sediment transport entirely</li><li><strong>No sediment budget</strong> — assumes no sediment input (rivers, dunes) or loss (offshore, inlets)</li><li><strong>Equilibrium assumption</strong> — assumes the coast is always in equilibrium; real beaches aren't</li><li><strong>Fails for complex coasts</strong> — tidal inlets, estuaries, headlands, and embayed beaches violate its assumptions</li><li><strong>Ignores wave climate change</strong> — changes in wave height, direction, and period can dominate over SLR on decadal scales</li><li><strong>Scale mismatch</strong> — designed for long-term averages; not applicable to storm events or short-term variability</li>",
+  models_h:"Beyond Bruun: Process-Based Coastal Models",
+  models_intro:"Ranasinghe advocates replacing (or supplementing) the Bruun Rule with <strong>process-based numerical models</strong> that simulate the actual physics of coastal change. Three models are most widely used:",
+  mt_storm:"Storm impact · Dunes",mt_morpho:"Full hydrodynamics · Engineering",mt_shore:"Shoreline evolution · Planform",
+  mc_xbeach:"Open-source nearshore model (Roelvink et al., 2009). Simulates swash, dune erosion, overwash, and storm impact. Widely used for rapid coastal hazard assessments. Runs on a laptop; free.",
+  mc_delft:"Industry-standard 3D hydrodynamic and morphodynamic suite (Deltares). Handles waves, tides, currents, and sediment transport. Gold standard for complex engineering applications. Open-source version available.",
+  mc_shores:"One-line shoreline evolution model (Roelvink & Costas, 2021). Simulates long-term planform change around inlets, headlands, and spits under variable wave climates. Open-source on GitHub.",
+  model_insight_h:"🔑 The Takeaway:",
+  model_insight_d:"The Bruun Rule gives a single deterministic number (e.g., '2 m of retreat per 1 mm of SLR'). Process-based models give a physically-realistic simulation with uncertainty bounds. Combined with Ranasinghe's probabilistic framework, they let you say: 'There is a 90% probability that shoreline retreat will be between 1.5 and 4.2 m by 2080 under RCP 4.5.' That is far more actionable for coastal managers.",
+  // data sources
+  ds_lbl:"Public Data Sources",ds_h:"🗂️ Where to Get Real Coastal Data",
+  ds_p:"These free, publicly available datasets are the same sources used by researchers. Bookmark them for your own coastal vulnerability assessments.",
+  ds_slr_h:"🌡️ Sea Level & Tides",ds_wave_h:"🌊 Waves & Ocean Climate",ds_shore_h:"🏖️ Shorelines & Elevation",
+  ft_t:"Coastal Climate Risk Index — Educational Resource",
+  ft_c:"Curriculum based on: Thieler & Hammar-Klose (1999) USGS CVI; Ranasinghe (2016) Earth-Science Reviews; IPCC SROCC (2019). For educational use only.",
+  gh_note:"🚀 GitHub Pages: save this file as index.html in your repository root (or /docs folder), then enable GitHub Pages in Settings → Pages. No build step required.",
+  interp_vl:"✅ Very Low vulnerability. The coast shows minimal susceptibility. Continue monitoring and maintain healthy coastal ecosystems.",
+  interp_lo:"🟢 Low vulnerability. Limited risk at present. Implement regular monitoring and review coastal setback regulations.",
+  interp_mo:"🟡 Moderate vulnerability. Action is recommended: beach nourishment, dune restoration, and an updated coastal management plan.",
+  interp_hi:"🔴 High vulnerability. Active intervention is required. Consider hard coastal protection, managed retreat planning, and restricting new development.",
+  interp_vh:"🚨 Very High vulnerability. Urgent action needed. Evaluate managed retreat or relocation for at-risk communities."
+},
+es:{
+  header_title:"🌊 Índice de Riesgo Climático Costero",
+  nav_overview:"Visión general",nav_basics:"Bases del riesgo",nav_coastal:"Amenazas costeras",
+  nav_rana:"Ranasinghe",nav_cvi:"Método IVC",nav_example:"Ejemplo resuelto",nav_workshop:"Taller",
+  hero_title:"Índice de Riesgo Climático Costero",
+  hero_sub:"De los fundamentos al marco probabilístico de Ranasinghe — una clase interactiva con un caso práctico del Caribe.",
+  p_time:"~3 horas",p_level:"Todos los niveles",p_region:"Caribe · América Latina",p_type:"Taller Interactivo",
+  obj_label:"Objetivos de Aprendizaje",obj_title:"Al finalizar esta clase, podrás…",
+  o1t:"Definir el Riesgo Climático",o1d:"Explicar la ecuación Riesgo = Amenaza × Exposición × Vulnerabilidad y aplicarla a entornos costeros.",
+  o2t:"Identificar Amenazas Costeras",o2d:"Reconocer las principales amenazas: aumento del nivel del mar, marejadas ciclónicas y erosión costera.",
+  o3t:"Calcular el IVC",o3d:"Usar la fórmula del Índice de Vulnerabilidad Costera de 6 variables para clasificar el riesgo costero.",
+  o4t:"Aplicar el Marco de Ranasinghe",o4d:"Comprender el modelado probabilístico de riesgo y cómo los impulsores del cambio climático alteran los sistemas costeros.",
+  tbt:"⏱ Distribución del tiempo de clase",th_mod:"Módulo",th_top:"Tema",th_time:"Tiempo",
+  m1:"Fundamentos del Riesgo Climático",m2:"Amenazas Costeras y Exposición",m3:"Marco de Ranasinghe",
+  m4:"Metodología IVC",m5:"Ejemplo Resuelto — República Dominicana",m6:"Taller — ¡Tú lo resuelves!",
+  s1_lbl:"Módulo 1 · 30 minutos",s1_h2:"Fundamentos del Riesgo Climático",
+  s1_intro:"Antes de profundizar en lo costero, necesitamos entender bien qué significa \"riesgo climático\". El riesgo no es solo la frecuencia de desastres — es la combinación de tres componentes que interactúan.",
+  req_lbl:"La Ecuación del Riesgo",req_formula:"Riesgo = Amenaza × Exposición × Vulnerabilidad",
+  req_note:"Si cualquier factor es cero, el riesgo es cero — los tres deben estar presentes.",
+  ht:"Amenaza",hd:"Un evento físico potencialmente dañino — huracán, aumento del nivel del mar, tormenta extrema. La amenaza tiene probabilidad y magnitud.",
+  et:"Exposición",ed:"Las personas, infraestructuras y activos presentes en zonas con amenaza. Una playa deshabitada tiene baja exposición aunque la amenaza sea alta.",
+  vt:"Vulnerabilidad",vd:"La predisposición a ser afectado negativamente, determinada por la susceptibilidad física, factores socioeconómicos y capacidad adaptativa.",
+  ipcc_t:"📌 Definición del IPCC (AR6, 2021):",
+  ipcc_d:"El IPCC define el riesgo como el potencial de consecuencias adversas derivadas de un evento o tendencia. El riesgo siempre es función de amenaza, exposición y vulnerabilidad — y los tres están influenciados por las decisiones humanas y el cambio climático.",
+  rc_t:"Componentes del Riesgo — Ejemplo para una comunidad costera",
+  ki_t:"💡 Perspectiva clave para entornos costeros:",
+  ki_d:"El cambio climático aumenta la amenaza (tormentas más intensas, mares más altos), mientras que la urbanización costera incrementa la exposición. Estas dos fuerzas juntas están elevando rápidamente el riesgo costero.",
+  s2_lbl:"Módulo 2 · 30 minutos",s2_h2:"Amenazas Costeras y Exposición",
+  s2_intro:"La costa es uno de los entornos más dinámicos y propensos a amenazas del planeta. Tres procesos físicos principales impulsan el riesgo climático costero, y se interactúan y amplifican mutuamente.",
+  slr_t:"Aumento del Nivel del Mar (ANM)",slr_d:"El nivel medio del mar global ha subido ~20 cm desde 1900, acelerándose a ~3.7 mm/año. El Caribe enfrenta tasas locales de 3–5 mm/año debido al calentamiento oceánico, deshielo y subsidencia.",
+  ss_t:"Marejada Ciclónica y Huracanes",ss_d:"Las tormentas tropicales empujan agua hacia la costa, generando marejadas de 2–6 m en el Caribe. El cambio climático intensifica las tormentas mientras el ANM eleva el nivel base de inundación.",
+  er_t:"Erosión Costera",er_d:"Aproximadamente el 70% de las playas arenosas mundiales están erosionando. En el Caribe, tasas de 0.5–3 m/año son comunes, impulsadas por el ANM, reducción del suministro de sedimentos y degradación arrecifal.",
+  slr_ct:"Proyecciones del Aumento del Nivel del Mar para el Caribe (2020–2100) — Escenarios RCP",
+  slr_cn:"Basado en proyecciones regionales del IPCC AR6. Valores en metros respecto a la línea base del año 2000.",
+  carib_h:"El Contexto Caribeño",
+  carib_p:"El Caribe es un punto crítico global para el riesgo climático costero. Con más de 40 millones de personas viviendo a menos de 10 km de la costa y economías dependientes del turismo y la pesca, la región es altamente vulnerable.",
+  carib_ft:"📊 Datos Costeros del Caribe:",
+  carib_fl:"<li>Rango mareal medio: &lt;0.5 m (ambiente micromareal)</li><li>Régimen de oleaje dominante: vientos alisios del NE, Hs ≈ 0.8–1.5 m</li><li>Temporada de huracanes: junio–noviembre (pico en septiembre)</li><li>Erosión costera promedio: ~0.5 m/año, hasta 3 m/año en puntos críticos</li><li>Cobertura arrecifal disminuida 50% desde los años 70 — pérdida de protección costera natural</li>",
+  s3_lbl:"Módulo 3 · 30 minutos",s3_h2:"El Marco Probabilístico de Ranasinghe",
+  s3_intro:"El Prof. Roshanka Ranasinghe (IHE Delft / TU Delft) es uno de los principales investigadores mundiales sobre cambio costero bajo el cambio climático. Su trabajo transformó la evaluación de riesgos costeros — de reglas deterministas a marcos probabilísticos basados en procesos.",
+  tl_h:"Evolución del Marco",
+  tl1:"Ranasinghe desarrolló y aplicó modelos numéricos basados en procesos (DELFT3D, XBeach) para entender cómo responden las costas a tormentas, oleaje y fuerzas mareales. Esto estableció la base física de su trabajo posterior en riesgo.",
+  tl2:"Ranasinghe demostró que la ampliamente usada Regla de Bruun simplifica en exceso la dinámica costera y puede subestimar dramáticamente la erosión en entornos de estuarios y costas encajadas.",
+  tl3:"<strong>\"Evaluando los impactos del cambio climático en costas arenosas abiertas\"</strong> (Earth-Science Reviews, 160). Este artículo sintetizó evidencia global, identificó cinco impulsores clave del cambio climático y exigió una nueva generación de modelos probabilísticos.",
+  tl4:"Ranasinghe contribuyó al Informe Especial del IPCC sobre el Océano y la Criosfera (SROCC, 2019). Su artículo de 2020 en <em>Scientific Reports</em> abogó por modelos que manejen la incertidumbre profunda en proyecciones del siglo XXI.",
+  ccid_h:"Los Cinco Impulsores del Cambio Climático",
+  ccid_p:"Ranasinghe (2016) identifica cinco impulsores físicos que median cómo el cambio climático altera los sistemas costeros. Comprenderlos es esencial para cualquier evaluación realista del riesgo costero.",
+  d1t:"1. ANM Medio",d1d:"Eleva la línea base para inundaciones e impulsa la erosión a largo plazo. Incluso pequeños cambios en el ANM tienen grandes efectos no lineales.",
+  d2t:"2. Clima de Oleaje",d2d:"Los cambios en altura, período y dirección de las olas reconfiguran el transporte de sedimentos — a menudo más importantes que el ANM en escalas decadales.",
+  d3t:"3. Características de Tormentas",d3d:"Los cambios en intensidad, frecuencia y trayectorias de tormentas alteran la altura de marejadas y las condiciones de oleaje durante eventos extremos.",
+  d4t:"4. Suministro de Sedimentos",d4d:"Las presas y los cambios de uso del suelo reducen los sedimentos fluviales, privando a las playas de material y amplificando la erosión.",
+  d5t:"5. CO₂ Atmosférico",d5d:"La acidificación oceánica degrada los arrecifes de coral. La pérdida arrecifal puede aumentar la energía del oleaje en la costa un 30–50%.",
+  rk_t:"🔑 Contribución Central de Ranasinghe:",
+  rk_d:"En lugar de preguntar '¿cuánto se erosionará esta playa?' (un único número), el marco de Ranasinghe pregunta: '¿Cuál es la distribución de probabilidad de los resultados de erosión?' Esto permite a los planificadores diseñar para un nivel de confianza elegido — por ejemplo, el resultado del percentil 95.",
+  pc_t:"Proyección Determinista vs. Probabilística de Erosión — Comparación Conceptual",
+  pc_n:"El enfoque determinista da un número; el probabilístico da una distribución de posibles resultados. Los gestores de riesgo eligen el nivel de riesgo aceptable.",
+  s4_lbl:"Módulo 4 · 30 minutos",s4_h2:"El Índice de Vulnerabilidad Costera (IVC)",
+  s4_intro:"El IVC fue desarrollado por el Servicio Geológico de EE.UU. (Thieler y Hammar-Klose, 1999) como método rápido para clasificar la vulnerabilidad costera al aumento del nivel del mar. Es un punto de entrada práctico a los marcos probabilísticos.",
+  cvi_fl:"La Fórmula del IVC",cvi_fn:"Cada variable se clasifica del 1 (vulnerabilidad muy baja) al 5 (muy alta). La media geométrica resalta los casos donde incluso una variable extrema impulsa un riesgo global alto.",
+  cv_h:"Escalas de Clasificación de Variables",geo_h:"1. Geomorfología (G)",
+  th_rank:"Rango",th_vuln:"Vulnerabilidad",th_desc:"Descripción",
+  vl:"Muy Baja",lo:"Baja",mo:"Moderada",hi:"Alta",vh:"Muy Alta",
+  g1:"Acantilados rocosos, costas montañosas altas",g2:"Acantilados medios, fiordos",g3:"Acantilados bajos, depósitos glaciales, llanuras aluviales",
+  g4:"Playas de canto rodado, estuarios, lagunas",g5:"Playas de barrera, playas arenosas, deltas, arrecifes de coral",
+  qv_h:"2–6. Variables Cuantitativas",th_var:"Variable",th_r1:"Rango 1 — Muy Baja",th_r3:"Rango 3 — Moderada",th_r5:"Rango 5 — Muy Alta",
+  vs:"Pendiente Costera",vslr:"Cambio del Nivel del Mar",vsc:"Cambio de Línea de Costa",vwh:"Altura Media de Olas",vtr:"Rango Mareal Medio",
+  ci_h:"Interpretación del Puntaje IVC",th_cvi:"Rango IVC",th_cls:"Clase de Riesgo",th_act:"Respuesta de Gestión Típica",
+  a1:"Solo monitoreo; no se requiere intervención inmediata",a2:"Monitoreo regular; revisar requerimientos de retiro costero",
+  a3:"Planificación de adaptación; alimentación de playas, restauración de dunas",a4:"Intervención activa; estructuras rígidas o retiro gestionado",a5:"Acción urgente; evaluar reubicación",
+  cl_t:"⚠️ Limitaciones del IVC (según la Crítica de Ranasinghe):",
+  cl_d:"El IVC es útil como herramienta de cribado pero tiene limitaciones: (1) pondera igual todas las variables; (2) no captura marejadas ciclónicas ni eventos extremos; (3) no considera trayectorias climáticas futuras; (4) las condiciones locales pueden superar la clasificación simple. Para decisiones de alto impacto, complemente el IVC con modelos probabilísticos basados en procesos.",
+  s5_lbl:"Módulo 5 · 30 minutos",s5_h2:"Ejemplo Resuelto: Playa Bávaro, República Dominicana",
+  s5_intro:"Apliquemos el IVC paso a paso a un entorno caribeño real. Playa Bávaro es un sistema de playa de barrera en la costa noreste de la República Dominicana, con significativo desarrollo turístico y documentados problemas de erosión.",
+  ex_st:"📍 Descripción del sitio:",ex_sd:"Trecho de 30 km de playa arenosa carbonatada de baja elevación, con arrecifes de coral franjeantes a 200–500 m de la costa. Erosión acelerada desde los años 90, vinculada a degradación arrecifal, construcción costera y aumento del nivel del mar. Rango mareal ~0.3 m.",
+  st1t:"Geomorfología (G)",st1d:"Playa de barrera clásica con arena carbonatada fina y bajo relieve. Las playas de barrera caen en la categoría de mayor vulnerabilidad.",
+  st2t:"Pendiente Costera (S)",st2d:"Levantamiento LIDAR muestra pendiente promedio de 0.035% en un transecto de 2 km tierra adentro — dentro del rango 0.03–0.06%.",
+  st3t:"Tasa de Cambio del Nivel del Mar (ANM)",st3d:"Mareógrafo NOAA (Santo Domingo) registra aumento del nivel relativo de 3.2 mm/año, combinando ascenso eustático y subsidencia local.",
+  st4t:"Tasa de Cambio de la Línea de Costa (LC)",st4d:"Análisis de línea de costa por satélite (1990–2020) muestra retroceso promedio de 1.8 m/año, con puntos críticos que alcanzan 3 m/año.",
+  st5t:"Altura Media de Oleaje (HO)",st5d:"Boya de oleaje cerca de Punta Cana registra Hs medio = 1.1 m, impulsado por vientos alisios del NE y oleaje del Atlántico Norte.",
+  st6t:"Rango Mareal Medio (RM)",st6d:"El Caribe es micromareal. Rango medio de mareas vivas = 0.3 m. Los rangos mareales pequeños concentran la energía del oleaje en una banda de elevación estrecha.",
+  st7t:"Calcular el IVC",
+  ex_res:"Resultado: vulnerabilidad ALTA (25–35). Se requiere intervención activa de gestión costera.",
+  ex_bt:"Clasificación de Variables — Playa Bávaro",ex_rt:"Radar de Vulnerabilidad — Playa Bávaro",
+  rc_t2:"🔗 Conexión con el Marco de Ranasinghe:",
+  rc_d:"El IVC nos da 32.7 — pero Ranasinghe preguntaría: '¿Cuál es el rango de incertidumbre?' Las proyecciones de ANM para 2100 van de +0.3 m a +1.0 m+. Bajo ANM máximo, el retroceso costero podría aumentar de 1.8 m/año a 4–6 m/año, potencialmente elevando el IVC por encima de 40 (Muy Alto).",
+  s6_lbl:"Módulo 6 · 45 minutos · Taller",s6_h2:"Tu turno: Playa Blanca, Colombia",
+  ws_h:"🌊 Escenario",ws_p:"Eres analista de riesgo costero contratado por el gobierno colombiano para evaluar Playa Blanca — una playa arenosa de 15 km en la costa caribeña cerca de Cartagena. Tu tarea: calcular el IVC y clasificar el nivel de riesgo usando los datos proporcionados.",
+  dp_h:"📊 Datos Proporcionados",
+  sh_t:"Cambio de Línea de Costa en Playa Blanca (2000–2022)",sh_n:"Posiciones de línea de costa derivadas de satélite (análisis DSAS). Valores negativos = erosión desde la línea base del 2000.",
+  wh_t:"Altura de Oleaje Media Mensual — Datos de Boya (2015–2022)",wh_n:"Hs media anual = 1.15 m. Temporada pico: dic–mar (vientos alisios del NE).",
+  dg_l:"Geomorfología:",dg_d:"Playa arenosa carbonatada de baja elevación con pequeñas dunas frontales (<1.5 m). Respaldada por planicie costera estrecha y laguna de manglares. Sin afloramientos rocosos.",
+  ds_l:"Pendiente Costera:",ds_d:"Levantamiento topográfico: pendiente promedio de 0.045% en un transecto de 1 km tierra adentro desde la línea de costa actual.",
+  dslr_l:"Cambio del Nivel del Mar:",dslr_d:"Mareógrafo de Cartagena (CIOH): tasa relativa de ANM = 4.1 mm/año — uno de los más altos del Caribe, en parte por subsidencia local.",
+  dt_l:"Rango Mareal:",dt_d:"Rango mareal de mareas vivas en Cartagena = 0.38 m. Ambiente micromareal caribeño clásico.",
+  ya_h:"✏️ Tu Evaluación",ya_p:"Con base en los datos anteriores, asigna un rango de vulnerabilidad (1–5) a cada variable usando las tablas del Módulo 4. Luego haz clic en Calcular.",
+  vn_g:"Geomorfología",vh_g:"Acantilado rocoso (1) → Playa arenosa de barrera / delta (5)",
+  vn_s:"Pendiente Costera",vh_s:">0.12% (1) → <0.03% (5) | Medida: 0.045%",
+  vn_slr:"Tasa de Cambio del Nivel del Mar",vh_slr:"<1.8 mm/año (1) → >3.4 mm/año (5) | Medida: 4.1 mm/año",
+  vn_sc:"Tasa de Cambio de Línea de Costa",vh_sc:">+2.0 m/año acreción (1) → <−2.0 m/año erosión (5) | Leer del gráfico",
+  vn_wh:"Altura Media de Oleaje",vh_wh:"<0.55 m (1) → >1.25 m (5) | Leer del gráfico",
+  vn_tr:"Rango Mareal Medio",vh_tr:">6.0 m macromareal (1) → <1.0 m micromareal (5) | Medido: 0.38 m",
+  calc_btn:"Calcular mi IVC →",yr_lbl:"Tu Puntaje IVC",wr_t:"Tu Perfil de Vulnerabilidad",
+  show_ans:"Mostrar Respuesta Esperada",ea_t:"Respuesta Esperada",
+  ea_p:"G=5 (playa de barrera arenosa), S=4 (0.045% cae en el rango 0.03–0.06%), ANM=5 (4.1 mm/año > umbral 3.4 mm/año), LC=3 (el gráfico muestra ~−0.42 m/año — dentro de la banda estable ±1 m/año), HO=4 (media anual 1.15 m en rango 1.05–1.25 m), RM=5 (0.38 m es micromareal).",
+  ea_r:"🔴 Riesgo ALTO — Se requiere gestión costera activa",
+  rf_t:"💭 Preguntas de Reflexión:",
+  rf_q:"<li>¿Qué variable contribuyó más al puntaje IVC? ¿Qué cambiaría si esa variable mejorara?</li><li>La tasa de ANM en Cartagena (4.1 mm/año) es mucho más alta que el promedio global. ¿Qué factores locales podrían explicar esto?</li><li>Usando el marco de Ranasinghe, ¿cómo cambiaría tu evaluación bajo la proyección de ANM del escenario RCP 8.5 para 2100?</li><li>¿Qué medidas de adaptación recomendarías para Playa Blanca, y por qué?</li>",
+  // modal vulnerabilidad
+  vm_title:"Entendiendo la Vulnerabilidad",
+  vm_p1:"La vulnerabilidad es la parte más incomprendida de la ecuación de riesgo — y a menudo el factor más importante para la acción. Responde la pregunta: <strong>\"Si ocurre una amenaza, ¿cuán gravemente se verá afectado el elemento expuesto?\"</strong>",
+  vm_dims:"La vulnerabilidad tiene tres dimensiones:",
+  vm_l1:"<strong>Física:</strong> Baja elevación, suelo arenoso inestable, proximidad a la costa, ausencia de arrecife o duna protectora",
+  vm_l2:"<strong>Social y económica:</strong> Pobreza, acceso limitado a seguros, vivienda informal, barreras de idioma para recibir alertas",
+  vm_l3:"<strong>Capacidad adaptativa:</strong> Capacidad de prepararse, responder y recuperarse — p.ej., rompeolas, sistemas de alerta temprana, planes de evacuación, reservas financieras",
+  vm_example:"<strong>Ejemplo:</strong> Dos casas en la misma playa afectadas por la misma tormenta. Una casa de concreto en cimientos elevados = baja vulnerabilidad. Una choza de madera al nivel del mar sin seguro de inundación = vulnerabilidad muy alta. La amenaza fue idéntica — la diferencia es totalmente la vulnerabilidad.",
+  click_explain:"Haz clic en ℹ️ para una explicación en lenguaje sencillo →",
+  // introducción hero
+  ib_label:"Qué aprenderás:",
+  ib_text:" Esta clase se construye desde cero — comenzando por qué significa realmente el \"riesgo\", pasando por los procesos físicos costeros (aumento del nivel del mar, marejadas, erosión), cubriendo el método IVC, y avanzando hacia el marco probabilístico del Prof. Ranasinghe y por qué reemplazó la Regla de Bruun. Calcularás un IVC real para una playa caribeña e interpretarás los resultados. No se requiere conocimiento previo.",
+  learn_more:"🔗 Más información",
+  // Regla de Bruun
+  bruun_h:"La Regla de Bruun — y Por Qué Necesitamos Ir Más Allá",
+  bruun_intro:"Durante décadas, los gestores costeros usaron la <strong>Regla de Bruun</strong> (Bruun, 1962) como método predeterminado para estimar cuánto retrocedería una playa ante un aumento del nivel del mar. Entenderla — y sus limitaciones críticas — es fundamental para comprender el trabajo de Ranasinghe.",
+  bruun_eq_h:"La Ecuación de la Regla de Bruun",
+  bv_r:"Distancia de retroceso costero (m)",bv_s:"Aumento del nivel del mar (m)",
+  bv_l:"Ancho del perfil activo (m) — de la berma a la profundidad de cierre",
+  bv_b:"Altura de la berma sobre el nivel medio del mar (m)",bv_h:"Profundidad de cierre (m)",
+  bruun_concept:"El concepto: cuando el nivel del mar sube S, el perfil de la playa debe desplazarse tierra adentro y hacia arriba para mantener su forma de equilibrio. La arena necesaria para elevar el perfil subacuático (S × L*) proviene del frente de la playa — causando el retroceso horizontal R.",
+  bruun_lim_h:"⚠️ Limitaciones Críticas de la Regla de Bruun:",
+  bruun_lims:"<li><strong>Solo 1D transversal</strong> — ignora completamente el transporte longitudinal de sedimentos</li><li><strong>Sin balance sedimentario</strong> — asume que no hay entrada (ríos, dunas) ni salida (offshore, entradas de marea) de sedimentos</li><li><strong>Supuesto de equilibrio</strong> — asume que la costa siempre está en equilibrio; las playas reales no lo están</li><li><strong>Falla en costas complejas</strong> — entradas de marea, estuarios, cabos y bahías violan sus supuestos</li><li><strong>Ignora cambios en el oleaje</strong> — los cambios en altura, dirección y período pueden dominar sobre el ANM a escalas decadales</li><li><strong>Desajuste de escala</strong> — diseñada para promedios de largo plazo; no aplicable a eventos de tormenta ni variabilidad a corto plazo</li>",
+  models_h:"Más Allá de Bruun: Modelos Costeros Basados en Procesos",
+  models_intro:"Ranasinghe propone reemplazar (o complementar) la Regla de Bruun con <strong>modelos numéricos basados en procesos</strong> que simulan la física real del cambio costero. Tres modelos son los más usados:",
+  mt_storm:"Impacto de tormentas · Dunas",mt_morpho:"Hidrodinámica completa · Ingeniería",mt_shore:"Evolución de línea de costa",
+  mc_xbeach:"Modelo costero de código abierto (Roelvink et al., 2009). Simula swash, erosión de dunas, sobrepaso y tormentas. Ampliamente usado para evaluaciones rápidas de riesgo costero. Funciona en una laptop; gratuito.",
+  mc_delft:"Suite hidrodinámica y morfodinámica 3D estándar de la industria (Deltares). Maneja oleaje, mareas, corrientes y transporte de sedimentos. Estándar de oro para aplicaciones de ingeniería complejas. Versión de código abierto disponible.",
+  mc_shores:"Modelo de evolución de línea de costa en planta (Roelvink & Costas, 2021). Simula cambio a largo plazo alrededor de entradas de marea, cabos y flechas bajo climas de oleaje variables. Código abierto en GitHub.",
+  model_insight_h:"🔑 La Conclusión:",
+  model_insight_d:"La Regla de Bruun da un único número determinista (p.ej., '2 m de retroceso por 1 mm de ANM'). Los modelos basados en procesos dan una simulación físicamente realista con rangos de incertidumbre. Combinados con el marco probabilístico de Ranasinghe, permiten decir: 'Hay un 90% de probabilidad de que el retroceso costero esté entre 1.5 y 4.2 m para 2080 bajo RCP 4.5.' Eso es mucho más útil para los gestores costeros.",
+  // fuentes de datos
+  ds_lbl:"Fuentes de Datos Públicos",ds_h:"🗂️ Dónde Obtener Datos Costeros Reales",
+  ds_p:"Estos conjuntos de datos públicos y gratuitos son las mismas fuentes que usan los investigadores. Guárdalos para tus propias evaluaciones de vulnerabilidad costera.",
+  ds_slr_h:"🌡️ Nivel del Mar y Mareas",ds_wave_h:"🌊 Oleaje y Clima Oceánico",ds_shore_h:"🏖️ Líneas de Costa y Elevación",
+  ft_t:"Índice de Riesgo Climático Costero — Recurso Educativo",
+  ft_c:"Contenido basado en: Thieler & Hammar-Klose (1999) IVC USGS; Ranasinghe (2016) Earth-Science Reviews; IPCC SROCC (2019). Solo para uso educativo.",
+  gh_note:"🚀 GitHub Pages: guarda este archivo como index.html en la raíz del repositorio (o carpeta /docs), luego activa GitHub Pages en Ajustes → Pages. No requiere pasos de compilación.",
+  interp_vl:"✅ Vulnerabilidad Muy Baja. La costa muestra susceptibilidad mínima. Continúe el monitoreo y mantenga los ecosistemas costeros saludables.",
+  interp_lo:"🟢 Vulnerabilidad Baja. Riesgo limitado actualmente. Implemente monitoreo regular y revise las regulaciones de retiro costero.",
+  interp_mo:"🟡 Vulnerabilidad Moderada. Se recomienda acción: alimentación de playa, restauración de dunas y actualización del plan de gestión costera.",
+  interp_hi:"🔴 Vulnerabilidad Alta. Se requiere intervención activa. Considere protección costera rígida, planificación de retiro gestionado y restricción de nuevos desarrollos.",
+  interp_vh:"🚨 Vulnerabilidad Muy Alta. Acción urgente requerida. Evalúe el retiro gestionado o la reubicación de comunidades en riesgo."
+}};
+
+// ─── LANGUAGE ──────────────────────────────────────────────────────────────
+let lang = 'en';
+let wsRadarChart = null;
+
+// ─── MODAL ────────────────────────────────────────────────────────────────────
+function openModal(id){
+  const el=document.getElementById(id);
+  if(el){el.classList.add('show');document.body.style.overflow='hidden';}
+}
+function closeModal(id){
+  const el=document.getElementById(id);
+  if(el){el.classList.remove('show');document.body.style.overflow='';}
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-ov.show').forEach(m=>m.classList.remove('show'));document.body.style.overflow='';}});
+
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l;
+  document.getElementById('btn-en').classList.toggle('active', l==='en');
+  document.getElementById('btn-es').classList.toggle('active', l==='es');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(T[l][k]!==undefined) el.textContent=T[l][k];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const k=el.getAttribute('data-i18n-html');
+    if(T[l][k]!==undefined) el.innerHTML=T[l][k];
+  });
+  document.title = T[l]['header_title'];
+  updateChartLang();
+}
+
+// ─── CHART DATA ─────────────────────────────────────────────────────────────
+const slrYears=[2020,2030,2040,2050,2060,2070,2080,2090,2100];
+const rcp26=[0.06,0.10,0.14,0.18,0.21,0.23,0.26,0.28,0.30];
+const rcp45=[0.07,0.12,0.18,0.24,0.31,0.37,0.43,0.47,0.52];
+const rcp85=[0.09,0.17,0.27,0.37,0.50,0.63,0.78,0.91,1.04];
+
+const shoreYears=[2000,2002,2004,2006,2008,2010,2012,2014,2016,2018,2020,2022];
+const shoreData=[0,-0.8,-1.7,-2.5,-3.4,-4.2,-5.0,-5.9,-6.8,-7.5,-8.4,-9.2];
+
+const waveMonths=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const waveData=[1.42,1.38,1.30,1.10,0.90,0.85,0.90,1.00,1.12,1.22,1.32,1.40];
+
+// Chart instances
+let charts = {};
+
+function initCharts(){
+  // Risk components bar
+  charts.risk = new Chart(document.getElementById('riskChart'),{
+    type:'bar',
+    data:{
+      labels:['Hazard / Amenaza','Exposure / Exposición','Vulnerability / Vulnerabilidad'],
+      datasets:[{
+        label:'Relative score',
+        data:[4.2,3.5,2.8],
+        backgroundColor:['rgba(239,68,68,.7)','rgba(245,158,11,.7)','rgba(139,92,246,.7)'],
+        borderColor:['#EF4444','#F59E0B','#8B5CF6'],
+        borderWidth:2,borderRadius:6
+      }]
+    },
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' Score: '+c.parsed.y}}},
+      scales:{y:{max:5,beginAtZero:true,title:{display:true,text:'Vulnerability Score (1–5)'}}}}
+  });
+
+  // SLR projections
+  charts.slr = new Chart(document.getElementById('slrChart'),{
+    type:'line',
+    data:{
+      labels:slrYears,
+      datasets:[
+        {label:'RCP 2.6 (Low emissions)',data:rcp26,borderColor:'#22C55E',backgroundColor:'rgba(34,197,94,.08)',borderWidth:2,pointRadius:3,fill:true,tension:.4},
+        {label:'RCP 4.5 (Intermediate)',data:rcp45,borderColor:'#F59E0B',backgroundColor:'rgba(245,158,11,.08)',borderWidth:2,pointRadius:3,fill:true,tension:.4},
+        {label:'RCP 8.5 (High emissions)',data:rcp85,borderColor:'#EF4444',backgroundColor:'rgba(239,68,68,.08)',borderWidth:2,pointRadius:3,fill:true,tension:.4}
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{position:'top'}},
+      scales:{y:{title:{display:true,text:'Sea-level rise (m)'},min:0},x:{title:{display:true,text:'Year'}}}}
+  });
+
+  // Probabilistic vs deterministic
+  const px=[0,5,10,15,20,25,30,35,40,45,50];
+  charts.prob = new Chart(document.getElementById('probChart'),{
+    type:'line',
+    data:{
+      labels:px.map(v=>v+' m'),
+      datasets:[
+        {label:'Deterministic (single value)',data:px.map(v=>v===25?100:0),borderColor:'#0077B6',borderWidth:3,pointRadius:0,tension:0,borderDash:[6,4]},
+        {label:'Probabilistic — P90',data:[0,0,0,2,8,18,32,44,52,56,54],borderColor:'#EF4444',backgroundColor:'rgba(239,68,68,.12)',borderWidth:2,pointRadius:0,tension:.5,fill:true},
+        {label:'Probabilistic — Median',data:[0,0,1,5,15,35,52,48,35,16,5],borderColor:'#023E8A',backgroundColor:'rgba(2,62,138,.08)',borderWidth:2,pointRadius:0,tension:.5,fill:true},
+        {label:'Probabilistic — P10',data:[0,1,5,18,42,35,18,9,3,1,0],borderColor:'#22C55E',backgroundColor:'rgba(34,197,94,.08)',borderWidth:2,pointRadius:0,tension:.5,fill:true}
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{position:'top'}},
+      scales:{y:{title:{display:true,text:'Probability (%)'},min:0},x:{title:{display:true,text:'Beach erosion magnitude'}}}}
+  });
+
+  // Example bar chart (Bávaro)
+  charts.exBar = new Chart(document.getElementById('exBarChart'),{
+    type:'bar',
+    data:{
+      labels:['G','S','SLR','SC','WH','TR'],
+      datasets:[{
+        label:'Vulnerability Rank',
+        data:[5,4,4,4,4,5],
+        backgroundColor:['rgba(252,165,165,.8)','rgba(254,202,202,.8)','rgba(254,202,202,.8)','rgba(254,202,202,.8)','rgba(254,202,202,.8)','rgba(252,165,165,.8)'],
+        borderColor:['#EF4444','#F87171','#F87171','#F87171','#F87171','#EF4444'],
+        borderWidth:2,borderRadius:6
+      }]
+    },
+    options:{responsive:true,plugins:{legend:{display:false}},
+      scales:{y:{max:5,min:0,ticks:{stepSize:1},title:{display:true,text:'Rank (1–5)'}},
+        x:{title:{display:true,text:'CVI Variable'}}}}
+  });
+
+  // Example radar chart (Bávaro)
+  charts.exRadar = new Chart(document.getElementById('exRadarChart'),{
+    type:'radar',
+    data:{
+      labels:['Geomorphology','Slope','SLR','Shoreline Change','Wave Height','Tidal Range'],
+      datasets:[{
+        label:'Playa Bávaro',data:[5,4,4,4,4,5],
+        borderColor:'#EF4444',backgroundColor:'rgba(239,68,68,.15)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#EF4444'
+      }]
+    },
+    options:{responsive:true,plugins:{legend:{display:false}},
+      scales:{r:{min:0,max:5,ticks:{stepSize:1},grid:{color:'rgba(0,0,0,.08)'},pointLabels:{font:{size:10}}}}}
+  });
+
+  // Shoreline change
+  charts.shore = new Chart(document.getElementById('shoreChart'),{
+    type:'line',
+    data:{
+      labels:shoreYears,
+      datasets:[{
+        label:'Cumulative shoreline change (m)',
+        data:shoreData,
+        borderColor:'#EF4444',backgroundColor:'rgba(239,68,68,.1)',borderWidth:2.5,pointRadius:4,fill:true,tension:.3
+      }]
+    },
+    options:{responsive:true,plugins:{legend:{display:false}},
+      scales:{y:{title:{display:true,text:'Change from 2000 baseline (m)'}},x:{title:{display:true,text:'Year'}}}}
+  });
+
+  // Wave heights
+  charts.wave = new Chart(document.getElementById('waveChart'),{
+    type:'bar',
+    data:{
+      labels:waveMonths,
+      datasets:[{
+        label:'Mean Hs (m)',
+        data:waveData,
+        backgroundColor:waveData.map(v=>v>1.25?'rgba(239,68,68,.75)':v>1.05?'rgba(249,115,22,.75)':'rgba(59,130,246,.75)'),
+        borderRadius:5
+      }]
+    },
+    options:{responsive:true,plugins:{legend:{display:false}},
+      scales:{y:{min:0.5,max:1.6,title:{display:true,text:'Hs (m)'}},x:{title:{display:true,text:'Month'}}},
+      annotation:{annotations:{threshold:{type:'line',yMin:1.25,yMax:1.25,borderColor:'#EF4444',borderWidth:2,borderDash:[5,5]}}}}
+  });
+}
+
+function updateChartLang(){
+  // Update radar labels
+  const geo = lang==='es'?['Geomorfología','Pendiente','ANM','Línea de Costa','Altura Olas','Rango Mareal']:
+                           ['Geomorphology','Slope','SLR','Shoreline Change','Wave Height','Tidal Range'];
+  if(charts.exRadar){charts.exRadar.data.labels=geo;charts.exRadar.update();}
+  if(wsRadarChart){wsRadarChart.data.labels=geo;wsRadarChart.update();}
+  if(charts.slr){
+    charts.slr.data.datasets[0].label=lang==='es'?'RCP 2.6 (Bajas emisiones)':'RCP 2.6 (Low emissions)';
+    charts.slr.data.datasets[1].label=lang==='es'?'RCP 4.5 (Intermedias)':'RCP 4.5 (Intermediate)';
+    charts.slr.data.datasets[2].label=lang==='es'?'RCP 8.5 (Altas emisiones)':'RCP 8.5 (High emissions)';
+    charts.slr.update();
+  }
+}
+
+// ─── WORKSHOP LOGIC ──────────────────────────────────────────────────────────
+function getVals(){
+  return ['inp_G','inp_S','inp_SLR','inp_SC','inp_WH','inp_TR'].map(id=>parseFloat(document.getElementById(id).value)||null);
+}
+
+function liveUpdate(){ /* optional: pre-calc as user types */ }
+
+function calcCVI(){
+  const [G,S,SLR,SC,WH,TR]=getVals();
+  if([G,S,SLR,SC,WH,TR].some(v=>v===null)){
+    alert(lang==='es'?'Por favor asigna un valor a todas las variables antes de calcular.':'Please assign a rank to all variables before calculating.');
+    return;
+  }
+  const cvi=Math.sqrt(G*S*SLR*SC*WH*TR/6);
+  const cviRound=Math.round(cvi*10)/10;
+
+  // Display score
+  document.getElementById('cvi_score').textContent=cviRound.toFixed(1);
+
+  // Risk level
+  let cls,badgeClass,interp;
+  if(cvi<8){cls=T[lang].vl;badgeClass='rvl';interp=T[lang].interp_vl;}
+  else if(cvi<15){cls=T[lang].lo;badgeClass='rl';interp=T[lang].interp_lo;}
+  else if(cvi<25){cls=T[lang].mo;badgeClass='rm';interp=T[lang].interp_mo;}
+  else if(cvi<35){cls=T[lang].hi;badgeClass='rh';interp=T[lang].interp_hi;}
+  else{cls=T[lang].vh;badgeClass='rvh';interp=T[lang].interp_vh;}
+
+  const badge=document.getElementById('risk_badge');
+  badge.textContent=cls;
+  badge.className='rbadge '+badgeClass;
+
+  // Indicator position (0–50 range mapped to 2–96%)
+  const pct=Math.min(Math.max((cvi/50)*96,2),96);
+  document.getElementById('rind').style.left=pct+'%';
+
+  // Interpretation
+  document.getElementById('interp_box').innerHTML='<strong>'+(lang==='es'?'Interpretación:':'Interpretation:')+'</strong> '+interp;
+
+  // Radar chart
+  const geo=lang==='es'?['Geomorfología','Pendiente','ANM','Línea de Costa','Altura Olas','Rango Mareal']:
+                         ['Geomorphology','Slope','SLR','Shoreline Change','Wave Height','Tidal Range'];
+  if(wsRadarChart){wsRadarChart.destroy();}
+  wsRadarChart=new Chart(document.getElementById('wsRadar'),{
+    type:'radar',
+    data:{
+      labels:geo,
+      datasets:[
+        {label:lang==='es'?'Playa Blanca (tu evaluación)':'Playa Blanca (your assessment)',
+         data:[G,S,SLR,SC,WH,TR],borderColor:'#0077B6',backgroundColor:'rgba(0,119,182,.15)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#0077B6'},
+        {label:lang==='es'?'Playa Bávaro (ejemplo)':'Playa Bávaro (example)',
+         data:[5,4,4,4,4,5],borderColor:'#EF4444',backgroundColor:'rgba(239,68,68,.08)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#EF4444',borderDash:[5,5]}
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{position:'top'}},
+      scales:{r:{min:0,max:5,ticks:{stepSize:1},grid:{color:'rgba(0,0,0,.08)'},pointLabels:{font:{size:10}}}}}
+  });
+
+  document.getElementById('rbox').style.display='block';
+  document.getElementById('rbox').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function toggleAnswer(){
+  const box=document.getElementById('ans_box');
+  box.style.display=box.style.display==='none'?'block':'none';
+}
+
+// ─── NAV ACTIVE STATE ────────────────────────────────────────────────────────
+const navItems=document.querySelectorAll('.ni');
+const sections=document.querySelectorAll('section,[id]');
+window.addEventListener('scroll',()=>{
+  let current='';
+  document.querySelectorAll('section').forEach(s=>{
+    if(window.scrollY>=s.offsetTop-120) current=s.id;
+  });
+  navItems.forEach(n=>{
+    n.classList.toggle('active',n.getAttribute('href')==='#'+current);
+  });
+});
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  const userLang=(navigator.language||'en').toLowerCase();
+  lang=userLang.startsWith('es')?'es':'en';
+  setLang(lang);
+  initCharts();
+});
+</script>
+</body>
+</html>
