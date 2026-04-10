@@ -1,0 +1,102 @@
+# =========================
+# OS / System files
+# =========================
+.DS_Store
+Thumbs.db
+
+Assetss/
+.AppleDouble
+.LSOverride
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.env
+.venv
+venv/
+ENV/
+
+# =========================
+# Jupyter / notebooks
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Logs & temp
+# =========================
+*.log
+tmp/
+temp/
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# ML / Data / Assets (IMPORTANT)
+# =========================
+
+# Data folders
+data/
+datasets/
+raw_data/
+processed_data/
+
+# Models
+models/
+checkpoints/
+*.h5
+*.pt
+*.pth
+*.ckpt
+*.joblib
+
+# Large files
+*.csv
+*.parquet
+*.feather
+*.hdf5
+
+# Images / media (optional, comment out if needed)
+*.png
+*.jpg
+*.jpeg
+*.tif
+*.tiff
+*.gif
+
+# Geo / remote sensing (important for your work)
+*.nc
+*.grib
+*.grb
+*.tiff
+*.tif
+*.shp
+*.dbf
+*.geojson
+
+# =========================
+# Dropbox / sync artifacts
+# =========================
+*.dropbox
+*.dropbox.attr
+
+# =========================
+# Build / outputs
+# =========================
+output/
+results/
+exports/
+
+# =========================
+# Mac + cloud weirdness
+# =========================
+*.lock
