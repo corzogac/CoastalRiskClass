@@ -697,16 +697,54 @@ footer{background:var(--db);color:rgba(255,255,255,.7);padding:44px 24px;text-al
 </section>
 
 <footer>
-  <p style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:10px" data-i18n="ft_t">Coastal Climate Risk Index — Educational Resource</p>
-  <p style="font-size:.82rem;max-width:580px;margin:0 auto 20px" data-i18n="ft_c">Curriculum based on: Thieler &amp; Hammar-Klose (1999) USGS CVI; Ranasinghe (2016) Earth-Science Reviews; IPCC SROCC (2019). For educational use only.</p>
-  <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;font-size:.78rem;opacity:.7;margin-bottom:20px">
-    <span>📚 Thieler &amp; Hammar-Klose (1999)</span>
-    <span>📚 Ranasinghe (2016) ESR 160</span>
-    <span>📚 IPCC SROCC (2019)</span>
-    <span>📚 Ranasinghe (2020) Sci. Reports</span>
-  </div>
-  <div style="border-top:1px solid rgba(255,255,255,.1);padding-top:18px;font-size:.78rem;opacity:.6">
-    <p data-i18n="gh_note">🚀 GitHub Pages: save this file as <code style="background:rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">index.html</code> in your repository root (or <code style="background:rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">/docs</code> folder), then enable GitHub Pages in Settings → Pages. No build step required.</p>
+  <div style="max-width:900px;margin:0 auto">
+
+    <!-- Title row -->
+    <div style="border-bottom:1px solid rgba(255,255,255,.12);padding-bottom:28px;margin-bottom:28px;text-align:center">
+      <p style="font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:6px;letter-spacing:-.01em">🌊 <span data-i18n="ft_t">Coastal Climate Risk Index</span></p>
+      <p style="font-size:.88rem;opacity:.75;max-width:520px;margin:0 auto" data-i18n="ft_c">An interactive educational resource on coastal climate risk assessment, from fundamentals to Ranasinghe's probabilistic framework.</p>
+    </div>
+
+    <!-- Three columns -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;margin-bottom:28px;text-align:left">
+
+      <!-- Author -->
+      <div>
+        <p style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:10px" data-i18n="ft_author_lbl">Course Author</p>
+        <p style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:4px">Gerald Corzo</p>
+        <p style="font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.6" data-i18n="ft_author_desc">IHE Delft Institute for Water Education<br>Department of Hydroinformatics &amp; Strategic Knowledge</p>
+        <p style="font-size:.78rem;color:rgba(255,255,255,.4);margin-top:8px">© <span id="ft_year">2025</span> Gerald Corzo</p>
+      </div>
+
+      <!-- References -->
+      <div>
+        <p style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:10px" data-i18n="ft_refs_lbl">Key References</p>
+        <ul style="list-style:none;font-size:.8rem;color:rgba(255,255,255,.65);line-height:2.2">
+          <li>📚 Thieler &amp; Hammar-Klose (1999) — CVI</li>
+          <li>📚 Ranasinghe (2016) — Earth-Sci. Reviews</li>
+          <li>📚 IPCC SROCC (2019) — Chapter 4</li>
+          <li>📚 Ranasinghe (2020) — Sci. Reports</li>
+          <li>📚 Roelvink et al. (2009) — XBeach</li>
+        </ul>
+      </div>
+
+      <!-- License & Links -->
+      <div>
+        <p style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:10px" data-i18n="ft_license_lbl">License &amp; Use</p>
+        <p style="font-size:.8rem;color:rgba(255,255,255,.65);line-height:1.7" data-i18n="ft_license_text">This material is provided for educational use. Content may be shared with attribution. Not for commercial use without permission.</p>
+        <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px">
+          <a href="https://github.com/corzogac/CoastalRiskClass" target="_blank" rel="noopener" style="font-size:.75rem;background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);padding:4px 12px;border-radius:12px;text-decoration:none;border:1px solid rgba(255,255,255,.2);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">⭐ GitHub Repo</a>
+          <a href="https://www.ihe-delft.nl" target="_blank" rel="noopener" style="font-size:.75rem;background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);padding:4px 12px;border-radius:12px;text-decoration:none;border:1px solid rgba(255,255,255,.2);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">🏛️ IHE Delft</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div style="border-top:1px solid rgba(255,255,255,.1);padding-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:.74rem;color:rgba(255,255,255,.35)">
+      <span>© <span id="ft_year2">2025</span> Gerald Corzo · <span data-i18n="ft_edu">For educational use</span></span>
+      <span data-i18n="ft_deployed">Deployed via GitHub Pages · <code style="background:rgba(255,255,255,.08);padding:1px 5px;border-radius:3px">docs/index.html</code></span>
+    </div>
+
   </div>
 </footer>
 
@@ -856,7 +894,15 @@ en:{
   ds_lbl:"Public Data Sources",ds_h:"🗂️ Where to Get Real Coastal Data",
   ds_p:"These free, publicly available datasets are the same sources used by researchers. Bookmark them for your own coastal vulnerability assessments.",
   ds_slr_h:"🌡️ Sea Level & Tides",ds_wave_h:"🌊 Waves & Ocean Climate",ds_shore_h:"🏖️ Shorelines & Elevation",
-  ft_t:"Coastal Climate Risk Index — Educational Resource",
+  ft_t:"Coastal Climate Risk Index",
+  ft_author_lbl:"Course Author",
+  ft_author_desc:"IHE Delft Institute for Water Education<br>Department of Hydroinformatics &amp; Strategic Knowledge",
+  ft_refs_lbl:"Key References",
+  ft_license_lbl:"License &amp; Use",
+  ft_license_text:"This material is provided for educational use. Content may be shared with attribution. Not for commercial use without permission.",
+  ft_edu:"For educational use",
+  ft_deployed:"Deployed via GitHub Pages · docs/index.html",
+  ft_t_old:"Coastal Climate Risk Index — Educational Resource",
   ft_c:"Curriculum based on: Thieler & Hammar-Klose (1999) USGS CVI; Ranasinghe (2016) Earth-Science Reviews; IPCC SROCC (2019). For educational use only.",
   gh_note:"🚀 GitHub Pages: save this file as index.html in your repository root (or /docs folder), then enable GitHub Pages in Settings → Pages. No build step required.",
   interp_vl:"✅ Very Low vulnerability. The coast shows minimal susceptibility. Continue monitoring and maintain healthy coastal ecosystems.",
@@ -1007,7 +1053,15 @@ es:{
   ds_lbl:"Fuentes de Datos Públicos",ds_h:"🗂️ Dónde Obtener Datos Costeros Reales",
   ds_p:"Estos conjuntos de datos públicos y gratuitos son las mismas fuentes que usan los investigadores. Guárdalos para tus propias evaluaciones de vulnerabilidad costera.",
   ds_slr_h:"🌡️ Nivel del Mar y Mareas",ds_wave_h:"🌊 Oleaje y Clima Oceánico",ds_shore_h:"🏖️ Líneas de Costa y Elevación",
-  ft_t:"Índice de Riesgo Climático Costero — Recurso Educativo",
+  ft_t:"Índice de Riesgo Climático Costero",
+  ft_author_lbl:"Autor del Curso",
+  ft_author_desc:"IHE Delft Instituto para la Educación en Agua<br>Departamento de Hidroinformática y Conocimiento Estratégico",
+  ft_refs_lbl:"Referencias Clave",
+  ft_license_lbl:"Licencia y Uso",
+  ft_license_text:"Este material se proporciona para uso educativo. El contenido puede compartirse con atribución. No apto para uso comercial sin permiso.",
+  ft_edu:"Para uso educativo",
+  ft_deployed:"Publicado via GitHub Pages · docs/index.html",
+  ft_t_old:"Índice de Riesgo Climático Costero — Recurso Educativo",
   ft_c:"Contenido basado en: Thieler & Hammar-Klose (1999) IVC USGS; Ranasinghe (2016) Earth-Science Reviews; IPCC SROCC (2019). Solo para uso educativo.",
   gh_note:"🚀 GitHub Pages: guarda este archivo como index.html en la raíz del repositorio (o carpeta /docs), luego activa GitHub Pages en Ajustes → Pages. No requiere pasos de compilación.",
   interp_vl:"✅ Vulnerabilidad Muy Baja. La costa muestra susceptibilidad mínima. Continúe el monitoreo y mantenga los ecosistemas costeros saludables.",
@@ -1039,7 +1093,7 @@ function setLang(l){
   document.getElementById('btn-es').classList.toggle('active', l==='es');
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const k=el.getAttribute('data-i18n');
-    if(T[l][k]!==undefined) el.textContent=T[l][k];
+    if(T[l][k]!==undefined) el.innerHTML=T[l][k];
   });
   document.querySelectorAll('[data-i18n-html]').forEach(el=>{
     const k=el.getAttribute('data-i18n-html');
@@ -1274,6 +1328,10 @@ window.addEventListener('scroll',()=>{
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded',()=>{
+  // Set current year in footer
+  const yr = new Date().getFullYear();
+  document.querySelectorAll('#ft_year,#ft_year2').forEach(el=>el.textContent=yr);
+  // Set language and init charts
   const userLang=(navigator.language||'en').toLowerCase();
   lang=userLang.startsWith('es')?'es':'en';
   setLang(lang);
