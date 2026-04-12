@@ -5,1027 +5,581 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Impacto del Cambio Climático en los Niveles Extremos del Mar</title>
 <style>
-/* ═══════════════════════════════════════════════════════════════
-   OCEAN DEPTHS — fully self-contained (no external dependencies)
-   Palette: Navy #1a2332 · Teal #2d8b8b · Seafoam #a8dadc · Cream #f1faee
-═══════════════════════════════════════════════════════════════ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --navy:#1a2332; --teal:#2d8b8b; --teal2:#1d6b6b;
-  --seafoam:#a8dadc; --cream:#f1faee; --accent:#00c9c9;
-  --light:#e0f4f4; --warn:#e66432;
+/* Ocean Depths Theme — Fully Self-Contained */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: #1a2332;
+  color: #f1faee;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow: hidden;
 }
-html,body{
-  width:100%;height:100%;overflow:hidden;
-  background:var(--navy);
-  font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
-  color:var(--cream);
+body { display: flex; flex-direction: column; }
+
+#deck { width: 100vw; height: 100vh; display: flex; flex-direction: column; }
+#viewport { flex: 1; position: relative; overflow: hidden; }
+.slide {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  background-color: #1a2332;
+  padding: 44px 64px 34px 64px;
+  overflow-y: auto;
+  z-index: 1;
+}
+.slide.active { display: flex; z-index: 10; }
+.slide.title-slide { background: linear-gradient(160deg, #1a2332 50%, #1d6b6b 100%); }
+.slide.section-slide {
+  background: linear-gradient(135deg, #1d6b6b 0%, #1a2332 70%);
+  align-items: center;
+  justify-content: center;
+}
+.slide.closing { background: linear-gradient(160deg, #1a2332 40%, #1d6b6b 100%); }
+
+/* Progress bar */
+#progress { height: 3px; background: linear-gradient(90deg, #00c9c9, #a8dadc); position: absolute; top: 0; left: 0; width: 0%; transition: width 0.3s ease; z-index: 20; }
+
+/* Slide header */
+.hdr { font-size: 15px; font-weight: 700; color: #00c9c9; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #2d8b8b; padding-bottom: 10px; margin-bottom: 20px; }
+
+/* Text elements */
+h1 { font-size: 36px; font-weight: 700; line-height: 1.25; margin-bottom: 16px; }
+h1 span { color: #00c9c9; }
+ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+li { font-size: 13px; padding-left: 18px; position: relative; color: #e0f4f4; line-height: 1.5; }
+li::before { content: '▸'; position: absolute; left: 0; color: #00c9c9; }
+li strong { color: #a8dadc; }
+
+/* Tags */
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.tag { background: rgba(45, 139, 139, 0.3); border: 1px solid #2d8b8b; border-radius: 12px; padding: 4px 12px; font-size: 12px; color: #a8dadc; }
+
+/* Boxes */
+.box { background: rgba(45, 139, 139, 0.18); border-left: 4px solid #00c9c9; border-radius: 0 7px 7px 0; padding: 12px 16px; margin: 8px 0; font-size: 13px; color: #e0f4f4; line-height: 1.55; }
+.box strong { color: #a8dadc; }
+.box.warn { border-left-color: #e66432; background: rgba(230, 100, 50, 0.12); }
+.box.warn strong { color: #ffaa80; }
+
+/* Two-column */
+.col2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 12px 0; flex: 1; }
+.col3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 12px 0; }
+
+/* Equation box */
+.eq { background: rgba(0, 201, 201, 0.09); border: 1px solid #2d8b8b; border-radius: 8px; padding: 14px 20px; text-align: center; font-size: 14px; color: #a8dadc; font-weight: 600; margin: 10px 0; }
+.eq-lbl { font-size: 11px; color: #e0f4f4; display: block; margin-bottom: 6px; }
+.eq-val { font-size: 18px; color: #00c9c9; }
+
+/* Section number */
+.sect-num { font-size: 88px; font-weight: 800; color: rgba(168, 218, 220, 0.12); margin: 0; }
+.sect-title { font-size: 32px; font-weight: 700; text-align: center; color: #f1faee; line-height: 1.3; }
+.sect-title em { color: #00c9c9; font-style: normal; }
+
+/* Title slide elements */
+.title-inst { font-size: 11px; color: #a8dadc; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 22px; }
+.accent-bar { height: 5px; width: 100%; background: linear-gradient(90deg, #00c9c9, #a8dadc); border-radius: 2px; margin-bottom: 32px; }
+.author-block { background: rgba(45, 139, 139, 0.2); border-left: 4px solid #00c9c9; border-radius: 0 8px 8px 0; padding: 16px 22px; margin-top: 18px; max-width: 520px; }
+.author-block .name { font-size: 15px; font-weight: 700; color: #a8dadc; }
+.author-block .role { font-size: 12px; color: #e0f4f4; margin-top: 4px; line-height: 1.5; }
+
+/* Contents list */
+.contents { list-style: none; display: flex; flex-direction: column; gap: 0; }
+.contents li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(45, 139, 139, 0.2);
+  font-size: 15px;
+  color: #e0f4f4;
+  padding-left: 0;
+}
+.contents li::before { content: ''; position: static; }
+.contents li:last-child { border-bottom: none; }
+.c-num {
+  width: 34px;
+  height: 34px;
+  background: #2d8b8b;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #f1faee;
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
-/* ── Deck container ─────────────────────────────────────────── */
-#deck{
-  width:100vw;height:100vh;
-  display:flex;flex-direction:column;
-}
+/* GWL pills */
+.gwl { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+.pill { padding: 5px 14px; border-radius: 16px; font-size: 12px; font-weight: 700; }
+.p15 { background: #7a0a3a; color: #fff; }
+.p20 { background: #b02020; color: #fff; }
+.p25 { background: #c84810; color: #fff; }
+.p30 { background: #d47800; color: #fff; }
 
-/* ── Slide area ─────────────────────────────────────────────── */
-#slide-viewport{
-  flex:1;
-  position:relative;
-  overflow:hidden;
-  display:flex;align-items:stretch;
-}
-.slide{
-  position:absolute;inset:0;
-  display:none;
-  flex-direction:column;
-  background:var(--navy);
-}
-.slide.active{display:flex;}
+/* Table */
+table { width: 100%; border-collapse: collapse; font-size: 12px; color: #e0f4f4; margin: 10px 0; }
+th { background: rgba(45, 139, 139, 0.35); padding: 6px 8px; text-align: left; border-bottom: 1px solid #2d8b8b; color: #a8dadc; font-weight: 700; }
+td { padding: 5px 8px; border-bottom: 1px solid rgba(45, 139, 139, 0.15); }
+tr:nth-child(even) td { background: rgba(45, 139, 139, 0.08); }
 
-/* ── Footer bar ─────────────────────────────────────────────── */
-#footer{
-  height:42px;
-  background:rgba(26,35,50,0.97);
-  border-top:1px solid rgba(45,139,139,0.35);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 22px;
-  flex-shrink:0;
+/* References */
+.refs { list-style: none; display: flex; flex-direction: column; gap: 0; }
+.refs li {
+  font-size: 11px;
+  color: #e0f4f4;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(45, 139, 139, 0.2);
+  line-height: 1.55;
+  padding-left: 0;
 }
-#slide-counter{font-size:13px;color:var(--seafoam);letter-spacing:1px;}
-#footer-center{font-size:11px;color:rgba(168,218,220,0.45);letter-spacing:0.5px;}
-#footer-right{display:flex;gap:10px;align-items:center;}
-.nav-btn{
-  background:none;border:1px solid rgba(45,139,139,0.5);
-  color:var(--seafoam);border-radius:6px;
-  width:30px;height:26px;cursor:pointer;font-size:14px;
-  display:flex;align-items:center;justify-content:center;
-  transition:background .2s;
-}
-.nav-btn:hover{background:rgba(45,139,139,0.35);}
-.nav-btn:disabled{opacity:0.25;cursor:default;}
+.refs li::before { content: ''; position: static; }
+.refs li:last-child { border-bottom: none; }
+.ref-num { color: #a8dadc; font-weight: 700; margin-right: 6px; }
+a { color: #00c9c9; text-decoration: none; }
 
-/* ── Language toggle ────────────────────────────────────────── */
-#lang-btn{
-  background:var(--teal);color:var(--cream);
-  border:none;border-radius:14px;
-  padding:4px 14px;font-size:12px;font-weight:700;
-  letter-spacing:1px;cursor:pointer;
-  transition:background .2s;
+/* Closing slide */
+.big-thanks { font-size: 52px; font-weight: 800; color: #00c9c9; margin-bottom: 6px; }
+.contact { font-size: 14px; color: #a8dadc; margin-bottom: 18px; }
+.credit-box {
+  background: rgba(45, 139, 139, 0.14);
+  border: 1px solid #2d8b8b;
+  border-radius: 8px;
+  padding: 18px 22px;
+  font-size: 12px;
+  color: #e0f4f4;
+  line-height: 1.7;
+  margin-top: auto;
 }
-#lang-btn:hover{background:var(--accent);color:var(--navy);}
+.credit-box strong { color: #a8dadc; }
 
-/* ── Language visibility ────────────────────────────────────── */
-.es{display:block;} .en{display:none;}
-body.en .es{display:none;} body.en .en{display:block;}
-span.es,span.en{display:inline;}
-body.en span.es{display:none;} body.en span.en{display:inline;}
+/* Footer */
+#footer {
+  height: 42px;
+  background: rgba(26, 35, 50, 0.97);
+  border-top: 1px solid rgba(45, 139, 139, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  flex-shrink: 0;
+}
+.counter { font-size: 13px; color: #a8dadc; letter-spacing: 1px; }
+.center-text { font-size: 11px; color: rgba(168, 218, 220, 0.45); }
+.footer-right { display: flex; gap: 10px; align-items: center; }
+button {
+  background: none;
+  border: 1px solid rgba(45, 139, 139, 0.5);
+  color: #a8dadc;
+  border-radius: 6px;
+  width: 30px;
+  height: 26px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+button:hover { background: rgba(45, 139, 139, 0.35); }
+button:disabled { opacity: 0.25; cursor: default; }
+#lang-btn {
+  width: auto;
+  background: #2d8b8b;
+  color: #f1faee;
+  border: none;
+  border-radius: 14px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+#lang-btn:hover { background: #00c9c9; color: #1a2332; }
 
-/* ── Progress bar ───────────────────────────────────────────── */
-#progress-bar{
-  height:3px;background:linear-gradient(90deg,var(--accent),var(--seafoam));
-  transition:width .35s ease;
-  position:absolute;top:0;left:0;z-index:10;
-}
-
-/* ══════════════════════════════════════════════════════════════
-   SLIDE INNER LAYOUTS
-══════════════════════════════════════════════════════════════ */
-.body{
-  padding:44px 64px 34px;
-  flex:1;display:flex;flex-direction:column;
-  position:relative;overflow:hidden;
-}
-
-/* ── Slide header ───────────────────────────────────────────── */
-.hdr{
-  font-size:15px;font-weight:700;
-  color:var(--accent);text-transform:uppercase;letter-spacing:2px;
-  border-bottom:2px solid var(--teal);padding-bottom:10px;margin-bottom:20px;
-  flex-shrink:0;
-}
-
-/* ── Title slide ─────────────────────────────────────────────  */
-.title-slide{
-  background:linear-gradient(160deg,var(--navy) 50%,var(--teal2) 100%);
-  justify-content:flex-start;
-}
-.accent-bar{
-  height:5px;width:100%;
-  background:linear-gradient(90deg,var(--accent),var(--seafoam));
-  border-radius:2px;margin-bottom:32px;flex-shrink:0;
-}
-.inst{font-size:11px;color:var(--seafoam);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:22px;}
-.t-main{
-  font-size:36px;font-weight:700;line-height:1.25;
-  color:var(--cream);margin-bottom:24px;
-}
-.t-main span{color:var(--accent);}
-.tag-row{margin-bottom:auto;display:flex;flex-wrap:wrap;gap:6px;}
-.tag{
-  display:inline-block;background:rgba(45,139,139,0.3);
-  border:1px solid var(--teal);border-radius:12px;
-  padding:3px 12px;font-size:12px;color:var(--seafoam);
-}
-.author-block{
-  background:rgba(45,139,139,0.2);border-left:4px solid var(--accent);
-  border-radius:0 8px 8px 0;padding:16px 22px;margin-top:18px;
-  max-width:520px;
-}
-.author-block .aname{font-size:15px;font-weight:700;color:var(--seafoam);}
-.author-block .arole{font-size:12px;color:var(--light);margin-top:4px;line-height:1.5;}
-
-/* ── Section slide ───────────────────────────────────────────  */
-.section-slide{
-  background:linear-gradient(135deg,var(--teal2) 0%,var(--navy) 70%);
-  justify-content:center;align-items:center;
-}
-.sect-num{
-  font-size:88px;font-weight:800;
-  color:rgba(168,218,220,0.12);
-  position:absolute;top:20px;right:44px;
-  line-height:1;
-}
-.sect-title{
-  font-size:32px;font-weight:700;text-align:center;
-  color:var(--cream);line-height:1.3;
-  position:relative;z-index:1;padding:0 60px;
-}
-.sect-title em{color:var(--accent);font-style:normal;}
-
-/* ── Two-col ─────────────────────────────────────────────────  */
-.col2{display:grid;grid-template-columns:1fr 1fr;gap:22px;flex:1;min-height:0;}
-.col3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
-.col-left,.col-right{display:flex;flex-direction:column;gap:10px;overflow:hidden;}
-
-/* ── Boxes ───────────────────────────────────────────────────  */
-.callout{
-  background:rgba(45,139,139,0.18);
-  border-left:4px solid var(--accent);
-  border-radius:0 7px 7px 0;
-  padding:12px 16px;
-  font-size:13px;color:var(--light);line-height:1.55;
-}
-.callout strong{color:var(--seafoam);}
-.callout.warn{border-left-color:var(--warn);background:rgba(230,100,50,0.12);}
-.callout.warn strong{color:#ffaa80;}
-.callout.pub{border-left-color:var(--seafoam);background:rgba(168,218,220,0.08);}
-
-/* ── Bullet list ─────────────────────────────────────────────  */
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;}
-ul.bullets li{
-  position:relative;padding-left:18px;
-  font-size:13px;color:var(--light);line-height:1.5;
-}
-ul.bullets li::before{content:'▸';color:var(--accent);position:absolute;left:0;top:1px;}
-ul.bullets li strong{color:var(--seafoam);}
-
-/* ── Equation box ────────────────────────────────────────────  */
-.eq{
-  background:rgba(0,201,201,0.09);
-  border:1px solid var(--teal);border-radius:8px;
-  padding:14px 20px;text-align:center;
-  font-size:14px;color:var(--seafoam);
-  font-weight:600;letter-spacing:0.5px;
-  flex-shrink:0;
-}
-.eq .eq-lbl{font-size:11px;color:var(--light);display:block;margin-bottom:7px;font-weight:400;}
-.eq .eq-val{font-size:20px;color:var(--accent);}
-
-/* ── Contents list ───────────────────────────────────────────  */
-.contents-list{list-style:none;padding:0;margin:0;}
-.contents-list li{
-  display:flex;align-items:center;gap:16px;
-  padding:10px 0;border-bottom:1px solid rgba(45,139,139,0.2);
-  font-size:15px;color:var(--light);
-}
-.contents-list li:last-child{border-bottom:none;}
-.c-num{
-  width:34px;height:34px;background:var(--teal);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;color:var(--cream);font-size:14px;flex-shrink:0;
-}
-
-/* ── Steps row ───────────────────────────────────────────────  */
-.steps{display:flex;gap:0;flex:1;min-height:0;margin-top:8px;}
-.step{
-  flex:1;background:rgba(45,139,139,0.18);
-  border:1px solid var(--teal);border-radius:8px;
-  padding:14px 12px;text-align:center;
-  font-size:12px;color:var(--light);line-height:1.4;
-  position:relative;margin-right:20px;
-}
-.step:last-child{margin-right:0;}
-.step strong{display:block;color:var(--accent);font-size:13px;margin-bottom:8px;}
-.step::after{
-  content:'→';position:absolute;right:-16px;top:50%;
-  transform:translateY(-50%);color:var(--seafoam);font-size:18px;
-}
-.step:last-child::after{display:none;}
-
-/* ── Return period bars ──────────────────────────────────────  */
-.rp-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.rp-lbl{width:70px;text-align:right;font-weight:700;color:var(--seafoam);font-size:13px;flex-shrink:0;}
-.rp-bar{height:14px;border-radius:7px;}
-.rp-desc{font-size:12px;color:var(--light);flex:1;}
-
-/* ── Dataset diagram ─────────────────────────────────────────  */
-.ds-grid{
-  display:grid;
-  grid-template-columns:1fr 30px 1fr 30px 1fr;
-  align-items:center;gap:6px;margin-top:8px;
-}
-.ds-col{display:flex;flex-direction:column;gap:6px;}
-.ds-box{
-  background:rgba(45,139,139,0.18);border:1px solid var(--teal);
-  border-radius:6px;padding:9px 10px;text-align:center;
-  color:var(--light);font-size:12px;line-height:1.35;
-}
-.ds-box em{color:var(--seafoam);font-style:normal;font-size:11px;}
-.ds-arrow{text-align:center;color:var(--accent);font-size:22px;line-height:1;}
-
-/* ── GWL pills ───────────────────────────────────────────────  */
-.gwl-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.gwl-pill{padding:5px 14px;border-radius:16px;font-size:12px;font-weight:700;}
-.p15{background:#7a0a3a;color:#fff;} .p20{background:#b02020;color:#fff;}
-.p25{background:#c84810;color:#fff;} .p30{background:#d47800;color:#fff;}
-.p40{background:#8fba3a;color:#1a2332;} .p50{background:#1a7ab5;color:#fff;}
-
-/* ── Source footnote ─────────────────────────────────────────  */
-.src{
-  position:absolute;bottom:8px;right:64px;
-  font-size:10px;color:rgba(168,218,220,0.45);font-style:italic;
-}
-
-/* ── Table ───────────────────────────────────────────────────  */
-table.data{width:100%;border-collapse:collapse;font-size:12px;color:var(--light);}
-table.data th{
-  background:rgba(45,139,139,0.35);padding:6px 8px;
-  text-align:left;border-bottom:1px solid var(--teal);color:var(--seafoam);
-}
-table.data td{padding:5px 8px;border-bottom:1px solid rgba(45,139,139,0.15);}
-table.data tr:nth-child(even) td{background:rgba(45,139,139,0.08);}
-
-/* ── References ──────────────────────────────────────────────  */
-.ref-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0;}
-.ref-list li{
-  font-size:11.5px;color:var(--light);
-  padding:6px 0;border-bottom:1px solid rgba(45,139,139,0.2);
-  line-height:1.55;
-}
-.ref-list li:last-child{border-bottom:none;}
-.ref-num{color:var(--seafoam);font-weight:700;margin-right:6px;}
-.ref-list a{color:var(--accent);text-decoration:none;}
-
-/* ── Credits / closing ───────────────────────────────────────  */
-.closing{background:linear-gradient(160deg,var(--navy) 40%,var(--teal2) 100%);}
-.big-thanks{
-  font-size:52px;font-weight:800;color:var(--accent);
-  margin-bottom:6px;
-}
-.contact-line{font-size:14px;color:var(--seafoam);margin-bottom:18px;}
-.contact-line a{color:var(--accent);}
-.credit-box{
-  background:rgba(45,139,139,0.14);border:1px solid var(--teal);
-  border-radius:8px;padding:18px 22px;font-size:12px;
-  color:var(--light);line-height:1.7;margin-top:auto;
-}
-.credit-box strong{color:var(--seafoam);}
-
-/* ── SVG diagrams ────────────────────────────────────────────  */
-svg.diag{width:100%;height:auto;}
-.svg-wrap{
-  background:rgba(255,255,255,0.03);
-  border:1px solid var(--teal);border-radius:8px;
-  padding:10px;display:flex;align-items:center;justify-content:center;
-}
+/* Language visibility */
+.es { display: block; }
+.en { display: none; }
+body.en .es { display: none; }
+body.en .en { display: block; }
+span.es, span.en { display: inline; }
+body.en span.es { display: none; }
+body.en span.en { display: inline; }
 </style>
 </head>
 <body>
 
 <div id="deck">
-  <div id="slide-viewport">
-    <div id="progress-bar"></div>
+  <div id="progress"></div>
+  <div id="viewport">
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 01 — TITLE
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 1: TITLE -->
     <div class="slide active title-slide">
-      <div class="body">
-        <div class="inst">IHE Delft — Institute for Water Education &nbsp;·&nbsp; UNESCO Centre</div>
-        <div class="accent-bar"></div>
-        <div class="t-main es">
-          Impacto del <span>Cambio Climático</span><br>en los Niveles Extremos del Mar
-        </div>
-        <div class="t-main en">
-          Impact of <span>Climate Change</span><br>on Extreme Sea Levels
-        </div>
-        <div class="tag-row">
-          <span class="tag es">Inundación Costera</span>
-          <span class="tag es">Nivel del Mar</span>
-          <span class="tag es">Cambio Climático</span>
-          <span class="tag es">Incertidumbre Probabilística</span>
-          <span class="tag en">Coastal Flooding</span>
-          <span class="tag en">Sea Level Rise</span>
-          <span class="tag en">Climate Change</span>
-          <span class="tag en">Probabilistic Uncertainty</span>
-        </div>
-        <div class="author-block">
-          <div class="aname">Khin Nawarat</div>
-          <div class="arole es">Candidata a Doctorado · Departamento de Riesgo y Resiliencia Costera y Urbana<br>IHE Delft — Centro UNESCO &nbsp;·&nbsp; k.nawarat@un-ihe.org</div>
-          <div class="arole en">PhD Candidate · Coastal and Urban Risk &amp; Resilience Department<br>IHE Delft — UNESCO Centre &nbsp;·&nbsp; k.nawarat@un-ihe.org</div>
-        </div>
+      <div class="title-inst">IHE Delft — Institute for Water Education · UNESCO Centre</div>
+      <div class="accent-bar"></div>
+      <h1 class="es">Impacto del <span>Cambio Climático</span><br>en los Niveles Extremos del Mar</h1>
+      <h1 class="en">Impact of <span>Climate Change</span><br>on Extreme Sea Levels</h1>
+      <div class="tags">
+        <span class="tag es">Inundación Costera</span>
+        <span class="tag es">Nivel del Mar</span>
+        <span class="tag es">Cambio Climático</span>
+        <span class="tag en">Coastal Flooding</span>
+        <span class="tag en">Sea Level</span>
+        <span class="tag en">Climate Change</span>
+      </div>
+      <div class="author-block" style="margin-top: auto;">
+        <div class="name">Khin Nawarat</div>
+        <div class="role es">Candidata a Doctorado · Departamento de Riesgo y Resiliencia Costera y Urbana<br>IHE Delft — Centro UNESCO</div>
+        <div class="role en">PhD Candidate · Coastal and Urban Risk &amp; Resilience Department<br>IHE Delft — UNESCO Centre</div>
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 02 — CONTENTS
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 2: CONTENTS -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">Contenido</div>
-        <div class="hdr en">Contents</div>
-        <ul class="contents-list">
-          <li><div class="c-num">1</div><span class="es">¿Cuáles son los impulsores de las inundaciones costeras?</span><span class="en">What are the drivers of coastal flooding?</span></li>
-          <li><div class="c-num">2</div><span class="es">Impactos del cambio climático en los niveles del mar</span><span class="en">Climate change impacts on sea levels</span></li>
-          <li><div class="c-num">3</div><span class="es">Metodología: integrando la incertidumbre</span><span class="en">Methodology: integrating uncertainty</span></li>
-          <li><div class="c-num">4</div><span class="es">Resultados regionales: Sri Lanka, Tailandia, Egipto</span><span class="en">Regional results: Sri Lanka, Thailand, Egypt</span></li>
-          <li><div class="c-num">5</div><span class="es">Hacia costas resilientes al clima</span><span class="en">Towards climate resilient coastlines</span></li>
-        </ul>
-      </div>
+      <div class="hdr es">Contenido</div>
+      <div class="hdr en">Contents</div>
+      <ul class="contents">
+        <li><div class="c-num">1</div><span class="es">¿Cuáles son los impulsores de las inundaciones costeras?</span><span class="en">What are the drivers of coastal flooding?</span></li>
+        <li><div class="c-num">2</div><span class="es">Impactos del cambio climático en los niveles del mar</span><span class="en">Climate change impacts on sea levels</span></li>
+        <li><div class="c-num">3</div><span class="es">Metodología: integrando la incertidumbre</span><span class="en">Methodology: integrating uncertainty</span></li>
+        <li><div class="c-num">4</div><span class="es">Resultados regionales: Sri Lanka, Tailandia, Egipto</span><span class="en">Regional results: Sri Lanka, Thailand, Egypt</span></li>
+        <li><div class="c-num">5</div><span class="es">Hacia costas resilientes al clima</span><span class="en">Towards climate resilient coastlines</span></li>
+      </ul>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 03 — SECTION 1 divider
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 3: SECTION 1 -->
     <div class="slide section-slide">
-      <div class="body" style="justify-content:center;align-items:center;">
-        <div class="sect-num">01</div>
-        <div class="sect-title es">Impulsores de las<br><em>Inundaciones Costeras</em></div>
-        <div class="sect-title en">Drivers of<br><em>Coastal Flooding</em></div>
-      </div>
+      <div class="sect-num">01</div>
+      <div class="sect-title es">Impulsores de las<br><em>Inundaciones Costeras</em></div>
+      <div class="sect-title en">Drivers of<br><em>Coastal Flooding</em></div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 04 — ESL definition
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 4: ESL DEFINITION -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">¿Qué es un Nivel Extremo del Mar (ESL)?</div>
-        <div class="hdr en">What is an Extreme Sea Level (ESL)?</div>
-        <div class="eq" style="margin-bottom:14px;">
-          <span class="eq-lbl es">Nivel Extremo del Mar = suma de sus componentes</span>
-          <span class="eq-lbl en">Extreme Sea Level = sum of its components</span>
-          <span class="eq-val">ESL = <span class="es">marea + marejada ciclónica + setup de olas + <span style="color:#ff8c80;">ANS</span></span><span class="en">tide + storm surge + wave setup + <span style="color:#ff8c80;">SLR</span></span></span>
+      <div class="hdr es">¿Qué es un Nivel Extremo del Mar (ESL)?</div>
+      <div class="hdr en">What is an Extreme Sea Level (ESL)?</div>
+      <div class="eq">
+        <span class="eq-lbl es">Nivel Extremo del Mar = suma de sus componentes</span>
+        <span class="eq-lbl en">Extreme Sea Level = sum of its components</span>
+        <span class="eq-val">ESL = <span class="es">marea + marejada ciclónica + setup de olas + ANS</span><span class="en">tide + storm surge + wave setup + SLR</span></span>
+      </div>
+      <div class="col2">
+        <div>
+          <div class="box es"><strong>Marea astronómica</strong><br>Generada por la atracción gravitacional de la Luna y el Sol. Predecible con alta precisión.</div>
+          <div class="box en"><strong>Astronomical tide</strong><br>Driven by gravitational pull of Moon and Sun. Highly predictable.</div>
+          <div class="box es"><strong>Marejada ciclónica</strong><br>Elevación del nivel del mar por presión atmosférica baja y esfuerzos del viento durante tormentas.</div>
+          <div class="box en"><strong>Storm surge</strong><br>Sea level elevation caused by low atmospheric pressure and wind stress during storms.</div>
         </div>
-        <div class="col2">
-          <div class="col-left">
-            <div class="callout es"><strong>Marea astronómica</strong><br>Generada por la atracción gravitacional de la Luna y el Sol. Predecible con alta precisión gracias a registros históricos.</div>
-            <div class="callout en"><strong>Astronomical tide</strong><br>Driven by gravitational pull of Moon and Sun. Highly predictable from long historical records.</div>
-            <div class="callout es"><strong>Marejada ciclónica</strong><br>Elevación del nivel del mar por presión atmosférica baja y esfuerzos del viento durante tormentas costeras intensas.</div>
-            <div class="callout en"><strong>Storm surge</strong><br>Sea level elevation caused by low atmospheric pressure and wind stress during intense coastal storms.</div>
-            <div class="callout es"><strong>Setup de olas</strong><br>Aumento del nivel medio del agua cerca de la orilla causado por el rompimiento de olas y la transferencia de momento.</div>
-            <div class="callout en"><strong>Wave setup</strong><br>Mean water-level rise near the shore caused by wave breaking and momentum transfer.</div>
-          </div>
-          <div class="col-right">
-            <div class="callout warn es"><strong>Ascenso del nivel del mar (ANS)</strong><br>Impulsado por el cambio climático: expansión térmica del océano + fusión de glaciares y capas de hielo. Este componente <strong>desplaza toda la distribución de ESL</strong> hacia el futuro, convirtiendo eventos raros en frecuentes.</div>
-            <div class="callout warn en"><strong>Sea Level Rise (SLR)</strong><br>Driven by climate change: thermal expansion of oceans + melt of glaciers and ice sheets. This component <strong>shifts the entire ESL distribution</strong> into the future, turning rare events into frequent ones.</div>
-            <div class="callout es" style="font-size:12px;">El nivel total del agua (<strong>TWL</strong>) cerca de la costa incluye también el <em>runup</em> de olas. Los umbrales críticos de inundación se superan cuando el TWL excede la cota de la berma o la coronación del dique.</div>
-            <div class="callout en" style="font-size:12px;">The total water level (<strong>TWL</strong>) near shore also includes wave runup. Critical flooding thresholds are exceeded when TWL surpasses the berm crest or dike crest elevation.</div>
-          </div>
+        <div>
+          <div class="box es"><strong>Setup de olas</strong><br>Aumento del nivel medio del agua cerca de la orilla causado por el rompimiento de olas.</div>
+          <div class="box en"><strong>Wave setup</strong><br>Mean water-level rise near shore caused by wave breaking.</div>
+          <div class="box warn es"><strong>Ascenso del Nivel del Mar (ANS)</strong><br>Impulsado por cambio climático. <strong>Desplaza toda la distribución de ESL</strong>, convirtiendo eventos raros en frecuentes.</div>
+          <div class="box warn en"><strong>Sea Level Rise (SLR)</strong><br>Driven by climate change. <strong>Shifts the entire ESL distribution</strong>, turning rare events into frequent ones.</div>
         </div>
-        <div class="src">Vousdoukas et al. (2018); CSIRO coastal diagram</div>
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 05 — Relative SLR
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 5: RELATIVE SLR -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">Ascenso Relativo del Nivel del Mar</div>
-        <div class="hdr en">Relative Sea Level Rise</div>
-        <div class="col2">
-          <div class="col-left">
-            <div class="callout es"><strong>ANS relativo</strong> = ANS absoluto (expansión térmica + hielo) + subsidencia local del suelo + cambios gravitacionales por redistribución de masa de hielo.</div>
-            <div class="callout en"><strong>Relative SLR</strong> = Absolute SLR (thermal expansion + ice) + local land subsidence + gravitational changes from ice mass redistribution.</div>
-            <div class="callout warn es"><strong>Alta confianza (IPCC AR6):</strong> el ascenso relativo del nivel del mar contribuye al aumento en <strong>frecuencia y severidad</strong> de inundaciones costeras en zonas bajas y a la erosión costera en la mayoría de costas arenosas.</div>
-            <div class="callout warn en"><strong>High confidence (IPCC AR6):</strong> relative SLR contributes to increases in the <strong>frequency and severity</strong> of coastal flooding in low-lying areas and to coastal erosion along most sandy coasts.</div>
-            <div class="callout es" style="font-size:12px;">En deltas urbanos (Jakarta, Ciudad Ho Chi Minh, Delta del Nilo), la subsidencia puede superar el ANS absoluto, amplificando drásticamente el riesgo local.</div>
-            <div class="callout en" style="font-size:12px;">In urban deltas (Jakarta, Ho Chi Minh City, Nile Delta), subsidence can exceed absolute SLR, dramatically amplifying local risk.</div>
-          </div>
-          <div class="col-right">
-            <div class="svg-wrap" style="flex:1;">
-              <svg viewBox="0 0 300 220" class="diag">
-                <defs>
-                  <linearGradient id="og" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#2d8b8b" stop-opacity="0.75"/>
-                    <stop offset="100%" stop-color="#1a2332" stop-opacity="0.9"/>
-                  </linearGradient>
-                </defs>
-                <!-- sea -->
-                <rect x="0" y="110" width="300" height="90" fill="url(#og)"/>
-                <!-- coast land -->
-                <polygon points="0,150 80,110 120,115 160,108 200,112 300,150 300,200 0,200" fill="#2a3d2a" opacity="0.7"/>
-                <!-- present SL -->
-                <line x1="0" y1="110" x2="300" y2="110" stroke="#a8dadc" stroke-width="2" stroke-dasharray="7,4"/>
-                <text x="5" y="107" font-size="10" fill="#a8dadc" font-family="sans-serif">SL presente</text>
-                <!-- future SL -->
-                <line x1="0" y1="78" x2="300" y2="78" stroke="#ff8c80" stroke-width="2.5" stroke-dasharray="7,4"/>
-                <text x="5" y="75" font-size="10" fill="#ff8c80" font-family="sans-serif">SL futuro (+ANS)</text>
-                <!-- SLR arrow -->
-                <line x1="260" y1="108" x2="260" y2="80" stroke="#00c9c9" stroke-width="2.5"/>
-                <polygon points="260,76 255,87 265,87" fill="#00c9c9"/>
-                <text x="264" y="96" font-size="11" fill="#00c9c9" font-family="sans-serif" font-weight="bold">ANS</text>
-                <!-- subsidence arrow -->
-                <line x1="170" y1="148" x2="170" y2="164" stroke="#ffaa80" stroke-width="2"/>
-                <polygon points="170,168 165,158 175,158" fill="#ffaa80"/>
-                <text x="175" y="162" font-size="9" fill="#ffaa80" font-family="sans-serif">subsidencia</text>
-                <!-- labels -->
-                <text x="10" y="185" font-size="10" fill="#6aaa6a" font-family="sans-serif">Tierra / costa</text>
-                <text x="10" y="135" font-size="10" fill="#e0f4f4" font-family="sans-serif">Océano</text>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="src">IPCC AR6 WGI Cap. 9; Oppenheimer et al. (2019, SROCC)</div>
-      </div>
+      <div class="hdr es">Ascenso Relativo del Nivel del Mar</div>
+      <div class="hdr en">Relative Sea Level Rise</div>
+      <div class="box es"><strong>ANS relativo</strong> = ANS absoluto (expansión térmica + hielo) + subsidencia local del suelo.</div>
+      <div class="box en"><strong>Relative SLR</strong> = Absolute SLR (thermal expansion + ice) + local land subsidence.</div>
+      <div class="box warn es"><strong>Alta confianza (IPCC AR6):</strong> el ascenso relativo contribuye al aumento en <strong>frecuencia y severidad</strong> de inundaciones costeras y a la erosión costera en la mayoría de costas arenosas.</div>
+      <div class="box warn en"><strong>High confidence (IPCC AR6):</strong> relative SLR contributes to increases in the <strong>frequency and severity</strong> of coastal flooding and coastal erosion along most sandy coasts.</div>
+      <div class="box es" style="font-size: 12px;">En deltas urbanos (Jakarta, Ho Chi Minh, Nilo), la subsidencia puede superar el ANS absoluto, amplificando drásticamente el riesgo local.</div>
+      <div class="box en" style="font-size: 12px;">In urban deltas (Jakarta, Ho Chi Minh City, Nile Delta), subsidence can exceed absolute SLR, dramatically amplifying local risk.</div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 06 — SECTION 2 divider
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 6: SECTION 2 -->
     <div class="slide section-slide">
-      <div class="body" style="justify-content:center;align-items:center;">
-        <div class="sect-num">02</div>
-        <div class="sect-title es">Cambio Climático y<br><em>Proyecciones del Nivel del Mar</em></div>
-        <div class="sect-title en">Climate Change and<br><em>Sea Level Projections</em></div>
-      </div>
+      <div class="sect-num">02</div>
+      <div class="sect-title es">Cambio Climático y<br><em>Proyecciones del Nivel del Mar</em></div>
+      <div class="sect-title en">Climate Change and<br><em>Sea Level Projections</em></div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 07 — SLR by warming level
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 7: SLR BY WARMING -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">ANS según Nivel de Calentamiento Global (NCG)</div>
-        <div class="hdr en">SLR by Global Warming Level (GWL)</div>
-        <div class="col2">
-          <div class="col-left">
-            <ul class="bullets">
-              <li class="es"><strong>SSP1-1.9 (~1.5°C):</strong> mediana ~0.3–0.5 m para 2100</li>
-              <li class="en"><strong>SSP1-1.9 (~1.5°C):</strong> median ~0.3–0.5 m by 2100</li>
-              <li class="es"><strong>SSP2-4.5 (~3°C):</strong> mediana ~0.4–0.7 m para 2100</li>
-              <li class="en"><strong>SSP2-4.5 (~3°C):</strong> median ~0.4–0.7 m by 2100</li>
-              <li class="es"><strong>SSP5-8.5 (~5°C):</strong> mediana ~0.6–1.0 m; escenarios de cola superior hasta ~2 m</li>
-              <li class="en"><strong>SSP5-8.5 (~5°C):</strong> median ~0.6–1.0 m; upper-tail scenarios up to ~2 m</li>
-            </ul>
-            <div class="gwl-pills">
-              <div class="gwl-pill p15">+1.5°C</div><div class="gwl-pill p20">+2.0°C</div>
-              <div class="gwl-pill p25">+2.5°C</div><div class="gwl-pill p30">+3.0°C</div>
-              <div class="gwl-pill p40">+4.0°C</div><div class="gwl-pill p50">+5.0°C</div>
-            </div>
-            <div class="callout es" style="margin-top:10px;font-size:12px;">El IPCC AR6 expresa los riesgos en términos de <strong>niveles de calentamiento global</strong> en lugar de escenarios de emisiones, mejorando la comunicación con tomadores de decisiones.</div>
-            <div class="callout en" style="margin-top:10px;font-size:12px;">IPCC AR6 frames risks in terms of <strong>global warming levels</strong> rather than emission scenarios, improving communication with policy makers.</div>
-          </div>
-          <div class="col-right">
-            <div class="svg-wrap" style="flex:1;">
-              <svg viewBox="0 0 300 210" class="diag">
-                <!-- axes -->
-                <line x1="42" y1="185" x2="290" y2="185" stroke="#a8dadc" stroke-width="1.5"/>
-                <line x1="42" y1="20" x2="42" y2="185" stroke="#a8dadc" stroke-width="1.5"/>
-                <!-- y-axis labels -->
-                <text x="3" y="189" font-size="9" fill="#a8dadc" font-family="sans-serif">0</text>
-                <text x="3" y="149" font-size="9" fill="#a8dadc" font-family="sans-serif">0.3</text>
-                <text x="3" y="109" font-size="9" fill="#a8dadc" font-family="sans-serif">0.6</text>
-                <text x="3" y="69" font-size="9" fill="#a8dadc" font-family="sans-serif">0.9</text>
-                <text x="3" y="29" font-size="9" fill="#a8dadc" font-family="sans-serif">1.2</text>
-                <!-- y-axis title -->
-                <text x="13" y="112" font-size="9" fill="#a8dadc" font-family="sans-serif" transform="rotate(-90,13,112)">ANS (m)</text>
-                <!-- x-axis labels -->
-                <text x="38" y="198" font-size="9" fill="#a8dadc" font-family="sans-serif">2020</text>
-                <text x="118" y="198" font-size="9" fill="#a8dadc" font-family="sans-serif">2050</text>
-                <text x="198" y="198" font-size="9" fill="#a8dadc" font-family="sans-serif">2080</text>
-                <text x="258" y="198" font-size="9" fill="#a8dadc" font-family="sans-serif">2100</text>
-                <!-- gridlines -->
-                <line x1="42" y1="149" x2="290" y2="149" stroke="#2d8b8b" stroke-width="0.5" stroke-dasharray="3,3"/>
-                <line x1="42" y1="109" x2="290" y2="109" stroke="#2d8b8b" stroke-width="0.5" stroke-dasharray="3,3"/>
-                <line x1="42" y1="69" x2="290" y2="69" stroke="#2d8b8b" stroke-width="0.5" stroke-dasharray="3,3"/>
-                <line x1="42" y1="29" x2="290" y2="29" stroke="#2d8b8b" stroke-width="0.5" stroke-dasharray="3,3"/>
-                <!-- shading SSP1-1.9 -->
-                <polygon points="42,185 130,174 200,160 280,152 280,158 200,168 130,182 42,185" fill="#4fc3f7" opacity="0.15"/>
-                <!-- shading SSP5-8.5 -->
-                <polygon points="42,185 130,158 200,118 280,78 280,55 200,98 130,142 42,185" fill="#ef9a9a" opacity="0.15"/>
-                <!-- SSP1-1.9 line -->
-                <polyline points="42,185 130,178 200,164 280,155" fill="none" stroke="#4fc3f7" stroke-width="2.5"/>
-                <text x="283" y="157" font-size="9" fill="#4fc3f7" font-family="sans-serif">1.5°C</text>
-                <!-- SSP2-4.5 line -->
-                <polyline points="42,185 130,168 200,138 280,112" fill="none" stroke="#ab47bc" stroke-width="2.5"/>
-                <text x="283" y="114" font-size="9" fill="#ab47bc" font-family="sans-serif">3°C</text>
-                <!-- SSP5-8.5 line -->
-                <polyline points="42,185 130,158 200,118 280,68" fill="none" stroke="#ef9a9a" stroke-width="2.5"/>
-                <text x="283" y="70" font-size="9" fill="#ef9a9a" font-family="sans-serif">5°C</text>
-              </svg>
-            </div>
-            <div style="font-size:10px;color:rgba(168,218,220,0.5);text-align:center;" class="es">Esquema representativo — basado en IPCC AR6 WGI Fig. 9.25</div>
-            <div style="font-size:10px;color:rgba(168,218,220,0.5);text-align:center;" class="en">Schematic — based on IPCC AR6 WGI Fig. 9.25</div>
-          </div>
-        </div>
-        <div class="src">IPCC AR6 WGI (2021), Capítulo 9</div>
+      <div class="hdr es">ANS según Nivel de Calentamiento Global (NCG)</div>
+      <div class="hdr en">SLR by Global Warming Level (GWL)</div>
+      <ul>
+        <li class="es"><strong>SSP1-1.9 (~1.5°C):</strong> mediana ~0.3–0.5 m para 2100</li>
+        <li class="en"><strong>SSP1-1.9 (~1.5°C):</strong> median ~0.3–0.5 m by 2100</li>
+        <li class="es"><strong>SSP2-4.5 (~3°C):</strong> mediana ~0.4–0.7 m para 2100</li>
+        <li class="en"><strong>SSP2-4.5 (~3°C):</strong> median ~0.4–0.7 m by 2100</li>
+        <li class="es"><strong>SSP5-8.5 (~5°C):</strong> mediana ~0.6–1.0 m; escenarios de cola superior hasta ~2 m</li>
+        <li class="en"><strong>SSP5-8.5 (~5°C):</strong> median ~0.6–1.0 m; upper-tail scenarios up to ~2 m</li>
+      </ul>
+      <div class="gwl">
+        <span class="pill p15">+1.5°C</span>
+        <span class="pill p20">+2.0°C</span>
+        <span class="pill p25">+2.5°C</span>
+        <span class="pill p30">+3.0°C</span>
+        <span class="pill p15">+4.0°C</span>
+        <span class="pill p20">+5.0°C</span>
       </div>
+      <div class="box es" style="font-size: 12px;">El IPCC AR6 expresa los riesgos en términos de <strong>niveles de calentamiento global</strong> en lugar de escenarios de emisiones.</div>
+      <div class="box en" style="font-size: 12px;">IPCC AR6 frames risks in terms of <strong>global warming levels</strong> rather than emission scenarios.</div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 08 — Tebaldi et al. 2021
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 8: TEBALDI 2021 -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">Publicación Clave: Tebaldi et al. (2021) — Nature Climate Change</div>
-        <div class="hdr en">Key Publication: Tebaldi et al. (2021) — Nature Climate Change</div>
-        <div class="col2">
-          <div class="col-left">
-            <div class="callout pub">
-              <strong style="font-size:14px;">Extreme sea levels at different global warming levels</strong><br>
-              <span style="font-size:12px;color:var(--accent);">Nature Climate Change, 11, 746–751 (2021)</span><br>
-              <span style="font-size:11px;color:var(--light);">doi: 10.1038/s41558-021-01127-1</span><br><br>
-              <span style="font-size:12px;font-style:italic;">Tebaldi · Ranasinghe · Vousdoukas · Rasmussen · Vega-Westhoff · Kirezci · Kopp · Sriver · Mentaschi</span>
-            </div>
-            <div class="callout es" style="font-size:12px;"><strong>Pregunta central:</strong> ¿En qué parte del mundo el evento de 100 años de ESL se convertirá en un evento <em>anual</em> si el calentamiento global alcanza 1.5°C a 5°C antes de finales del siglo XXI?</div>
-            <div class="callout en" style="font-size:12px;"><strong>Central question:</strong> In which part of the world will the 100-yr ESL event become an <em>annual</em> event if global warming reaches 1.5°C to 5°C before the end of the 21st century?</div>
-          </div>
-          <div class="col-right">
-            <ul class="bullets">
-              <li class="es"><strong>Enfoque multi-método</strong> combinando 3 conjuntos de datos de ESL presente con 2 proyecciones de ANS → 6 combinaciones → convolución completa.</li>
-              <li class="en"><strong>Multi-method approach</strong> combining 3 present-day ESL datasets with 2 SLR projections → 6 combinations → full convolution.</li>
-              <li class="es"><strong>Los trópicos son más sensibles</strong> que las altas latitudes: el cambio de frecuencia ocurre antes y bajo menores niveles de calentamiento.</li>
-              <li class="en"><strong>Tropics are more sensitive</strong> than high latitudes: the frequency shift occurs earlier and under lower warming levels.</li>
-              <li class="es"><strong>Relevancia del Acuerdo de París:</strong> cada fracción de grado de calentamiento evitado tiene un impacto significativo en las comunidades costeras.</li>
-              <li class="en"><strong>Paris Agreement relevance:</strong> every avoided fraction of a degree of warming has a meaningful impact on coastal communities.</li>
-            </ul>
-            <div class="callout warn es" style="font-size:12px;margin-top:8px;"><strong>Hallazgo principal:</strong> ~50% de los más de 7,000 lugares estudiados experimentarán el evento de 100 años actual al menos una vez al año, incluso bajo <strong>sólo 1.5°C de calentamiento</strong>.</div>
-            <div class="callout warn en" style="font-size:12px;margin-top:8px;"><strong>Key finding:</strong> ~50% of 7,000+ locations will experience the present-day 100-yr ESL event at least once a year, even under <strong>just 1.5°C of warming</strong>.</div>
-          </div>
-        </div>
+      <div class="hdr es">Publicación Clave: Tebaldi et al. (2021) — Nature Climate Change</div>
+      <div class="hdr en">Key Publication: Tebaldi et al. (2021) — Nature Climate Change</div>
+      <div class="box" style="font-weight: 600; margin-bottom: 12px;">
+        <strong style="font-size: 14px;">Extreme sea levels at different global warming levels</strong><br>
+        <span style="color: #00c9c9;">Nature Climate Change, 11, 746–751 (2021)</span><br>
+        <span style="font-size: 11px;">doi: 10.1038/s41558-021-01127-1</span>
       </div>
+      <ul>
+        <li class="es"><strong>Pregunta central:</strong> ¿En qué parte del mundo el evento de 100 años de ESL se convertirá en un evento <em>anual</em> bajo 1.5°C a 5°C de calentamiento?</li>
+        <li class="en"><strong>Central question:</strong> In which part of the world will the 100-yr ESL event become an <em>annual</em> event under 1.5°C to 5°C warming?</li>
+        <li class="es"><strong>Hallazgo principal:</strong> ~50% de más de 7,000 lugares experimentarán el evento de 100 años actual al menos una vez al año, incluso bajo <strong>sólo 1.5°C</strong>.</li>
+        <li class="en"><strong>Key finding:</strong> ~50% of 7,000+ locations will experience the present-day 100-yr ESL event at least once a year, even under <strong>just 1.5°C</strong>.</li>
+        <li class="es"><strong>Enfoque:</strong> multi-método combinando 3 conjuntos de datos de ESL con 2 proyecciones de ANS → convolución completa.</li>
+        <li class="en"><strong>Approach:</strong> Multi-method combining 3 ESL datasets with 2 SLR projections → full convolution.</li>
+      </ul>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 09 — SECTION 3 divider
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 9: SECTION 3 -->
     <div class="slide section-slide">
-      <div class="body" style="justify-content:center;align-items:center;">
-        <div class="sect-num">03</div>
-        <div class="sect-title es">Metodología:<br><em>Integrando la Incertidumbre</em></div>
-        <div class="sect-title en">Methodology:<br><em>Integrating Uncertainty</em></div>
-      </div>
+      <div class="sect-num">03</div>
+      <div class="sect-title es">Metodología:<br><em>Integrando la Incertidumbre</em></div>
+      <div class="sect-title en">Methodology:<br><em>Integrating Uncertainty</em></div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 10 — Return periods
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 10: RETURN PERIODS -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">Períodos de Retorno y Usos en Gestión Costera</div>
-        <div class="hdr en">Return Periods and Coastal Management Uses</div>
-        <div class="callout es" style="margin-bottom:14px;font-size:13px;">Un <strong>período de retorno de T años</strong> implica una probabilidad de 1/T de ser excedido en cualquier año. A medida que el ANS empuja el nivel del mar hacia arriba, los eventos raros de hoy se vuelven cada vez más frecuentes.</div>
-        <div class="callout en" style="margin-bottom:14px;font-size:13px;">A <strong>T-year return period</strong> implies a 1/T probability of exceedance in any given year. As SLR pushes sea levels up, today's rare events become increasingly frequent.</div>
-        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px;">
-          <div class="rp-row">
-            <div class="rp-lbl">200-yr</div>
-            <div class="rp-bar" style="width:78%;background:linear-gradient(90deg,#7a0a3a,#c0365a);"></div>
-            <div class="rp-desc es">primas de seguros / evaluaciones de riesgo financiero</div>
-            <div class="rp-desc en">insurance premia / financial risk assessment</div>
-          </div>
-          <div class="rp-row">
-            <div class="rp-lbl">100-yr</div>
-            <div class="rp-bar" style="width:62%;background:linear-gradient(90deg,#2d8b8b,#00c9c9);"></div>
-            <div class="rp-desc es">definición de línea de retiro / setback costero</div>
-            <div class="rp-desc en">coastal setback line definition</div>
-          </div>
-          <div class="rp-row">
-            <div class="rp-lbl">50-yr</div>
-            <div class="rp-bar" style="width:46%;background:linear-gradient(90deg,#1a6b8b,#4fc3f7);"></div>
-            <div class="rp-desc es">diseño de puertos, instalaciones portuarias</div>
-            <div class="rp-desc en">port and harbour design</div>
-          </div>
-          <div class="rp-row">
-            <div class="rp-lbl">10-yr</div>
-            <div class="rp-bar" style="width:28%;background:linear-gradient(90deg,#3a8a3a,#8fba3a);"></div>
-            <div class="rp-desc es">gestión de zonas costeras contra erosión por tormentas</div>
-            <div class="rp-desc en">coastal zone management for storm erosion</div>
-          </div>
-          <div class="rp-row">
-            <div class="rp-lbl">1-yr</div>
-            <div class="rp-bar" style="width:14%;background:linear-gradient(90deg,#a8dadc,#e0f4f4);"></div>
-            <div class="rp-desc es">operaciones costeras cotidianas / recreación</div>
-            <div class="rp-desc en">everyday coastal operations / recreation</div>
-          </div>
-        </div>
-        <div class="callout warn es" style="font-size:12px;margin-top:10px;"><strong>Consecuencia del cambio climático:</strong> bajo +1.5°C, el evento de 100 años puede convertirse en un evento anual en gran parte de los trópicos antes del año 2100 (Tebaldi et al., 2021).</div>
-        <div class="callout warn en" style="font-size:12px;margin-top:10px;"><strong>Climate change consequence:</strong> under +1.5°C, the 100-yr event can become an annual event across much of the tropics before 2100 (Tebaldi et al., 2021).</div>
-      </div>
+      <div class="hdr es">Períodos de Retorno en Gestión Costera</div>
+      <div class="hdr en">Return Periods in Coastal Management</div>
+      <div class="box es" style="margin-bottom: 14px;">Un <strong>período de retorno de T años</strong> implica una probabilidad de 1/T de ser excedido en cualquier año. A medida que el ANS empuja el nivel del mar hacia arriba, los eventos raros de hoy se vuelven cada vez más frecuentes.</div>
+      <div class="box en" style="margin-bottom: 14px;">A <strong>T-year return period</strong> implies a 1/T probability of exceedance in any given year. As SLR pushes sea levels up, today's rare events become increasingly frequent.</div>
+      <ul>
+        <li class="es"><strong>200-yr:</strong> primas de seguros / evaluaciones de riesgo financiero</li>
+        <li class="en"><strong>200-yr:</strong> insurance premia / financial risk assessment</li>
+        <li class="es"><strong>100-yr:</strong> definición de línea de retiro / setback costero</li>
+        <li class="en"><strong>100-yr:</strong> coastal setback line definition</li>
+        <li class="es"><strong>50-yr:</strong> diseño de puertos e instalaciones portuarias</li>
+        <li class="en"><strong>50-yr:</strong> port and harbour design</li>
+        <li class="es"><strong>10-yr:</strong> gestión de zonas costeras contra erosión por tormentas</li>
+        <li class="en"><strong>10-yr:</strong> coastal zone management for storm erosion</li>
+        <li class="es"><strong>1-yr:</strong> operaciones costeras cotidianas</li>
+        <li class="en"><strong>1-yr:</strong> everyday coastal operations</li>
+      </ul>
+      <div class="box warn es" style="font-size: 12px;">Bajo +1.5°C, el evento de 100 años puede convertirse en un evento anual en gran parte de los trópicos antes del año 2100.</div>
+      <div class="box warn en" style="font-size: 12px;">Under +1.5°C, the 100-yr event can become an annual event across much of the tropics before 2100.</div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 11 — Probability distributions
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 11: PROBABILITY DISTRIBUTIONS -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">Distribuciones de Probabilidad del ESL</div>
-        <div class="hdr en">Probability Distributions of ESL</div>
-        <div class="col2">
-          <div class="col-left">
-            <div class="callout es" style="font-size:13px;">El nivel total del agua (<strong>TWL</strong>) es la suma estocástica de los componentes del ESL. Su distribución de probabilidad determina con qué frecuencia se superan los umbrales críticos de inundación.</div>
-            <div class="callout en" style="font-size:13px;">The total water level (<strong>TWL</strong>) is the stochastic sum of ESL components. Its probability distribution determines how often critical flooding thresholds are exceeded.</div>
-            <div class="callout es" style="font-size:13px;">El ANS <strong>desplaza toda la distribución</strong> hacia la derecha. Un umbral con período de retorno de 100 años en el presente puede tener uno de 1–10 años en el futuro.</div>
-            <div class="callout en" style="font-size:13px;">SLR <strong>shifts the entire distribution</strong> to the right. A threshold with a 100-yr return period today may have a 1–10-yr return period in the future.</div>
-            <ul class="bullets">
-              <li class="es"><strong>Presente:</strong> evento 100 años ≈ 1 m (ejemplo hipotético)</li>
-              <li class="en"><strong>Present:</strong> 100-yr event ≈ 1 m (hypothetical example)</li>
-              <li class="es"><strong>Futuro +ANS:</strong> evento 100 años ≈ 3 m — el nivel de 1 m se convierte en un evento de ~1 año</li>
-              <li class="en"><strong>Future +SLR:</strong> 100-yr event ≈ 3 m — the 1 m level becomes a ~1-yr event</li>
-            </ul>
-          </div>
-          <div class="col-right">
-            <div class="svg-wrap" style="flex:1;">
-              <svg viewBox="0 0 290 200" class="diag">
-                <text x="10" y="16" font-size="10" fill="#a8dadc" font-family="sans-serif" font-weight="bold">Probabilidad de excedencia</text>
-                <line x1="35" y1="170" x2="280" y2="170" stroke="#a8dadc" stroke-width="1.5"/>
-                <line x1="35" y1="20" x2="35" y2="170" stroke="#a8dadc" stroke-width="1.5"/>
-                <!-- gridlines -->
-                <line x1="35" y1="95" x2="280" y2="95" stroke="#2d8b8b" stroke-width="0.5" stroke-dasharray="4,3"/>
-                <!-- x labels -->
-                <text x="33" y="182" font-size="9" fill="#a8dadc" font-family="sans-serif">0</text>
-                <text x="88" y="182" font-size="9" fill="#4fc3f7" font-family="sans-serif">1 m</text>
-                <text x="188" y="182" font-size="9" fill="#ff8c80" font-family="sans-serif">3 m</text>
-                <text x="270" y="182" font-size="9" fill="#a8dadc" font-family="sans-serif">ESL</text>
-                <!-- y labels -->
-                <text x="2" y="30" font-size="8" fill="#ffaa80" font-family="sans-serif">1/yr</text>
-                <text x="2" y="98" font-size="8" fill="#ffaa80" font-family="sans-serif">100yr</text>
-                <!-- present curve -->
-                <path d="M35,23 Q60,28 93,95 Q125,155 200,169 Q240,171 280,171" fill="none" stroke="#4fc3f7" stroke-width="2.5"/>
-                <text x="110" y="70" font-size="10" fill="#4fc3f7" font-family="sans-serif" font-weight="bold">Presente</text>
-                <!-- future curve -->
-                <path d="M35,23 Q80,26 145,95 Q185,155 245,169 Q265,171 280,171" fill="none" stroke="#ff8c80" stroke-width="2.5" stroke-dasharray="7,4"/>
-                <text x="175" y="70" font-size="10" fill="#ff8c80" font-family="sans-serif" font-weight="bold">Futuro</text>
-                <!-- 100-yr line -->
-                <line x1="35" y1="95" x2="280" y2="95" stroke="#ffaa80" stroke-width="1" stroke-dasharray="4,3"/>
-                <!-- vertical marks -->
-                <line x1="93" y1="95" x2="93" y2="170" stroke="#4fc3f7" stroke-width="1" stroke-dasharray="3,2"/>
-                <line x1="193" y1="95" x2="193" y2="170" stroke="#ff8c80" stroke-width="1" stroke-dasharray="3,2"/>
-                <!-- shift arrow -->
-                <line x1="98" y1="148" x2="185" y2="148" stroke="#00c9c9" stroke-width="2"/>
-                <polygon points="186,148 178,144 178,152" fill="#00c9c9"/>
-                <text x="125" y="143" font-size="10" fill="#00c9c9" font-family="sans-serif" font-weight="bold">+ANS</text>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="src">Concepto: Vousdoukas et al. (2018); Tebaldi et al. (2021)</div>
-      </div>
+      <div class="hdr es">Distribuciones de Probabilidad del ESL</div>
+      <div class="hdr en">Probability Distributions of ESL</div>
+      <div class="box es">El nivel total del agua (<strong>TWL</strong>) es la suma estocástica de componentes. El ANS <strong>desplaza toda la distribución</strong> hacia la derecha. Un evento con período de retorno de 100 años en el presente puede tener uno de 1–10 años en el futuro.</div>
+      <div class="box en">The total water level (<strong>TWL</strong>) is the stochastic sum of components. SLR <strong>shifts the entire distribution</strong> to the right. A present-day 100-yr event may have a 1–10-yr return period in the future.</div>
+      <ul>
+        <li class="es"><strong>Presente:</strong> evento 100 años ≈ 1 m (ejemplo)</li>
+        <li class="en"><strong>Present:</strong> 100-yr event ≈ 1 m (example)</li>
+        <li class="es"><strong>Futuro +ANS:</strong> evento 100 años ≈ 3 m — el nivel de 1 m se convierte en un evento de ~1 año</li>
+        <li class="en"><strong>Future +SLR:</strong> 100-yr event ≈ 3 m — the 1 m level becomes a ~1-yr event</li>
+      </ul>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 12 — Convolution / uncertainty
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 12: CONVOLUTION -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">Integrando la Incertidumbre: Convolución Monte Carlo</div>
-        <div class="hdr en">Integrating Uncertainty: Monte Carlo Convolution</div>
-        <div class="callout es" style="margin-bottom:14px;font-size:13px;">Para proyectar el ESL futuro bajo un nivel de calentamiento x°C, la distribución del ESL presente se <strong>convoluciona</strong> con la distribución de probabilidad del ANS proyectado. El proceso se repite miles de veces (Monte Carlo).</div>
-        <div class="callout en" style="margin-bottom:14px;font-size:13px;">To project future ESL under warming level x°C, the present-day ESL distribution is <strong>convolved</strong> with the probability distribution of projected SLR. The process is repeated thousands of times (Monte Carlo).</div>
-        <div style="display:flex;align-items:center;gap:14px;justify-content:center;margin:12px 0;flex-wrap:wrap;">
-          <div class="ds-box" style="flex:1;min-width:130px;font-size:13px;">
-            <strong style="color:var(--accent);display:block;margin-bottom:5px;" class="es">ESL presente</strong>
-            <strong style="color:var(--accent);display:block;margin-bottom:5px;" class="en">Present-day ESL</strong>
-            <span class="es">distribución espacial del ESL de 100 años en ~7,000 sitios costeros</span>
-            <span class="en">spatial distribution of the 100-yr ESL at ~7,000 coastal sites</span>
-          </div>
-          <div style="font-size:26px;color:var(--accent);font-weight:800;">+</div>
-          <div class="ds-box" style="flex:1;min-width:130px;font-size:13px;">
-            <strong style="color:var(--accent);display:block;margin-bottom:5px;" class="es">ANS proyectado</strong>
-            <strong style="color:var(--accent);display:block;margin-bottom:5px;" class="en">Projected SLR</strong>
-            <span class="es">distribución de probabilidad del ANS para x°C (selección aleatoria Monte Carlo)</span>
-            <span class="en">SLR probability distribution for x°C (Monte Carlo random draw)</span>
-          </div>
-          <div style="font-size:26px;color:var(--accent);font-weight:800;">=</div>
-          <div class="ds-box" style="flex:1;min-width:130px;border-color:var(--accent);font-size:13px;">
-            <strong style="color:var(--accent);display:block;margin-bottom:5px;" class="es">ESL futuro bajo x°C</strong>
-            <strong style="color:var(--accent);display:block;margin-bottom:5px;" class="en">Future ESL under x°C</strong>
-            <span class="es">distribución completa → mejor caso / más probable / peor caso</span>
-            <span class="en">full distribution → best-case / most-likely / worst-case</span>
-          </div>
-        </div>
-        <div class="callout es" style="font-size:12px;"><strong>Resultado:</strong> los períodos de retorno del ESL cambian de 100 años a valores como 80, 50, 20, 10 o 1 año, dependiendo del NCG y la ubicación geográfica. Los trópicos muestran mayor sensibilidad que las latitudes altas.</div>
-        <div class="callout en" style="font-size:12px;"><strong>Result:</strong> ESL return periods shift from 100-yr to 80-, 50-, 20-, 10-, or 1-yr, depending on GWL and geographic location. Tropics show higher sensitivity than high latitudes.</div>
-        <div class="src">Tebaldi et al. (2021); Rasmussen et al. (2018)</div>
-      </div>
+      <div class="hdr es">Integrando la Incertidumbre: Convolución Monte Carlo</div>
+      <div class="hdr en">Integrating Uncertainty: Monte Carlo Convolution</div>
+      <div class="box es">Para proyectar el ESL futuro bajo un nivel de calentamiento x°C, la distribución del ESL presente se <strong>convoluciona</strong> con la distribución de probabilidad del ANS proyectado, repetido miles de veces (Monte Carlo).</div>
+      <div class="box en">To project future ESL under warming level x°C, the present-day ESL distribution is <strong>convolved</strong> with the SLR probability distribution, repeated thousands of times (Monte Carlo).</div>
+      <div class="box es" style="font-size: 12px;">Los períodos de retorno cambian de 100 años a valores como 80, 50, 20, 10 o 1 año, dependiendo del NCG y la ubicación geográfica.</div>
+      <div class="box en" style="font-size: 12px;">Return periods shift from 100-yr to 80-, 50-, 20-, 10-, or 1-yr, depending on GWL and geographic location.</div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 13 — Multi-dataset
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 13: MULTI-DATASET -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">Enfoque Multi-Conjunto de Datos para Reducir Sesgos</div>
-        <div class="hdr en">Multi-Dataset Approach to Reduce Model Bias</div>
-        <div class="callout es" style="margin-bottom:12px;font-size:13px;">Se combinan <strong>3 conjuntos de datos de ESL presentes</strong> con <strong>2 proyecciones de ANS</strong>, produciendo 6 proyecciones pareadas de ESL futuro cuya convolución completa da los rangos de incertidumbre.</div>
-        <div class="callout en" style="margin-bottom:12px;font-size:13px;"><strong>3 present-day ESL datasets</strong> are combined with <strong>2 SLR projections</strong>, producing 6 paired future-ESL projections whose full convolution yields the uncertainty ranges.</div>
-        <div class="ds-grid" style="flex:1;align-items:center;">
-          <div class="ds-col">
-            <div class="ds-box"><em>Vousdoukas et al. (2018)</em><br>ESL global probabilístico</div>
-            <div class="ds-box"><em>Kirezci et al. (2020)</em><br>ESL global — Sci. Reports</div>
-            <div class="ds-box"><em>Rasmussen et al. (2018)</em><br>ESL global</div>
-          </div>
-          <div class="ds-arrow">×<br><span style="font-size:11px;color:var(--seafoam);" class="es">combinado con</span><span style="font-size:11px;color:var(--seafoam);" class="en">combined with</span></div>
-          <div class="ds-col">
-            <div class="ds-box"><em>Rasmussen et al. (2018)</em><br><span class="es">proyecciones de ANS</span><span class="en">SLR projections</span></div>
-            <div class="ds-box"><em>Vega-Westhoff et al. (2019)</em><br><span class="es">proyecciones de ANS</span><span class="en">SLR projections</span></div>
-          </div>
-          <div class="ds-arrow">→</div>
-          <div class="ds-col">
-            <div class="ds-box" style="border-color:var(--accent);">
-              <strong style="color:var(--accent);" class="es">6 proyecciones<br>ESL futuro</strong>
-              <strong style="color:var(--accent);" class="en">6 future ESL<br>projections</strong><br>
-              <span style="font-size:11px;" class="es">→ convolución completa → mejor / más probable / peor caso</span>
-              <span style="font-size:11px;" class="en">→ full convolution → best / most-likely / worst case</span>
-            </div>
-          </div>
-        </div>
-        <div class="callout es" style="font-size:12px;margin-top:10px;"><strong>¿Por qué múltiples conjuntos?</strong> Cada uno usa diferentes estadísticas de valores extremos y datos de referencia. El enfoque multi-modelo reduce sesgos y cuantifica el rango de incertidumbre epistémica.</div>
-        <div class="callout en" style="font-size:12px;margin-top:10px;"><strong>Why multiple datasets?</strong> Each uses different extreme-value statistics and baseline data. The multi-model approach reduces bias and quantifies the epistemic uncertainty range.</div>
-      </div>
+      <div class="hdr es">Enfoque Multi-Conjunto de Datos</div>
+      <div class="hdr en">Multi-Dataset Approach</div>
+      <div class="box es">Se combinan <strong>3 conjuntos de datos de ESL presentes</strong> (Vousdoukas, Kirezci, Rasmussen) con <strong>2 proyecciones de ANS</strong>, produciendo 6 proyecciones pareadas cuya convolución completa da los rangos de incertidumbre (mejor/más probable/peor caso).</div>
+      <div class="box en"><strong>3 present-day ESL datasets</strong> (Vousdoukas, Kirezci, Rasmussen) combined with <strong>2 SLR projections</strong>, producing 6 paired projections whose full convolution yields the uncertainty ranges (best/most-likely/worst case).</div>
+      <div class="box es" style="font-size: 12px;"><strong>¿Por qué múltiples?</strong> Cada uno usa diferentes estadísticas de valores extremos. El enfoque multi-modelo reduce sesgos y cuantifica el rango de incertidumbre epistémica.</div>
+      <div class="box en" style="font-size: 12px;"><strong>Why multiple?</strong> Each uses different extreme-value statistics. Multi-model approach reduces bias and quantifies epistemic uncertainty.</div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 14 — SECTION 4 divider
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 14: SECTION 4 -->
     <div class="slide section-slide">
-      <div class="body" style="justify-content:center;align-items:center;">
-        <div class="sect-num">04</div>
-        <div class="sect-title es">Resultados Regionales:<br><em>Sri Lanka, Tailandia, Egipto</em></div>
-        <div class="sect-title en">Regional Results:<br><em>Sri Lanka, Thailand, Egypt</em></div>
-      </div>
+      <div class="sect-num">04</div>
+      <div class="sect-title es">Resultados Regionales:<br><em>Sri Lanka, Tailandia, Egipto</em></div>
+      <div class="sect-title en">Regional Results:<br><em>Sri Lanka, Thailand, Egypt</em></div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 15 — Global maps result
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 15: GLOBAL MAPS -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">Resultado Global: ¿Bajo qué NCG el evento de 100 años se vuelve anual?</div>
-        <div class="hdr en">Global Result: Under which GWL does the 100-yr event become annual?</div>
-        <div class="callout es" style="margin-bottom:12px;font-size:13px;">Los mapas mundiales muestran el NCG bajo el cual el ESL de 100 años de hoy pasaría a ser un evento <strong>anual</strong>, para los escenarios inferior, más probable y superior.</div>
-        <div class="callout en" style="margin-bottom:12px;font-size:13px;">Global maps show the GWL under which today's 100-yr ESL becomes an <strong>annual</strong> event, for the lower, most-likely, and upper scenarios.</div>
-        <div class="col3" style="margin-bottom:14px;">
-          <div class="ds-box" style="font-size:13px;">
-            <strong style="color:#4fc3f7;" class="es">Caso inferior</strong><strong style="color:#4fc3f7;" class="en">Lower case</strong><br><br>
-            <span class="es">Gran parte de los trópicos y costas bajas: evento anual bajo <strong style="color:#ff8c80;">≤ 1.5°C</strong></span>
-            <span class="en">Most of tropics and low-lying coasts: annual event under <strong style="color:#ff8c80;">≤ 1.5°C</strong></span>
-          </div>
-          <div class="ds-box" style="border-color:var(--accent);font-size:13px;">
-            <strong style="color:var(--accent);" class="es">Caso más probable</strong><strong style="color:var(--accent);" class="en">Most-likely case</strong><br><br>
-            <span class="es">Trópicos y Europa: <strong style="color:#ff8c80;">≤ 2°C</strong><br>Norte de Europa: 3–5°C</span>
-            <span class="en">Tropics &amp; Europe: <strong style="color:#ff8c80;">≤ 2°C</strong><br>Northern Europe: 3–5°C</span>
-          </div>
-          <div class="ds-box" style="font-size:13px;">
-            <strong style="color:#a8dadc;" class="es">Caso superior</strong><strong style="color:#a8dadc;" class="en">Upper case</strong><br><br>
-            <span class="es">Amplias regiones tropicales: <strong style="color:#ff8c80;">≤ 2.5–3°C</strong></span>
-            <span class="en">Wide tropical regions: <strong style="color:#ff8c80;">≤ 2.5–3°C</strong></span>
-          </div>
-        </div>
-        <div class="gwl-pills">
-          <div class="gwl-pill p15">1.5°C</div><div class="gwl-pill p20">2.0°C</div>
-          <div class="gwl-pill p25">2.5°C</div><div class="gwl-pill p30">3.0°C</div>
-          <div class="gwl-pill p40">4.0°C</div><div class="gwl-pill p50">5.0°C+</div>
-          <span style="font-size:11px;color:var(--seafoam);align-self:center;" class="es">= NCG cuando el evento de 100 años se vuelve anual (escala de color)</span>
-          <span style="font-size:11px;color:var(--seafoam);align-self:center;" class="en">= GWL when 100-yr event becomes annual (colour scale)</span>
-        </div>
-        <div class="callout warn es" style="font-size:12px;margin-top:10px;"><strong>Cita directa (Tebaldi et al., 2021):</strong> "~50% de las ubicaciones consideradas experimentarán el evento de ESL de 100 años del presente al menos una vez al año, incluso bajo 1.5°C de calentamiento."</div>
-        <div class="callout warn en" style="font-size:12px;margin-top:10px;"><strong>Direct quote (Tebaldi et al., 2021):</strong> "~50% of the locations considered will experience the present-day 100-yr extreme-sea-level event at least once a year, even under 1.5°C of warming."</div>
-        <div class="src">Tebaldi et al. (2021), Nature Climate Change, doi:10.1038/s41558-021-01127-1</div>
+      <div class="hdr es">Resultado Global: ¿Bajo qué NCG el evento de 100 años se vuelve anual?</div>
+      <div class="hdr en">Global Result: Under which GWL does the 100-yr event become annual?</div>
+      <div class="col3">
+        <div class="box"><strong style="color: #4fc3f7;" class="es">Caso inferior</strong><strong style="color: #4fc3f7;" class="en">Lower case</strong><br>Gran parte de trópicos: <strong style="color: #ff8c80;">≤ 1.5°C</strong></div>
+        <div class="box"><strong style="color: #00c9c9;" class="en">Most-likely case</strong><strong style="color: #00c9c9;" class="es">Caso más probable</strong><br>Trópicos y Europa: <strong style="color: #ff8c80;">≤ 2°C</strong></div>
+        <div class="box"><strong style="color: #a8dadc;" class="es">Caso superior</strong><strong style="color: #a8dadc;" class="en">Upper case</strong><br>Regiones tropicales: <strong style="color: #ff8c80;">≤ 2.5–3°C</strong></div>
       </div>
+      <div class="gwl">
+        <span class="pill p15">1.5°C</span>
+        <span class="pill p20">2.0°C</span>
+        <span class="pill p25">2.5°C</span>
+        <span class="pill p30">3.0°C</span>
+      </div>
+      <div class="box warn es" style="font-size: 12px;"><strong>Tebaldi et al. (2021):</strong> "~50% de las ubicaciones experimentarán el evento de 100 años actual al menos una vez al año, incluso bajo 1.5°C."</div>
+      <div class="box warn en" style="font-size: 12px;"><strong>Tebaldi et al. (2021):</strong> "~50% of locations will experience the 100-yr ESL event at least once a year, even under 1.5°C."</div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 16 — Regional results
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 16: REGIONAL DETAILS -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">Impacto del NCG en PRS Regionales: Egipto, Tailandia, Sri Lanka</div>
-        <div class="hdr en">GWL Impact on Regional RPs: Egypt, Thailand, Sri Lanka</div>
-        <div class="col2">
-          <div class="col-left">
-            <ul class="bullets">
-              <li class="es">Los ESL alrededor de estos países están proyectados a <strong>aumentar significativamente</strong>, con incrementos de dos a varias veces los niveles actuales.</li>
-              <li class="en">ESLs around these countries are projected to <strong>rise significantly</strong>, with increases from two- to several-fold current levels.</li>
-              <li class="es">El aumento es <strong>mayor para PRS de 1 y 10 años</strong>; diferencias menores entre los incrementos porcentuales de otros PRS.</li>
-              <li class="en">Increase is <strong>larger for 1-yr and 10-yr RPs</strong>; smaller percentage differences among other RPs.</li>
-              <li class="es">El aumento se vuelve <strong>muy pronunciado para NCG &gt; 3°C</strong>.</li>
-              <li class="en">Increases become <strong>highly pronounced for GWL &gt; 3°C</strong>.</li>
-              <li class="es">Lograr la meta del Acuerdo de París dará <strong>más tiempo de adaptación</strong> para el Delta del Nilo.</li>
-              <li class="en">Meeting the Paris Agreement target will give <strong>more adaptation time</strong> for the Nile Delta.</li>
-            </ul>
-          </div>
-          <div class="col-right">
-            <div style="font-size:12px;color:var(--seafoam);margin-bottom:6px;font-weight:700;" class="es">Egipto — año en que el evento de 100 años se vuelve anual</div>
-            <div style="font-size:12px;color:var(--seafoam);margin-bottom:6px;font-weight:700;" class="en">Egypt — year when 100-yr event becomes annual</div>
-            <table class="data">
-              <thead>
-                <tr>
-                  <th class="es">Ubicación</th><th class="en">Location</th>
-                  <th>+1.5°C</th><th>+3°C</th><th>+5°C</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td class="es">El Alamein</td><td class="en">El-Alamein</td><td style="color:var(--seafoam);">2080</td><td style="color:#ffaa80;">2070</td><td style="color:#ff8c80;">2060</td></tr>
-                <tr><td class="es">Alejandría</td><td class="en">Alexandria</td><td style="color:var(--seafoam);">2080</td><td style="color:#ffaa80;">2070</td><td style="color:#ff8c80;">2060</td></tr>
-                <tr><td class="es">Kafr El-Sheikh</td><td class="en">Kafr-El-Sheikh</td><td style="color:var(--seafoam);">2080</td><td style="color:#ffaa80;">2070</td><td style="color:#ff8c80;">2060</td></tr>
-                <tr><td class="es">Damietta</td><td class="en">Damietta</td><td style="color:var(--seafoam);">2080</td><td style="color:#ffaa80;">2070</td><td style="color:#ff8c80;">2060</td></tr>
-                <tr><td class="es">Port Said</td><td class="en">Port-Said</td><td style="color:var(--seafoam);">2090</td><td style="color:#ffaa80;">2070</td><td style="color:#ff8c80;">2060</td></tr>
-              </tbody>
-            </table>
-            <div style="font-size:10px;color:rgba(168,218,220,0.5);margin-top:5px;" class="es">Rango de incertidumbre entre corchetes. Fuente: Nawarat (IHE Delft)</div>
-            <div style="font-size:10px;color:rgba(168,218,220,0.5);margin-top:5px;" class="en">Uncertainty range shown in brackets. Source: Nawarat (IHE Delft)</div>
-          </div>
-        </div>
-      </div>
+      <div class="hdr es">Impacto del NCG en PRS Regionales: Egipto, Tailandia, Sri Lanka</div>
+      <div class="hdr en">GWL Impact on Regional RPs: Egypt, Thailand, Sri Lanka</div>
+      <ul>
+        <li class="es">Los ESL alrededor de estos países están <strong>proyectados a aumentar significativamente</strong>, con incrementos de dos a varias veces los niveles actuales.</li>
+        <li class="en">ESLs are <strong>projected to rise significantly</strong>, with increases from two- to several-fold current levels.</li>
+        <li class="es">El aumento es <strong>mayor para PRS de 1 y 10 años</strong>; diferencias menores entre otros PRS.</li>
+        <li class="en">Increases are <strong>larger for 1-yr and 10-yr RPs</strong>; smaller differences among other RPs.</li>
+        <li class="es">El aumento se vuelve <strong>muy pronunciado para NCG &gt; 3°C</strong>.</li>
+        <li class="en">Increases become <strong>highly pronounced for GWL &gt; 3°C</strong>.</li>
+        <li class="es">Lograr la meta del Acuerdo de París dará <strong>más tiempo de adaptación</strong> para el Delta del Nilo.</li>
+        <li class="en">Meeting Paris Agreement target will give <strong>more adaptation time</strong> for the Nile Delta.</li>
+      </ul>
+      <table>
+        <thead>
+          <tr><th class="es">Ubicación (Egipto)</th><th class="en">Location (Egypt)</th><th>+1.5°C</th><th>+3°C</th><th>+5°C</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="es">El Alamein</td><td class="en">El-Alamein</td><td style="color: #a8dadc;">2080</td><td style="color: #ffaa80;">2070</td><td style="color: #ff8c80;">2060</td></tr>
+          <tr><td class="es">Alejandría</td><td class="en">Alexandria</td><td style="color: #a8dadc;">2080</td><td style="color: #ffaa80;">2070</td><td style="color: #ff8c80;">2060</td></tr>
+          <tr><td class="es">Port Said</td><td class="en">Port-Said</td><td style="color: #a8dadc;">2090</td><td style="color: #ffaa80;">2070</td><td style="color: #ff8c80;">2060</td></tr>
+        </tbody>
+      </table>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 17 — SECTION 5 divider
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 17: SECTION 5 -->
     <div class="slide section-slide">
-      <div class="body" style="justify-content:center;align-items:center;">
-        <div class="sect-num">05</div>
-        <div class="sect-title es">Hacia la Aplicación:<br><em>Costas Resilientes al Clima</em></div>
-        <div class="sect-title en">Towards Application:<br><em>Climate Resilient Coastlines</em></div>
-      </div>
+      <div class="sect-num">05</div>
+      <div class="sect-title es">Hacia la Aplicación:<br><em>Costas Resilientes al Clima</em></div>
+      <div class="sect-title en">Towards Application:<br><em>Climate Resilient Coastlines</em></div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 18 — Application framework
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 18: APPLICATION -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">Marco de Aplicación: 4 Pasos hacia Costas Resilientes</div>
-        <div class="hdr en">Application Framework: 4 Steps towards Resilient Coastlines</div>
-        <div class="steps" style="flex:1;align-items:stretch;">
-          <div class="step">
-            <strong class="es">1. Impacto CC en el conductor</strong>
-            <strong class="en">1. CC impact on driver</strong>
-            <span class="es">Proyecciones de ESL mediante modelado hidrodinámico o datos observados de mareas y oleaje</span>
-            <span class="en">ESL projections via hydrodynamic modelling or observed tide and wave data</span>
-          </div>
-          <div class="step">
-            <strong class="es">2. Mapas de inundación integrados</strong>
-            <strong class="en">2. CC-integrated flood maps</strong>
-            <span class="es">Mapas costeros forzados por proyecciones de ESL + modelos de elevación de alta resolución (SFINCS)</span>
-            <span class="en">Coastal maps forced by ESL projections + high-resolution elevation models (SFINCS)</span>
-          </div>
-          <div class="step">
-            <strong class="es">3. Evaluación del riesgo costero</strong>
-            <strong class="en">3. Coastal risk assessment</strong>
-            <span class="es"><em>Riesgo = Peligro × Exposición × Vulnerabilidad</em></span>
-            <span class="en"><em>Risk = Hazard × Exposure × Vulnerability</em></span>
-          </div>
-          <div class="step">
-            <strong class="es">4. Medidas de adaptación</strong>
-            <strong class="en">4. Adaptation measures</strong>
-            <span class="es">Defensas costeras, reubicación, retroceso planificado, acomodo, naturaleza-basados</span>
-            <span class="en">Coastal defences, relocation, managed retreat, accommodation, nature-based solutions</span>
-          </div>
-        </div>
-        <div class="callout es" style="margin-top:14px;font-size:12px;">El modelo <strong>SFINCS</strong> (Super-Fast INundation of CoastS) permite mapas de inundación costera de alta resolución a escala global en tiempos de cómputo viables — esencial para la evaluación diferencial del riesgo entre comunidades costeras (Leijnse et al., 2021).</div>
-        <div class="callout en" style="margin-top:14px;font-size:12px;">The <strong>SFINCS</strong> model (Super-Fast INundation of CoastS) enables high-resolution coastal flood maps at global scale within feasible computation times — essential for differential risk assessment between coastal communities (Leijnse et al., 2021).</div>
-        <div class="src es">Nawarat (IHE Delft); Leijnse et al. (2021) — Coastal Engineering</div>
-        <div class="src en">Nawarat (IHE Delft); Leijnse et al. (2021) — Coastal Engineering</div>
-      </div>
+      <div class="hdr es">Marco de Aplicación: 4 Pasos hacia Costas Resilientes</div>
+      <div class="hdr en">Application Framework: 4 Steps towards Resilient Coastlines</div>
+      <ul>
+        <li class="es"><strong>1. Impacto CC en el conductor:</strong> Proyecciones de ESL mediante modelado hidrodinámico o datos observados.</li>
+        <li class="en"><strong>1. CC impact on driver:</strong> ESL projections via hydrodynamic modelling or observed data.</li>
+        <li class="es"><strong>2. Mapas de inundación integrados:</strong> Mapas costeros forzados por proyecciones de ESL + modelos de elevación alta resolución (SFINCS).</li>
+        <li class="en"><strong>2. CC-integrated flood maps:</strong> Coastal maps forced by ESL projections + high-resolution elevation models (SFINCS).</li>
+        <li class="es"><strong>3. Evaluación del riesgo costero:</strong> Riesgo = Peligro × Exposición × Vulnerabilidad.</li>
+        <li class="en"><strong>3. Coastal risk assessment:</strong> Risk = Hazard × Exposure × Vulnerability.</li>
+        <li class="es"><strong>4. Medidas de adaptación:</strong> Defensas costeras, reubicación, retroceso planificado, acomodo, soluciones basadas en naturaleza.</li>
+        <li class="en"><strong>4. Adaptation measures:</strong> Coastal defences, relocation, managed retreat, accommodation, nature-based solutions.</li>
+      </ul>
+      <div class="box es" style="font-size: 12px;">El modelo <strong>SFINCS</strong> (Super-Fast INundation of CoastS) permite mapas de inundación de alta resolución a escala global — esencial para la evaluación diferencial del riesgo (Leijnse et al., 2021).</div>
+      <div class="box en" style="font-size: 12px;">The <strong>SFINCS</strong> model enables high-resolution global flood maps — essential for differential risk assessment between communities (Leijnse et al., 2021).</div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 19 — References
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 19: REFERENCES -->
     <div class="slide">
-      <div class="body">
-        <div class="hdr es">Referencias Bibliográficas</div>
-        <div class="hdr en">References</div>
-        <ul class="ref-list">
-          <li><span class="ref-num">[1]</span> Tebaldi, C., Ranasinghe, R., Vousdoukas, M., Rasmussen, D. J., Vega-Westhoff, B., Kirezci, E., Kopp, R. E., Sriver, R., &amp; Mentaschi, L. (2021). Extreme sea levels at different global warming levels. <em>Nature Climate Change</em>, 11, 746–751. <a href="https://doi.org/10.1038/s41558-021-01127-1">doi:10.1038/s41558-021-01127-1</a></li>
-          <li><span class="ref-num">[2]</span> Vousdoukas, M. I., Mentaschi, L., Voukouvalas, E., Verlaan, M., Jevrejeva, S., Jackson, L. P., &amp; Feyen, L. (2018). Global probabilistic projections of extreme sea levels show intensification of coastal flood hazard. <em>Nature Communications</em>, 9, 2360. <a href="https://doi.org/10.1038/s41467-018-04692-w">doi:10.1038/s41467-018-04692-w</a></li>
-          <li><span class="ref-num">[3]</span> Kirezci, E., Young, I. R., Ranasinghe, R., Muis, S., Nicholls, R. J., Lincke, D., &amp; Hinkel, J. (2020). Projections of global-scale extreme sea levels and resulting episodic coastal flooding over the 21st Century. <em>Scientific Reports</em>, 10, 11629. <a href="https://doi.org/10.1038/s41598-020-67736-6">doi:10.1038/s41598-020-67736-6</a></li>
-          <li><span class="ref-num">[4]</span> Rasmussen, D. J., Meinshausen, M., &amp; Kopp, R. E. (2018). Probability-weighted ensembles of U.S. county-level climate projections for climate risk analysis. <em>J. Applied Meteorology &amp; Climatology</em>, 55(10), 2301–2320. <a href="https://doi.org/10.1175/JAMC-D-15-0302.1">doi:10.1175/JAMC-D-15-0302.1</a></li>
-          <li><span class="ref-num">[5]</span> Vega-Westhoff, B., Sriver, R. L., Hartin, C. A., Wong, T. E., &amp; Keller, K. (2019). Impacts of observational constraints related to sea level on future projections of the Antarctic ice sheet. <em>Earth's Future</em>, 7, 677–695. <a href="https://doi.org/10.1029/2018EF001126">doi:10.1029/2018EF001126</a></li>
-          <li><span class="ref-num">[6]</span> IPCC (2021). <em>Climate Change 2021: The Physical Science Basis — AR6 WGI</em>. Cambridge University Press. <a href="https://www.ipcc.ch/report/ar6/wg1/">ipcc.ch/report/ar6/wg1</a></li>
-          <li><span class="ref-num">[7]</span> Leijnse, T., van Ormondt, M., Nederhoff, K., &amp; van Dongeren, A. (2021). Modeling compound flooding in coastal systems using a computationally efficient reduced-physics solver. <em>Coastal Engineering</em>, 163, 103796. <a href="https://doi.org/10.1016/j.coastaleng.2020.103796">doi:10.1016/j.coastaleng.2020.103796</a></li>
-          <li><span class="ref-num">[8]</span> Oppenheimer, M., et al. (2019). Sea Level Rise and Implications for Low-Lying Islands, Coasts and Communities. In <em>IPCC Special Report on the Ocean and Cryosphere in a Changing Climate</em>. <a href="https://www.ipcc.ch/srocc/">ipcc.ch/srocc</a></li>
-        </ul>
-      </div>
+      <div class="hdr es">Referencias Bibliográficas</div>
+      <div class="hdr en">References</div>
+      <ul class="refs">
+        <li><span class="ref-num">[1]</span> Tebaldi et al. (2021). Extreme sea levels at different global warming levels. <em>Nature Climate Change</em>, 11, 746–751.</li>
+        <li><span class="ref-num">[2]</span> Vousdoukas et al. (2018). Global probabilistic projections of extreme sea levels. <em>Nature Communications</em>, 9, 2360.</li>
+        <li><span class="ref-num">[3]</span> Kirezci et al. (2020). Projections of global-scale extreme sea levels. <em>Scientific Reports</em>, 10, 11629.</li>
+        <li><span class="ref-num">[4]</span> Rasmussen et al. (2018). Probability-weighted ensembles of county-level climate projections. <em>J. Applied Meteorology &amp; Climatology</em>, 55(10), 2301–2320.</li>
+        <li><span class="ref-num">[5]</span> Vega-Westhoff et al. (2019). Impacts of observational constraints on Antarctic ice sheet projections. <em>Earth's Future</em>, 7, 677–695.</li>
+        <li><span class="ref-num">[6]</span> IPCC (2021). <em>Climate Change 2021: The Physical Science Basis — AR6 WGI</em>.</li>
+        <li><span class="ref-num">[7]</span> Leijnse et al. (2021). Modeling compound flooding using a computationally efficient solver. <em>Coastal Engineering</em>, 163, 103796.</li>
+      </ul>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         SLIDE 20 — CLOSING / CREDITS
-    ═══════════════════════════════════════════════════════════ -->
+    <!-- SLIDE 20: CLOSING -->
     <div class="slide closing">
-      <div class="body">
-        <div class="big-thanks es">¡Gracias!</div>
-        <div class="big-thanks en">Thank You!</div>
-        <div class="contact-line es">Preguntas y contacto: <a href="mailto:k.nawarat@un-ihe.org">k.nawarat@un-ihe.org</a> · Departamento de Riesgo y Resiliencia Costera y Urbana, IHE Delft</div>
-        <div class="contact-line en">Contact: <a href="mailto:k.nawarat@un-ihe.org">k.nawarat@un-ihe.org</a> · Coastal and Urban Risk &amp; Resilience Department, IHE Delft</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;">
-          <span class="tag es">Nivel Extremo del Mar</span><span class="tag es">Nivel de Calentamiento Global</span>
-          <span class="tag es">Inundación Costera</span><span class="tag es">Incertidumbre Probabilística</span>
-          <span class="tag en">Extreme Sea Level</span><span class="tag en">Global Warming Level</span>
-          <span class="tag en">Coastal Flooding</span><span class="tag en">Probabilistic Uncertainty</span>
-        </div>
-        <div class="credit-box" style="margin-top:auto;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-            <div>
-              <strong class="es">Presentación original</strong><strong class="en">Original presentation</strong><br>
-              Khin Nawarat — PhD Candidate<br>
-              <span style="font-size:11px;color:rgba(241,250,238,0.65);">IHE Delft · UNESCO Centre<br>k.nawarat@un-ihe.org</span><br><br>
-              <strong class="es">Diseño interactivo adaptado por</strong><strong class="en">Interactive design adapted by</strong><br>
-              Gerald Corzo — IHE Delft<br>
-              <span style="font-size:11px;color:rgba(241,250,238,0.65);">© <span id="cr_year">2025</span> Gerald Corzo. <span class="es">Todos los derechos reservados.</span><span class="en">All rights reserved.</span></span>
-            </div>
-            <div>
-              <strong class="es">Licencia de contenido</strong><strong class="en">Content licence</strong><br>
-              <span style="font-size:11px;" class="es">Material académico de IHE Delft para uso educativo. Figuras y datos tomados de las publicaciones citadas; utilizados bajo principios de uso legítimo para fines de enseñanza.</span>
-              <span style="font-size:11px;" class="en">IHE Delft academic material for educational use. Figures and data sourced from cited publications; used under fair-use principles for teaching purposes.</span>
-              <br><br>
-              <strong>DOI principal:</strong><br>
-              <a href="https://doi.org/10.1038/s41558-021-01127-1" style="color:var(--accent);font-size:12px;">10.1038/s41558-021-01127-1</a><br>
-              <span style="font-size:11px;color:rgba(168,218,220,0.6);">Tebaldi et al. (2021) — Nature Climate Change</span>
-            </div>
-          </div>
+      <div class="big-thanks es">¡Gracias!</div>
+      <div class="big-thanks en">Thank You!</div>
+      <div class="contact es">Preguntas: <a href="mailto:k.nawarat@un-ihe.org">k.nawarat@un-ihe.org</a> · Departamento de Riesgo y Resiliencia Costera y Urbana, IHE Delft</div>
+      <div class="contact en">Contact: <a href="mailto:k.nawarat@un-ihe.org">k.nawarat@un-ihe.org</a> · Coastal and Urban Risk &amp; Resilience Department, IHE Delft</div>
+      <div class="tags" style="margin: 14px 0;">
+        <span class="tag es">Nivel Extremo del Mar</span>
+        <span class="tag es">Cambio Climático</span>
+        <span class="tag en">Extreme Sea Level</span>
+        <span class="tag en">Climate Change</span>
+      </div>
+      <div class="credit-box" style="margin-top: auto;">
+        <div><strong class="es">Presentación original:</strong><strong class="en">Original presentation:</strong> Khin Nawarat, PhD Candidate, IHE Delft</div>
+        <div><strong class="es">Diseño interactivo:</strong><strong class="en">Interactive design:</strong> Gerald Corzo, IHE Delft · © <span id="yr">2025</span></div>
+        <div style="margin-top: 10px; border-top: 1px solid rgba(168, 218, 220, 0.3); padding-top: 10px;">
+          <strong class="es">Licencia:</strong><strong class="en">Licence:</strong> Material académico para uso educativo. Datos de publicaciones citadas bajo principios de uso legítimo.
         </div>
       </div>
     </div>
 
-  </div><!-- /slide-viewport -->
+  </div><!-- /viewport -->
 
-  <!-- Footer navigation bar -->
+  <!-- Footer -->
   <div id="footer">
-    <div id="slide-counter">1 / 20</div>
-    <div id="footer-center" class="es">Impacto del Cambio Climático en los Niveles Extremos del Mar · Khin Nawarat · IHE Delft</div>
-    <div id="footer-center" class="en">Impact of Climate Change on Extreme Sea Levels · Khin Nawarat · IHE Delft</div>
-    <div id="footer-right">
-      <button class="nav-btn" id="btn-prev" onclick="prevSlide()" title="Previous">◀</button>
-      <button class="nav-btn" id="btn-next" onclick="nextSlide()" title="Next">▶</button>
+    <div class="counter"><span id="current">1</span> / <span id="total">20</span></div>
+    <div class="center-text es">Impacto del Cambio Climático en los Niveles Extremos del Mar — IHE Delft</div>
+    <div class="center-text en">Impact of Climate Change on Extreme Sea Levels — IHE Delft</div>
+    <div class="footer-right">
+      <button onclick="prev()" id="prev-btn">◀</button>
+      <button onclick="next()" id="next-btn">▶</button>
       <button id="lang-btn" onclick="toggleLang()">🌐 EN</button>
     </div>
   </div>
-</div><!-- /deck -->
+</div>
 
 <script>
-// ── Slide engine ─────────────────────────────────────────────
 const slides = document.querySelectorAll('.slide');
 const total = slides.length;
 let current = 0;
 
-function goTo(n) {
+function go(n) {
   slides[current].classList.remove('active');
   current = Math.max(0, Math.min(n, total - 1));
   slides[current].classList.add('active');
-  document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + total;
-  document.getElementById('btn-prev').disabled = current === 0;
-  document.getElementById('btn-next').disabled = current === total - 1;
-  document.getElementById('progress-bar').style.width = ((current / (total - 1)) * 100) + '%';
+  document.getElementById('current').textContent = current + 1;
+  document.getElementById('progress').style.width = ((current / (total - 1)) * 100) + '%';
+  document.getElementById('prev-btn').disabled = current === 0;
+  document.getElementById('next-btn').disabled = current === total - 1;
 }
-function nextSlide() { goTo(current + 1); }
-function prevSlide() { goTo(current - 1); }
 
-// Keyboard navigation
+function next() { go(current + 1); }
+function prev() { go(current - 1); }
+
 document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); nextSlide(); }
-  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    { e.preventDefault(); prevSlide(); }
-  if (e.key === 'Home') goTo(0);
-  if (e.key === 'End')  goTo(total - 1);
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  if (e.key === 'Home') go(0);
+  if (e.key === 'End') go(total - 1);
 });
 
-// Init
-goTo(0);
+document.getElementById('total').textContent = total;
+document.getElementById('yr').textContent = new Date().getFullYear();
 
-// ── Language toggle ──────────────────────────────────────────
 let lang = 'es';
-window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('cr_year').textContent = new Date().getFullYear();
-  const browser = (navigator.language || 'es').toLowerCase();
-  if (browser.startsWith('en')) { lang = 'en'; applyLang(); }
-});
-function toggleLang() { lang = lang === 'es' ? 'en' : 'es'; applyLang(); }
-function applyLang() {
-  const btn = document.getElementById('lang-btn');
+function toggleLang() {
+  lang = lang === 'es' ? 'en' : 'es';
   if (lang === 'en') {
     document.body.classList.add('en');
-    document.documentElement.lang = 'en';
-    btn.textContent = '🌐 ES';
+    document.getElementById('lang-btn').textContent = '🌐 ES';
   } else {
     document.body.classList.remove('en');
-    document.documentElement.lang = 'es';
-    btn.textContent = '🌐 EN';
+    document.getElementById('lang-btn').textContent = '🌐 EN';
   }
 }
+
+// Auto-detect browser language
+const browserLang = (navigator.language || 'es').toLowerCase();
+if (browserLang.startsWith('en')) { lang = 'en'; toggleLang(); }
+
+go(0);
 </script>
 </body>
 </html>
